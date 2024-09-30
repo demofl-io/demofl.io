@@ -1,0 +1,54 @@
+{
+  "theme": {
+    "color": "#000000",
+    "background": "#FFFFFF",
+    "font": "Arial"
+  },
+  "product": {
+    "name": "Product Name",
+    "logourl": "http://www.example.com/logo.png"
+  },
+  "customer": {
+    "name": "ACME",
+    "logourl": "http://www.example.com/logo.png"
+  },
+  "personnas": {
+    "CEO": {
+      "name": "John Doe",
+      "title": "CEO",
+      "pictureurl": ""
+    },
+    "CFO": {
+      "name": "Jane Doe",
+      "title": "CFO",
+      "pictureurl": ""
+    }
+  },
+  "steps": [
+    {
+      "id": "step1",
+      "title": "Step 1",
+      "description": "This is step 1",
+      "personna": "CEO",
+      "icon": "house",
+      "onlyShowUrls": true,
+      "urls": ["http://www.google.com"]
+    },
+    {
+      "id": "step2",
+      "title": "Step 2",
+      "description": "This is step 2",
+      "personna": "CFO",
+      "incognito": true,
+      "icon": "lightbulb",
+      "urls": ["http://www.yahoo.com"]
+    },
+    {
+      "id": "step3",
+      "title": "Step 3",
+      "description": "This is step 3",
+      "icon": "lightbulb",
+      "urls": ["http://www.bing.com"]
+    }
+  ]
+}

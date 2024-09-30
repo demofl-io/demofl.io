@@ -1,0 +1,57 @@
+{
+  "name": "demofl.io",
+  "manifest_version": 3,
+  "version": "0.1",
+  "description": "Turns the page red when you click the icon",
+  "permissions": [
+    "downloads",
+    "activeTab",
+    "tabs",
+    "scripting",
+    "tabGroups",
+    "storage",
+    "background"
+  ],
+  "background": {
+    "service_worker": "js/background.js"
+  },
+  "options_page": "options.html",
+  "incognito": "spanning",
+  "commands": {
+    "_execute_action": {
+      "suggested_key": "Alt+Y",
+      "description": "Start the extension"
+    },
+    "TestAction": {
+      "suggested_key": "Alt+B",
+      "description": "TestAction"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*/*", "http://*/*", "*://127.0.0.1:*/*"],
+      "run_at": "document_end",
+      "js": ["js/content.js"]
+    }
+  ],
+  "host_permissions": [
+    "*://localhost:*/*",
+    "*://127.0.0.1:*/*",
+    "*://127.0.0.1:7331/*",
+    "http://*/*",
+    "https://*/*",
+    "http://127.0.0.1:7331/*",
+    "file:///*"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["logos/*","profiles/*", "flow/*", "content.js"],
+      "matches": ["http://*/*", "*://127.0.0.1:*/*", "https://*/*"]
+    }
+  ],
+  "action": {
+    "default_title": "demofl.io",
+
+    "default_popup": "popup.html"
+  }
+}
