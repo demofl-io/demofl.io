@@ -106,7 +106,25 @@ function createPersonaOverlay(persona) {
     }
 
     const overlay = document.createElement('div');
-    overlay.className = 'persona-overlay'; // Add a class for identification
+    overlay.className = 'persona-overlay';
+
+    // Add animation keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideIn {
+        0% {
+          transform: translate(-50%, -100%);
+          opacity: 0;
+        }
+        100% {
+          transform: translate(-50%, 0);
+          opacity: 1;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Update overlay styles to include animation
     overlay.style.cssText = `
       position: fixed;
       top: 20px;
@@ -124,7 +142,45 @@ function createPersonaOverlay(persona) {
       max-width: 300px;
       cursor: move;
       user-select: none;
+      animation: slideIn 0.3s ease-out forwards;
+      transition: transform 0.3s ease-out;
     `;
+
+    // Add close button
+    const closeButton = document.createElement('button');
+    closeButton.innerHTML = '×';
+    closeButton.style.cssText = `
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #666;
+      z-index: 10000;
+    `;
+    
+    closeButton.addEventListener('click', () => {
+      overlay.style.display = 'none';
+    });
+
+    // Add hover effect
+    closeButton.addEventListener('mouseover', () => {
+      closeButton.style.backgroundColor = '#f0f0f0';
+    });
+    closeButton.addEventListener('mouseout', () => {
+      closeButton.style.backgroundColor = 'white';
+    });
+
+    overlay.appendChild(closeButton);
 
     // Rest of your existing overlay creation code...
     const content = document.createElement('div');
