@@ -13,13 +13,16 @@ function connectToBackground() {
     port = chrome.runtime.connect({ name: "persona-port" });
     console.log("Connected to background script");
     
+    // Add cleanup listener here, where we know port exists
     port.onDisconnect.addListener(() => {
       console.log("Port disconnected");
-      // Only clean up on actual tab close
+      port = null;
+      
+      // Only clean up if we're actually closing the tab
       if (document.visibilityState === 'hidden') {
         window.addEventListener('unload', () => {
           if (currentTabId) {
-            console.log("Cleaning up tab:", currentTabId);
+            console.log("Cleaning up on tab close:", currentTabId);
             chrome.storage.local.get(["personaTabs"], (result) => {
               const personaTabs = result.personaTabs || {};
               delete personaTabs[currentTabId];
@@ -30,10 +33,10 @@ function connectToBackground() {
       }
     });
     
+    return true;
   } catch (error) {
     console.error("Connection error:", error);
-    // Retry connection after a delay
-    setTimeout(connectToBackground, 1000);
+    return false;
   }
 }
 
@@ -46,6 +49,7 @@ function checkStoredPersona() {
       const personaTabs = result.personaTabs || {};
       if (currentTabId && personaTabs[currentTabId]) {
         console.log("Found persona for tab:", currentTabId);
+        // Always create overlay on reload
         createPersonaOverlay(personaTabs[currentTabId]);
         resolve(true);
       } else {
@@ -61,7 +65,7 @@ function init() {
   chrome.runtime.sendMessage({ action: "getTabId" }, async (response) => {
     if (chrome.runtime.lastError) {
       console.error("Error getting tab ID:", chrome.runtime.lastError);
-      setTimeout(init, 1000); // Retry after 1 second
+      setTimeout(init, 1000);
       return;
     }
     
@@ -70,13 +74,13 @@ function init() {
       console.log("Tab ID set to:", currentTabId);
       
       // Connect to background first
-      connectToBackground();
-      
-      // Then check storage
-      await checkStoredPersona();
+      if (connectToBackground()) {
+        // Always check for stored persona data
+        await checkStoredPersona();
+      }
     } else {
       console.error("No tab ID received");
-      setTimeout(init, 1000); // Retry after 1 second
+      setTimeout(init, 1000);
     }
   });
 }
@@ -198,6 +202,14 @@ function createPersonaOverlay(persona) {
         z-index: 10000;
       `;
 
+      // Simple hide on click
+      closeButton.addEventListener('click', () => {
+        // Just hide the overlay visually
+        overlay.style.display = 'none';
+      });
+
+      overlay.appendChild(closeButton);
+
       // Add drag functionality
       let isDragging = false;
       let currentX;
@@ -245,13 +257,13 @@ function createPersonaOverlay(persona) {
       // Add close button functionality
       closeButton.addEventListener('click', () => {
         overlay.remove();
-        if (currentTabId) {
-          chrome.storage.local.get(["personaTabs"], (result) => {
-            const personaTabs = result.personaTabs || {};
-            delete personaTabs[currentTabId];
-            chrome.storage.local.set({ personaTabs });
-          });
-        }
+        // if (currentTabId) {
+        //   chrome.storage.local.get(["personaTabs"], (result) => {
+        //     const personaTabs = result.personaTabs || {};
+        //     delete personaTabs[currentTabId];
+        //     chrome.storage.local.set({ personaTabs });
+        //   });
+        // }
       });
 
       overlay.appendChild(closeButton);
@@ -261,45 +273,20 @@ function createPersonaOverlay(persona) {
   }
 }
 
-// Check for stored persona data when page loads
-chrome.storage.local.get(["personaTabs"], (result) => {
-  const personaTabs = result.personaTabs || {};
-  if (currentTabId && personaTabs[currentTabId]) {
-    createPersonaOverlay(personaTabs[currentTabId]);
-  }
-});
-
 // Message listener
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log("Message received in content script:", request);
-  
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "showPersona") {
-    try {
-      console.log("Show persona request received for tab:", currentTabId);
+    console.log("Received showPersona message:", request.persona);
+    
+    chrome.storage.local.get(["personaTabs"], (result) => {
+      const personaTabs = result.personaTabs || {};
+      personaTabs[currentTabId] = request.persona;
       
-      // Store the persona data immediately
-      const personaData = request.persona;
-      chrome.storage.local.get(["personaTabs"], (result) => {
-        const personaTabs = result.personaTabs || {};
-        personaTabs[currentTabId] = personaData;
-        
-        chrome.storage.local.set({ personaTabs }, () => {
-          if (chrome.runtime.lastError) {
-            console.error("Storage error:", chrome.runtime.lastError);
-            sendResponse({ success: false });
-            return;
-          }
-          
-          console.log("Creating overlay for persona on Bing");
-          createPersonaOverlay(personaData);
-          sendResponse({ success: true });
-        });
+      chrome.storage.local.set({ personaTabs }, () => {
+        createPersonaOverlay(request.persona);
+        sendResponse({ success: true });
       });
-      
-      return true; // Keep the message channel open
-    } catch (error) {
-      console.error("Error handling showPersona message:", error);
-      sendResponse({ success: false, error: error.message });
-    }
+    });
+    return true;
   }
 });

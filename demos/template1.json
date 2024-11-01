@@ -32,7 +32,7 @@
       "personna": "CEO",
       "icon": "house",
       "onlyShowUrls": true,
-      "urls": ["http://www.google.com"]
+      "urls": ["http://www.google.com","http://www.google.com","http://www.cnn.com"]
     },
     {
       "id": "step2",
