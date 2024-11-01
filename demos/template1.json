@@ -1,8 +1,10 @@
 {
   "theme": {
-    "color": "#000000",
-    "background": "#FFFFFF",
-    "font": "Arial"
+    "color": "#ffffff",
+    "background": "#111827",
+    "font": "Arial",
+    "hposition": "center",
+    "vposition": "top"
   },
   "product": {
     "name": "Product Name",

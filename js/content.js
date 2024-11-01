@@ -113,13 +113,43 @@ function createPersonaOverlay(persona) {
         return;
       }
 
+      // Calculate initial position based on theme settings
+      const positions = {
+        horizontal: {
+          left: { position: 'left: 20px;', transform: 'translateX(0)' },
+          center: { position: 'left: 50%;', transform: 'translateX(-50%)' },
+          right: { position: 'right: 20px;', transform: 'translateX(0)' }
+        },
+        vertical: {
+          top: { position: 'top: 20px;', transform: '' },
+          middle: { position: 'top: 50%;', transform: 'translateY(-50%)' },
+          bottom: { position: 'bottom: 20px;', transform: '' }
+        }
+      };
+
+      const h = positions.horizontal[theme.hposition] || positions.horizontal.center;
+      const v = positions.vertical[theme.vposition] || positions.vertical.top;
+
+      // Remove this line that causes the error
+      // const { position, transform } = getInitialPosition();
+
       const overlay = document.createElement('div');
       overlay.className = 'persona-overlay';
 
-      // Add animation keyframes
+      // Add animation keyframes based on position
       const style = document.createElement('style');
       style.textContent = `
-        @keyframes slideIn {
+        @keyframes slideInLeft {
+          0% {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          100% {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
+        @keyframes slideInCenter {
           0% {
             transform: translate(-50%, -100%);
             opacity: 0;
@@ -129,15 +159,34 @@ function createPersonaOverlay(persona) {
             opacity: 1;
           }
         }
+        @keyframes slideInRight {
+          0% {
+            transform: translateX(100%);
+            opacity: 0;
+          }
+          100% {
+            transform: translateX(0);
+            opacity: 1;
+          }
+        }
       `;
       document.head.appendChild(style);
+
+      // Get animation name based on position
+      const getAnimationName = () => {
+        switch (theme.hposition) {
+          case 'left': return 'slideInLeft';
+          case 'right': return 'slideInRight';
+          default: return 'slideInCenter';
+        }
+      };
 
       // Update overlay styles to include theme
       overlay.style.cssText = `
         position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translate(-50%, 0);
+        ${h.position}
+        ${v.position}
+        ${h.transform || v.transform ? `transform: ${[h.transform, v.transform].filter(Boolean).join(' ')};` : ''}
         background-color: ${theme.background};
         color: ${theme.color};
         font-family: ${theme.font}, sans-serif;
@@ -148,10 +197,10 @@ function createPersonaOverlay(persona) {
         align-items: center;
         gap: 12px;
         z-index: 9999;
-        max-width: 300px;
+        width: 300px;
         cursor: move;
         user-select: none;
-        animation: slideIn 0.3s ease-out forwards;
+        animation: ${getAnimationName()} 0.3s ease-out forwards;
         transition: transform 0.3s ease-out;
       `;
 
@@ -218,10 +267,23 @@ function createPersonaOverlay(persona) {
       let initialY;
 
       const dragStart = (e) => {
+        const rect = overlay.getBoundingClientRect();
+        
         if (e.target === overlay) {
-          initialX = e.clientX - overlay.offsetLeft;
-          initialY = e.clientY - overlay.offsetTop;
           isDragging = true;
+          
+          // Handle center position differently
+          if (theme.hposition === 'center') {
+            initialX = e.clientX - rect.left - (rect.width / 2); // Add half width to compensate for center transform
+          } else {
+            initialX = e.clientX - rect.left;
+          }
+          
+          if (theme.vposition === 'bottom') {
+            initialY = window.innerHeight - (e.clientY - rect.height);
+          } else {
+            initialY = e.clientY - rect.top;
+          }
         }
       };
 
@@ -232,20 +294,30 @@ function createPersonaOverlay(persona) {
       const drag = (e) => {
         if (isDragging) {
           e.preventDefault();
+          
           currentX = e.clientX - initialX;
           currentY = e.clientY - initialY;
-
+          
           // Keep overlay within viewport bounds
           const viewportWidth = window.innerWidth;
           const viewportHeight = window.innerHeight;
-          const overlayRect = overlay.getBoundingClientRect();
-
-          currentX = Math.min(Math.max(0, currentX), viewportWidth - overlayRect.width);
-          currentY = Math.min(Math.max(0, currentY), viewportHeight - overlayRect.height);
-
+          const rect = overlay.getBoundingClientRect();
+          
+          // Simplify bounds check (same for all positions)
+          currentX = Math.min(Math.max(0, currentX), viewportWidth - rect.width);
+          
+          if (theme.vposition === 'bottom') {
+            currentY = Math.max(20, window.innerHeight - (e.clientY + initialY));
+            overlay.style.bottom = `${currentY}px`;
+            overlay.style.top = 'auto';
+          } else {
+            currentY = Math.min(Math.max(0, currentY), viewportHeight - rect.height);
+            overlay.style.top = `${currentY}px`;
+            overlay.style.bottom = 'auto';
+          }
+          
           overlay.style.left = `${currentX}px`;
-          overlay.style.top = `${currentY}px`;
-          overlay.style.transform = 'none';
+          overlay.style.transform = 'none'; // Remove transform during drag
         }
       };
 
