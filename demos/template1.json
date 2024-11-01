@@ -46,6 +46,7 @@
     {
       "id": "step3",
       "title": "Step 3",
+      "personna": "CFO",
       "description": "This is step 3",
       "icon": "lightbulb",
       "urls": ["http://www.bing.com"]

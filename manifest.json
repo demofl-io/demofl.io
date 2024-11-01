@@ -5,6 +5,7 @@
   "description": "Turns the page red when you click the icon",
   "permissions": [
     "downloads",
+    "windows",
     "activeTab",
     "tabs",
     "scripting",
@@ -29,9 +30,14 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://*/*", "http://*/*", "*://127.0.0.1:*/*"],
+      "matches": [
+        "https://*/*",
+        "http://*/*",
+        "*://127.0.0.1:*/*"
+      ],
       "run_at": "document_end",
-      "js": ["js/content.js"]
+      "js": ["js/content.js"],
+      "all_frames": true
     }
   ],
   "host_permissions": [

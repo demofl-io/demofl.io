@@ -68,54 +68,96 @@ async function saveDemoToLocalStorage(demoData) {
 
 // Parse demo json file into memory
 async function parseDemoFile(demoData) {
+  try {
+    const currentWindow = await chrome.windows.getCurrent();
+    let currentWindowId = currentWindow.id;
 
-  var currentWindowId = chrome.windows.getCurrent().id
+    for (let i = 0; i < demoData.steps.length; i++) {
+      let stepTabIds = [];
+      let stepWindowId = currentWindowId;
+      
+      if (demoData.steps[i].incognito && demoData.steps[i].urls.length > 0) {
+        try {
+          const windownew = await chrome.windows.create({ 
+            incognito: true,
+            focused: false
+          });
+          stepWindowId = windownew.id;
+        } catch (error) {
+          console.error("Error creating incognito window:", error);
+          continue;
+        }
+      }
+      
+      // Create all tabs for this step
+      for (let j = 0; j < demoData.steps[i].urls.length; j++) {
+        try {
+          const tab = await chrome.tabs.create({ 
+            active: false, 
+            url: demoData.steps[i].urls[j], 
+            windowId: stepWindowId 
+          });
+          
+          stepTabIds.push(tab.id);
 
-  // Loop through the steps
-  for (let i = 0; i < demoData.steps.length; i++) {
-
-    let stepTabIds = [];
-    let stepWindowId = currentWindowId;
-
-    if (demoData.steps[i].incognito && demoData.steps[i].urls.length > 0) {
-      // Create a new incognito window
-      console.log("Creating incognito window");
-      await chrome.windows.create({ "incognito": true }).then(windownew => {
-        // Save the tab id for this url
-        stepWindowId = windownew.id;
-      });
-    }
-
-    // Loop through the urls for this step
-    for (let j = 0; j < demoData.steps[i].urls.length; j++) {
-
-      console.log(demoData.steps[i].urls[j]);
-      // Create a new tab for this url
-      await chrome.tabs.create({ active: false, url: demoData.steps[i].urls[j], windowId: stepWindowId }).then(tab => {
-        // Save the tab id for this url
-        stepTabIds.push(tab.id);
-      });
-
-      // If this is an incognito window, close the first tab
-      if (demoData.steps[i].incognito && j == 0) {
-        chrome.tabs.query({ windowId: stepWindowId }).then(tabs => {
-          chrome.tabs.remove(tabs[0].id);
-        });
+          if (demoData.steps[i].personna) {
+            await new Promise((resolve) => {
+              chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
+                if (tabId === tab.id && info.status === 'complete') {
+                  chrome.tabs.onUpdated.removeListener(listener);
+                  const personaData = demoData.personnas[demoData.steps[i].personna];
+                  chrome.tabs.sendMessage(tab.id, {
+                    action: "showPersona",
+                    persona: personaData
+                  }, (response) => {
+                    if (chrome.runtime.lastError) {
+                      console.error('Error:', chrome.runtime.lastError);
+                    }
+                    resolve();
+                  });
+                }
+              });
+            });
+          }
+        } catch (error) {
+          console.error("Error creating tab:", error);
+        }
       }
 
-    }
-    // update the demo data with the new tab ids
-    demoData.steps[i].tabIds = stepTabIds;
+      // Close the first tab in incognito window if needed
+      if (demoData.steps[i].incognito && demoData.steps[i].urls.length > 0) {
+        try {
+          const tabs = await chrome.tabs.query({ windowId: stepWindowId });
+          await chrome.tabs.remove(tabs[0].id);
+        } catch (error) {
+          console.error("Error closing initial incognito tab:", error);
+        }
+      }
 
-    // If there are tabs for this step, group them together
-    if (stepTabIds.length > 0) {
-      // Group all these tabs together for this step part
-      await chrome.tabs.group({ tabIds: stepTabIds, createProperties: { windowId: stepWindowId } }).then(group => {
-        chrome.tabGroups.update(group, { title: demoData.steps[i].title });
-      });
+      // Update the demo data with the new tab ids
+      demoData.steps[i].tabIds = stepTabIds;
+
+      // Group tabs if there are any
+      if (stepTabIds.length > 0) {
+        try {
+          const group = await chrome.tabs.group({ 
+            tabIds: stepTabIds, 
+            createProperties: { windowId: stepWindowId } 
+          });
+          await chrome.tabGroups.update(group, { 
+            title: demoData.steps[i].title 
+          });
+        } catch (error) {
+          console.error("Error grouping tabs:", error);
+        }
+      }
     }
+
+    // Save the demo data to local storage
+    await saveDemoToLocalStorage(demoData);
+    
+  } catch (error) {
+    console.error("Error in parseDemoFile:", error);
+    throw error;
   }
-
-  // Save the demo data to local storage along with the new tab ids
-  saveDemoToLocalStorage(demoData)
 }
