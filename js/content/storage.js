@@ -1,5 +1,5 @@
 // js/content/storage.js
-import { createPersonaOverlay } from './overlay.js';
+import { createPersonaOverlay } from './overlay/index.js';
 
 export function checkStoredPersona(currentTabId) {
     console.log("Checking stored persona for tab:", currentTabId);
