@@ -98,156 +98,164 @@ document.addEventListener('visibilitychange', () => {
 function createPersonaOverlay(persona) {
   console.log("Creating overlay for persona:", persona);
   try {
-    // Check if overlay already exists
-    const existingOverlay = document.querySelector('.persona-overlay');
-    if (existingOverlay) {
-      console.log("Overlay already exists, skipping creation");
-      return;
-    }
+    // Get theme from storage
+    chrome.storage.local.get(["demo"], (result) => {
+      const theme = result.demo.theme;
+      
+      // Check if overlay already exists
+      const existingOverlay = document.querySelector('.persona-overlay');
+      if (existingOverlay) {
+        console.log("Overlay already exists, skipping creation");
+        return;
+      }
 
-    const overlay = document.createElement('div');
-    overlay.className = 'persona-overlay';
+      const overlay = document.createElement('div');
+      overlay.className = 'persona-overlay';
 
-    // Add animation keyframes
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes slideIn {
-        0% {
-          transform: translate(-50%, -100%);
-          opacity: 0;
+      // Add animation keyframes
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes slideIn {
+          0% {
+            transform: translate(-50%, -100%);
+            opacity: 0;
+          }
+          100% {
+            transform: translate(-50%, 0);
+            opacity: 1;
+          }
         }
-        100% {
-          transform: translate(-50%, 0);
-          opacity: 1;
+      `;
+      document.head.appendChild(style);
+
+      // Update overlay styles to include theme
+      overlay.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translate(-50%, 0);
+        background-color: ${theme.background};
+        color: ${theme.color};
+        font-family: ${theme.font}, sans-serif;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        padding: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 9999;
+        max-width: 300px;
+        cursor: move;
+        user-select: none;
+        animation: slideIn 0.3s ease-out forwards;
+        transition: transform 0.3s ease-out;
+      `;
+
+      // Rest of your overlay content with themed colors
+      const content = document.createElement('div');
+      content.style.cssText = `
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        pointer-events: none;
+      `;
+
+      content.innerHTML = `
+        ${persona.pictureurl ? 
+          `<img src="${persona.pictureurl}" alt="${persona.name}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">` : 
+          `<div style="width: 48px; height: 48px; border-radius: 50%; background-color: ${theme.color}20; display: flex; align-items: center; justify-content: center; color: ${theme.color};">
+            ${persona.name.charAt(0)}
+          </div>`
         }
-      }
-    `;
-    document.head.appendChild(style);
+        <div style="color: ${theme.color};">
+          <div style="font-weight: bold; margin-bottom: 4px;">${persona.name}</div>
+          <div style="font-size: 0.9em; opacity: 0.7;">${persona.title}</div>
+        </div>
+      `;
 
-    // Update overlay styles to include animation
-    overlay.style.cssText = `
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translate(-50%, 0);
-      background-color: rgba(255, 255, 255, 0.95);
-      border-radius: 8px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-      padding: 12px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      z-index: 9999;
-      font-family: Arial, sans-serif;
-      max-width: 300px;
-      cursor: move;
-      user-select: none;
-      animation: slideIn 0.3s ease-out forwards;
-      transition: transform 0.3s ease-out;
-    `;
+      overlay.appendChild(content);
+      document.body.appendChild(overlay);
 
-    // Add close button
-    const closeButton = document.createElement('button');
-    closeButton.innerHTML = '×';
-    closeButton.style.cssText = `
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: white;
-      border: none;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      color: #666;
-      z-index: 10000;
-    `;
-    
-    closeButton.addEventListener('click', () => {
-      overlay.style.display = 'none';
+      // Add close button with themed colors
+      const closeButton = document.createElement('button');
+      closeButton.innerHTML = '×';
+      closeButton.style.cssText = `
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: ${theme.background};
+        color: ${theme.color};
+        border: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        z-index: 10000;
+      `;
+
+      // Add drag functionality
+      let isDragging = false;
+      let currentX;
+      let currentY;
+      let initialX;
+      let initialY;
+
+      const dragStart = (e) => {
+        if (e.target === overlay) {
+          initialX = e.clientX - overlay.offsetLeft;
+          initialY = e.clientY - overlay.offsetTop;
+          isDragging = true;
+        }
+      };
+
+      const dragEnd = () => {
+        isDragging = false;
+      };
+
+      const drag = (e) => {
+        if (isDragging) {
+          e.preventDefault();
+          currentX = e.clientX - initialX;
+          currentY = e.clientY - initialY;
+
+          // Keep overlay within viewport bounds
+          const viewportWidth = window.innerWidth;
+          const viewportHeight = window.innerHeight;
+          const overlayRect = overlay.getBoundingClientRect();
+
+          currentX = Math.min(Math.max(0, currentX), viewportWidth - overlayRect.width);
+          currentY = Math.min(Math.max(0, currentY), viewportHeight - overlayRect.height);
+
+          overlay.style.left = `${currentX}px`;
+          overlay.style.top = `${currentY}px`;
+          overlay.style.transform = 'none';
+        }
+      };
+
+      // Add event listeners for drag
+      overlay.addEventListener('mousedown', dragStart, false);
+      document.addEventListener('mousemove', drag, false);
+      document.addEventListener('mouseup', dragEnd, false);
+
+      // Add close button functionality
+      closeButton.addEventListener('click', () => {
+        overlay.remove();
+        if (currentTabId) {
+          chrome.storage.local.get(["personaTabs"], (result) => {
+            const personaTabs = result.personaTabs || {};
+            delete personaTabs[currentTabId];
+            chrome.storage.local.set({ personaTabs });
+          });
+        }
+      });
+
+      overlay.appendChild(closeButton);
     });
-
-    // Add hover effect
-    closeButton.addEventListener('mouseover', () => {
-      closeButton.style.backgroundColor = '#f0f0f0';
-    });
-    closeButton.addEventListener('mouseout', () => {
-      closeButton.style.backgroundColor = 'white';
-    });
-
-    overlay.appendChild(closeButton);
-
-    // Rest of your existing overlay creation code...
-    const content = document.createElement('div');
-    content.style.cssText = `
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      pointer-events: none;
-    `;
-
-    content.innerHTML = `
-      ${persona.pictureurl ? 
-        `<img src="${persona.pictureurl}" alt="${persona.name}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">` : 
-        `<div style="width: 48px; height: 48px; border-radius: 50%; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #1a1a1a;">
-          ${persona.name.charAt(0)}
-        </div>`
-      }
-      <div style="color: #1a1a1a;">
-        <div style="font-weight: bold; margin-bottom: 4px;">${persona.name}</div>
-        <div style="font-size: 0.9em; color: #666;">${persona.title}</div>
-      </div>
-    `;
-
-    overlay.appendChild(content);
-    document.body.appendChild(overlay);
-    console.log("Overlay created successfully");
-    
-    // Your existing drag functionality...
-    let isDragging = false;
-    let currentX;
-    let currentY;
-    let initialX;
-    let initialY;
-
-    const dragStart = (e) => {
-      initialX = e.clientX - overlay.offsetLeft;
-      initialY = e.clientY - overlay.offsetTop;
-      isDragging = true;
-    };
-
-    const dragMove = (e) => {
-      if (isDragging) {
-        e.preventDefault();
-        currentX = e.clientX - initialX;
-        currentY = e.clientY - initialY;
-        
-        const rect = overlay.getBoundingClientRect();
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        
-        currentX = Math.max(0, Math.min(currentX, viewportWidth - rect.width));
-        currentY = Math.max(0, Math.min(currentY, viewportHeight - rect.height));
-        
-        overlay.style.left = `${currentX}px`;
-        overlay.style.top = `${currentY}px`;
-        overlay.style.transform = 'none';
-      }
-    };
-
-    const dragEnd = () => {
-      isDragging = false;
-    };
-
-    overlay.addEventListener('mousedown', dragStart);
-    document.addEventListener('mousemove', dragMove);
-    document.addEventListener('mouseup', dragEnd);
-
   } catch (error) {
     console.error("Error creating overlay:", error);
   }
