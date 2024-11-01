@@ -14,3 +14,13 @@ The original version was built by me for a my former employer, this is a new ver
 
 # To Do
 UI to build the flow
+
+# Dev Build
+```bash
+npm init -y
+npm install webpack webpack-cli --save-dev
+```
+
+```bash
+npm run build
+```

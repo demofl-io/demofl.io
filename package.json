@@ -1,5 +1,17 @@
 {
   "devDependencies": {
-    "daisyui": "^4.12.10"
-  }
+    "daisyui": "^4.12.10",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "name": "demofl.io",
+  "version": "1.0.0",
+  "description": "This extension aims to make life as an SE (Sales / Solutions Engineer) easier but also to make demos more attractive to prospects.",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

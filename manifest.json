@@ -30,13 +30,10 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://*/*",
-        "http://*/*",
-        "*://127.0.0.1:*/*"
-      ],
+      "matches": ["https://*/*", "http://*/*", "*://127.0.0.1:*/*"],
       "run_at": "document_end",
-      "js": ["js/content.js"],
+      "js": ["dist/content-bundle.js"],
+      "type": "module",
       "all_frames": true
     }
   ],
@@ -51,7 +48,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["logos/*","profiles/*", "flow/*", "content.js"],
+      "resources": ["logos/*", "profiles/*", "flow/*", "content.js"],
       "matches": ["http://*/*", "*://127.0.0.1:*/*", "https://*/*"]
     }
   ],
