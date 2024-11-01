@@ -1,7 +1,7 @@
 // js/content/index.js
 import { init, currentTabId } from './init.js';
 import { checkStoredPersona } from './storage.js';
-import { createPersonaOverlay } from './overlay.js';
+import { createPersonaOverlay } from './overlay/index.js';
 
 console.log("Content script loaded on:", window.location.href);
 
