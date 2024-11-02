@@ -24,3 +24,19 @@ npm install webpack webpack-cli --save-dev
 ```bash
 npm run build
 ```
+
+# Screenshots
+
+### Demo Overview
+![Demo Overview](screenshots/1-journey.png)
+*Overview of all steps in the demo journey*
+
+### Persona Cards
+![Persona Cards](screenshots/2-team.png)
+*Meet the team page with persona cards*
+
+### Persona Overlay
+![Persona Overlay](screenshots/3-overlay1.png)
+*Draggable persona overlay on demo pages*
+![Persona Overlay 2](screenshots/4-overlay2.png)
+*Draggable persona overlay on demo pages*
