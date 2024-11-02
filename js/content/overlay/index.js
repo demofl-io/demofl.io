@@ -17,7 +17,7 @@ export function createPersonaOverlay(persona) {
 
       const overlay = document.createElement('div');
       overlay.className = 'persona-overlay';
-      overlay.style.cssText = generateOverlayStyles(theme, theme.hposition, theme.vposition);
+      overlay.style.cssText = generateOverlayStyles(theme, theme["overlay-h"], theme["overlay-v"]);
 
       const content = createOverlayContent(persona, theme);
       overlay.appendChild(content);

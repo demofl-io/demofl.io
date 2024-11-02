@@ -9,8 +9,8 @@ export function createCloseButton(theme, onClose) {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: ${theme.background};
-    color: ${theme.color};
+    background: ${theme["overlay-background"]};
+    color: ${theme["overlay-color"]};
     border: none;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     cursor: pointer;

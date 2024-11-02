@@ -7,9 +7,9 @@ export function initializeDrag(overlay, theme) {
   let initialY;
 
   // Calculate scale from theme
-  const scale = theme.overlaysize.includes('%') ?
-    Math.min(parseInt(theme.overlaysize) / 100, 2) : // Convert percentage to scale, max 200%
-    parseInt(theme.overlaysize) / 100; // Convert direct number to scale
+  const scale = theme["overlay-scale"].includes('%') ?
+    Math.min(parseInt(theme["overlay-scale"]) / 100, 2) : // Convert percentage to scale, max 200%
+    parseInt(theme["overlay-scale"]) / 100; // Convert direct number to scale
 
   const dragStart = (e) => {
     const rect = overlay.getBoundingClientRect();

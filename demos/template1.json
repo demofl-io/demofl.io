@@ -1,12 +1,12 @@
 {
   "theme": {
-    "color": "#ffffff",
-    "background": "#111827",
     "brand-color": "#15384e",
-    "font": "Arial",
-    "hposition": "center",
-    "vposition": "top",
-    "overlaysize": "140%"
+    "brand-font": "Arial",
+    "overlay-color": "#ffffff",
+    "overlay-background": "#111827",
+    "overlay-h": "center",
+    "overlay-v": "top",
+    "overlay-scale": "140%"
   },
   "product": {
     "name": "Planet Express",

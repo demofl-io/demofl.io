@@ -1,5 +1,5 @@
 // js/content/overlay/styles.js
-export function generateOverlayStyles(theme, hposition, vposition) {
+export function generateOverlayStyles(theme, overlayh, overlayv) {
   const positions = {
     horizontal: {
       left: { position: 'left: 20px;', transform: 'translateX(0)' },
@@ -13,13 +13,13 @@ export function generateOverlayStyles(theme, hposition, vposition) {
     }
   };
 
-  const h = positions.horizontal[hposition] || positions.horizontal.center;
-  const v = positions.vertical[vposition] || positions.vertical.top;
+  const h = positions.horizontal[overlayh] || positions.horizontal.center;
+  const v = positions.vertical[overlayv] || positions.vertical.top;
 
-  // Handle the overlaysize from theme as scale factor
-  const scale = theme.overlaysize.includes('%') ?
-    Math.min(parseInt(theme.overlaysize) / 100, 2) : // Convert percentage to scale, max 200%
-    parseInt(theme.overlaysize) / 100; // Convert direct number to scale
+  // Handle the overlay-scale from theme as scale factor
+  const scale = theme["overlay-scale"].includes('%') ?
+    Math.min(parseInt(theme["overlay-scale"]) / 100, 2) : // Convert percentage to scale, max 200%
+    parseInt(theme["overlay-scale"]) / 100; // Convert direct number to scale
 
   // Base width for the overlay before scaling
   const baseWidth = '300px';
@@ -29,9 +29,9 @@ export function generateOverlayStyles(theme, hposition, vposition) {
     ${h.position}
     ${v.position}
     ${h.transform || v.transform ? `transform: ${[h.transform, v.transform, `scale(${scale})`].filter(Boolean).join(' ')};` : `transform: scale(${scale});`}
-    background-color: ${theme.background};
-    color: ${theme.color};
-    font-family: ${theme.font}, sans-serif;
+    background-color: ${theme["overlay-background"]};
+    color: ${theme["overlay-color"]};
+    font-family: ${theme["brand-font"]}, sans-serif;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     padding: 12px;
@@ -43,7 +43,7 @@ export function generateOverlayStyles(theme, hposition, vposition) {
     cursor: move;
     user-select: none;
     transition: transform 0.3s ease-out;
-    transform-origin: ${hposition === 'right' ? 'right' : hposition === 'left' ? 'left' : 'center'} 
-                     ${vposition === 'bottom' ? 'bottom' : vposition === 'top' ? 'top' : 'center'};
+    transform-origin: ${overlayh === 'right' ? 'right' : overlayh === 'left' ? 'left' : 'center'} 
+                     ${overlayv === 'bottom' ? 'bottom' : overlayv === 'top' ? 'top' : 'center'};
   `;
 }
