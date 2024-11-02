@@ -9,3 +9,6 @@ install:
 	chmod +x tailwindcss-linux-x64
 	mv tailwindcss-linux-x64 tailwindcss
 	npm i -D daisyui@latest
+
+zip:
+	zip -r demoflio-extension.zip manifest.json popup.html  options.html icon*.png dist/ demos/
