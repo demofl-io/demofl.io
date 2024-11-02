@@ -48,7 +48,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["logos/*", "profiles/*", "flow/*", "content.js"],
+      "resources": ["demos/*", "logos/*", "profiles/*", "flow/*", "content.js"],
       "matches": ["http://*/*", "*://127.0.0.1:*/*", "https://*/*"]
     }
   ],
