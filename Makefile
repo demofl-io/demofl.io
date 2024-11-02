@@ -11,4 +11,4 @@ install:
 	npm i -D daisyui@latest
 
 zip:
-	zip -r demoflio-extension.zip manifest.json popup.html  options.html icon*.png dist/ demos/
+	zip -r demoflio-extension.zip manifest.json popup.html  options.html icon*.png dist/ demos/ pictures/

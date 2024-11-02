@@ -1,5 +1,5 @@
 import { demoFolder } from './templates.js';
-import { generateOverviewHTML, generatePersonasHTML } from './overview.js';
+import { generateOverviewHTML, generatePersonasHTML } from './templates/index.js';
 
 export async function openJSONFile(value) {
     const [type, name] = value.split(':');
