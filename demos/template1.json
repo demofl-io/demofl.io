@@ -18,21 +18,26 @@
   },
   "personnas": {
     "CEO": {
-      "name": "John Doe",
+      "name": "Mickael",
       "title": "CEO",
       "pictureurl": "mickael.jpg"
     },
     "CFO": {
-      "name": "Jane Doe",
+      "name": "Pam",
       "title": "CFO",
       "pictureurl": "pam.jpg"
+    },
+    "CTO": {
+      "name": "Dwigth",
+      "title": "CTO",
+      "pictureurl": "dwight.jpg"
     }
   },
   "steps": [
     {
       "id": "step1",
-      "title": "Step 1",
-      "description": "This is step 1",
+      "title": "Grow your business",
+      "description": "Bring more business to your company ...",
       "personna": "CEO",
       "icon": "house",
       "onlyShowUrls": true,
@@ -40,18 +45,18 @@
     },
     {
       "id": "step2",
-      "title": "Step 2",
-      "description": "This is step 2",
-      "personna": "CFO",
-      "incognito": true,
+      "title": "Help your customers",
+      "description": "Increase customer satisfaction ...",
+      "personna": "CTO",
+      "incognito": false,
       "icon": "lightbulb",
       "urls": ["http://www.yahoo.com"]
     },
     {
       "id": "step3",
-      "title": "Step 3",
+      "title": "Profit !!",
       "personna": "CFO",
-      "description": "This is step 3",
+      "description": "Money money money ...",
       "icon": "lightbulb",
       "urls": ["http://www.bing.com"]
     }
