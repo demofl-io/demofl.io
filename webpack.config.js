@@ -23,5 +23,13 @@ module.exports = [{
     path: path.resolve(__dirname, 'dist'),
   },
   mode: 'production',
+},
+{
+    entry: './js/processor.js',
+    output: {
+        filename: 'processor-bundle.js',
+        path: path.resolve(__dirname, 'dist'),
+    },
+    mode: 'production',
 }];
 
