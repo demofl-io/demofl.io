@@ -51,7 +51,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["demos/*", "logos/*", "profiles/*", "flow/*", "content.js"],
+      "resources": ["pictures/*","demos/*", "logos/*", "profiles/*", "flow/*", "content.js"],
       "matches": ["http://*/*", "https://*/*"]
     }
   ],

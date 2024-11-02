@@ -2,28 +2,30 @@
   "theme": {
     "color": "#ffffff",
     "background": "#111827",
+    "brand-color": "#15384e",
     "font": "Arial",
     "hposition": "center",
-    "vposition": "top"
+    "vposition": "top",
+    "overlaysize": "140%"
   },
   "product": {
-    "name": "Product Name",
-    "logourl": "http://www.example.com/logo.png"
+    "name": "Planet Express",
+    "logourl": "https://www.graphicdesignforum.com/uploads/default/optimized/2X/a/a03dd3a60bb57b4071d9502290849bda1cbae5cc_2_690x649.png"
   },
   "customer": {
-    "name": "ACME",
-    "logourl": "http://www.example.com/logo.png"
+    "name": "Dunder Mifflin",
+    "logourl": "https://www.bettercloud.com/wp-content/uploads/sites/3/2013/07/DunderMifflinLogo.jpg"
   },
   "personnas": {
     "CEO": {
       "name": "John Doe",
       "title": "CEO",
-      "pictureurl": ""
+      "pictureurl": "mickael.jpg"
     },
     "CFO": {
       "name": "Jane Doe",
       "title": "CFO",
-      "pictureurl": ""
+      "pictureurl": "pam.jpg"
     }
   },
   "steps": [

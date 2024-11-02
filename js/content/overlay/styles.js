@@ -16,11 +16,19 @@ export function generateOverlayStyles(theme, hposition, vposition) {
   const h = positions.horizontal[hposition] || positions.horizontal.center;
   const v = positions.vertical[vposition] || positions.vertical.top;
 
+  // Handle the overlaysize from theme as scale factor
+  const scale = theme.overlaysize.includes('%') ?
+    Math.min(parseInt(theme.overlaysize) / 100, 2) : // Convert percentage to scale, max 200%
+    parseInt(theme.overlaysize) / 100; // Convert direct number to scale
+
+  // Base width for the overlay before scaling
+  const baseWidth = '300px';
+
   return `
     position: fixed;
     ${h.position}
     ${v.position}
-    ${h.transform || v.transform ? `transform: ${[h.transform, v.transform].filter(Boolean).join(' ')};` : ''}
+    ${h.transform || v.transform ? `transform: ${[h.transform, v.transform, `scale(${scale})`].filter(Boolean).join(' ')};` : `transform: scale(${scale});`}
     background-color: ${theme.background};
     color: ${theme.color};
     font-family: ${theme.font}, sans-serif;
@@ -31,9 +39,11 @@ export function generateOverlayStyles(theme, hposition, vposition) {
     align-items: center;
     gap: 12px;
     z-index: 9999;
-    width: 300px;
+    width: ${baseWidth};
     cursor: move;
     user-select: none;
     transition: transform 0.3s ease-out;
+    transform-origin: ${hposition === 'right' ? 'right' : hposition === 'left' ? 'left' : 'center'} 
+                     ${vposition === 'bottom' ? 'bottom' : vposition === 'top' ? 'top' : 'center'};
   `;
 }

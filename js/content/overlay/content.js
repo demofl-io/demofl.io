@@ -8,9 +8,13 @@ export function createOverlayContent(persona, theme) {
     pointer-events: none;
   `;
 
+    // Get full URL for picture from extension resources
+    const pictureUrl = persona.pictureurl ? 
+    chrome.runtime.getURL(`pictures/${persona.pictureurl}`) : null;
+
   content.innerHTML = `
-    ${persona.pictureurl ? 
-      `<img src="${persona.pictureurl}" alt="${persona.name}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">` : 
+    ${pictureUrl ? 
+      `<img src="${pictureUrl}" alt="${persona.name}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">` : 
       `<div style="width: 48px; height: 48px; border-radius: 50%; background-color: ${theme.color}20; display: flex; align-items: center; justify-content: center; color: ${theme.color};">
         ${persona.name.charAt(0)}
       </div>`

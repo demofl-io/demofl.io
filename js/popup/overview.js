@@ -1,4 +1,40 @@
+// Helper function to convert hex to HSL
+function hexToHSL(hex) {
+    // Remove the # if present
+    hex = hex.replace('#', '');
+    
+    // Convert hex to RGB
+    const r = parseInt(hex.substring(0, 2), 16) / 255;
+    const g = parseInt(hex.substring(2, 4), 16) / 255;
+    const b = parseInt(hex.substring(4, 6), 16) / 255;
+    
+    // Find greatest and smallest RGB values
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    
+    let h, s, l = (max + min) / 2;
+  
+    if (max === min) {
+      h = s = 0;
+    } else {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+  
+    return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
+  }
+
 export function generateOverviewHTML(demoData) {
+
+    const hslColor = hexToHSL(demoData.theme["brand-color"]);
+
     return `
       <!DOCTYPE html>
       <html>
@@ -10,6 +46,11 @@ export function generateOverviewHTML(demoData) {
         <link href="https://cdn.jsdelivr.net/npm/daisyui@1.14.0/dist/full.css" rel="stylesheet">
          <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <style>
+          :root {
+            --p: ${hslColor};
+            --pf: ${hslColor};
+            --pc: 0 0% 100%;
+          }
           body {
             min-height: 100vh;
             display: flex;
@@ -68,9 +109,9 @@ export function generateOverviewHTML(demoData) {
           <div class="hero-content text-center px-4">
             <div>
               <div class="flex justify-center items-center gap-4 md:gap-8 mb-6">
-                <img src="${demoData.product.logourl}" alt="${demoData.product.name}" class="h-8 md:h-12">
+                <img src="${demoData.product.logourl}" alt="${demoData.product.name}" class="h-16 md:h-24">
                 <div class="divider divider-horizontal">x</div>
-                <img src="${demoData.customer.logourl}" alt="${demoData.customer.name}" class="h-8 md:h-12">
+                <img src="${demoData.customer.logourl}" alt="${demoData.customer.name}" class="h-16 md:h-24">
               </div>
               <h1 class="text-3xl md:text-5xl font-bold mb-2">Demo Journey</h1>
               <p class="text-lg md:text-xl opacity-75">Follow the story step by step</p>
@@ -108,6 +149,8 @@ export function generateOverviewHTML(demoData) {
 }
 
 export function generatePersonasHTML(demoData) {
+    const hslColor = hexToHSL(demoData.theme["brand-color"]);
+
     return `
     <!DOCTYPE html>
     <html>
@@ -118,6 +161,11 @@ export function generatePersonasHTML(demoData) {
       <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
       <link href="https://cdn.jsdelivr.net/npm/daisyui@1.14.0/dist/full.css" rel="stylesheet">
       <style>
+          :root {
+          --p: ${hslColor};
+          --pf: ${hslColor};
+          --pc: 0 0% 100%;
+          }
         body {
           min-height: 100vh;
           display: flex;
@@ -147,9 +195,9 @@ export function generatePersonasHTML(demoData) {
         <div class="hero-content text-center">
           <div>
             <div class="flex justify-center items-center gap-8 mb-6">
-              <img src="${demoData.product.logourl}" alt="${demoData.product.name}" class="h-12">
+              <img src="${demoData.product.logourl}" alt="${demoData.product.name}" class="h-16 md:h-24">
               <div class="divider divider-horizontal">x</div>
-              <img src="${demoData.customer.logourl}" alt="${demoData.customer.name}" class="h-12">
+              <img src="${demoData.customer.logourl}" alt="${demoData.customer.name}" class="h-16 md:h-24">
             </div>
             <h1 class="text-5xl font-bold mb-2">Meet the Team</h1>
             <p class="text-xl opacity-75">The key players in this demo story</p>
@@ -159,22 +207,27 @@ export function generatePersonasHTML(demoData) {
 
       <main class="container mx-auto px-4 pb-16">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          ${Object.entries(demoData.personnas).map(([key, persona]) => `
-            <div class="persona-card card bg-base-100 shadow-xl hover:shadow-2xl">
-              <div class="card-body items-center text-center p-8">
-                <div class="avatar large placeholder mb-4">
-                  <div class="bg-primary text-primary-content rounded-full w-24 h-24 ring ring-primary ring-offset-2">
-                    ${persona.pictureurl ?
-            `<img src="${persona.pictureurl}" alt="${persona.name}" class="mask mask-circle">` :
-            `<span class="text-3xl font-bold">${persona.name.charAt(0)}</span>`
-        }
+          ${Object.entries(demoData.personnas).map(([key, persona]) => {
+            const pictureUrl = persona.pictureurl ? 
+              chrome.runtime.getURL(`pictures/${persona.pictureurl}`) : null;
+            
+            return `
+              <div class="persona-card card bg-base-100 shadow-xl hover:shadow-2xl">
+                <div class="card-body items-center text-center p-8">
+                  <div class="avatar large placeholder mb-4">
+                    <div class="bg-primary text-primary-content rounded-full w-24 h-24 ring ring-primary ring-offset-2">
+                      ${pictureUrl ?
+                        `<img src="${pictureUrl}" alt="${persona.name}" class="mask mask-circle">` :
+                        `<span class="text-3xl font-bold">${persona.name.charAt(0)}</span>`
+                      }
+                    </div>
                   </div>
+                  <h2 class="card-title text-2xl mb-1">${persona.name}</h2>
+                  <div class="badge badge-primary badge-lg mb-4">${persona.title}</div>
                 </div>
-                <h2 class="card-title text-2xl mb-1">${persona.name}</h2>
-                <div class="badge badge-primary badge-lg mb-4">${persona.title}</div>
               </div>
-            </div>
-          `).join('')}
+            `;
+          }).join('')}
         </div>
       </main>
 
