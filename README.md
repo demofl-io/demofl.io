@@ -45,3 +45,6 @@ npm run build
 *Draggable persona overlay on demo pages*
 ![Persona Overlay 2](screenshots/4-overlay2.png)
 *Draggable persona overlay on demo pages*
+
+## Privacy Policy
+You can read our privacy policy [here](./PRIVACY_POLICY.md).
