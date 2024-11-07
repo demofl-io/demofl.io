@@ -1,5 +1,8 @@
 module.exports = {
-  content: ["./html/**/*.html", "./js/**/*.js"],
+  content: [
+    "./html/**/*.html",
+    "./js/**/*.js"
+  ],
   theme: {
     extend: {},
   },
@@ -13,5 +16,18 @@ module.exports = {
     base: true,
     styled: true,
     utils: true
+  },
+  purge: {
+    enabled: true,
+    content: [
+      "./html/**/*.html",
+      "./js/**/*.js"
+    ],
+    options: {
+      safelist: [],
+      blocklist: [],
+      keyframes: true,
+      fontFace: true
+    }
   }
 }

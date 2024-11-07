@@ -37,9 +37,20 @@ module.exports = [{
         ]
     },
     optimization: {
+        minimize: true,
         minimizer: [
-            `...`,
-            new CssMinimizerPlugin()
+            '...',
+            new CssMinimizerPlugin({
+                minimizerOptions: {
+                    preset: [
+                        'default',
+                        {
+                            discardComments: { removeAll: true },
+                            normalizeWhitespace: true
+                        },
+                    ],
+                },
+            })
         ]
     },
     mode: 'production'
