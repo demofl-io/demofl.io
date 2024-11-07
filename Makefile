@@ -1,5 +1,3 @@
-
-
 install:
 	curl -sL https://deb.nodesource.com/setup_16.x -o /tmp/nodesource_setup.sh
 	sudo bash /tmp/nodesource_setup.sh
@@ -11,4 +9,4 @@ install:
 	npm i -D daisyui@latest
 
 zip:
-	zip -r demoflio-extension.zip manifest.json html/ dist/ demos/ pictures/ assets/ 
+	zip -r demoflio-extension.zip manifest.json html/ dist/ demos/ pictures/ assets/ -x "assets/data.json"
