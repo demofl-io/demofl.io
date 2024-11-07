@@ -14,10 +14,10 @@
     "background"
   ],
   "icons": {
-    "16": "icon32.png",
-    "32": "icon32.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
+    "16": "assets/icons/icon32.png",
+    "32": "assets/icons/icon32.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
   },
 
   "background": {
