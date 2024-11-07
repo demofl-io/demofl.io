@@ -2,7 +2,7 @@
   "name": "demofl.io",
   "manifest_version": 3,
   "version": "2024.11.07.001",
-  "description": "This extension aims to make life as an SE (Sales / Solutions Engineer) easier but also to make demos more attractive to prospects",
+  "description": "Demofl.io is a powerful Chrome extension designed to streamline the demo creation process for Sales and Solutions Engineers (SEs). It simplifies the way you build, manage, and present demo flows, making your presentations more engaging and effective for prospects.",
   "permissions": [
 
     "windows",
