@@ -51,8 +51,16 @@ export function createStepField(title = '', description = '', urls = [], persona
                     <label class="label">
                         <span class="label-text">Icon</span>
                     </label>
-                    <!-- Search Input -->
-                    <input type="text" class="input input-bordered step-icon-search w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Search Icon" value="${icon}"/>
+                    <div class="flex space-x-2">
+                        <!-- Icon Preview -->
+                        <div class="w-10 h-10 flex items-center justify-center border rounded-lg dark:border-gray-600">
+                            <span class="selected-icon-preview ${icon ? icon : ''}">${icon || ''}</span>
+                        </div>
+                        <!-- Search Input -->
+                        <div class="flex-1">
+                            <input type="text" class="input input-bordered step-icon-search w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Search Icon" value="${icon}"/>
+                        </div>
+                    </div>
                     
                     <!-- Icon Dropdown -->
                     <div class="absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 z-10 max-h-60 overflow-y-auto hidden icon-dropdown">
@@ -100,11 +108,18 @@ export function createStepField(title = '', description = '', urls = [], persona
         iconDropdown.querySelectorAll('.icon-item').forEach(iconItem => {
             iconItem.addEventListener('click', () => {
                 const selectedIcon = iconItem.getAttribute('data-icon');
+                const iconClass = iconItem.querySelector('span').className;
+                
                 // Update the hidden input value
                 const hiddenInput = stepDiv.querySelector('.selected-icon');
                 hiddenInput.value = selectedIcon;
                 
-                // Optionally, update the search input to show the selected icon
+                // Update the preview
+                const preview = stepDiv.querySelector('.selected-icon-preview');
+                preview.className = `selected-icon-preview ${iconClass}`;
+                preview.textContent = selectedIcon;
+                
+                // Update the search input
                 searchInput.value = selectedIcon;
                 
                 // Hide the dropdown
