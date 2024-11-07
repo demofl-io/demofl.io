@@ -130,3 +130,4 @@ dist
 .pnp.*
 package-lock.json
 demoflio-extension.zip
+assets/data.json
