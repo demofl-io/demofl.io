@@ -1,6 +1,15 @@
 {
   "devDependencies": {
-    "daisyui": "^4.12.10",
+    "autoprefixer": "^10.4.2",
+    "css-loader": "^6.7.1",
+    "css-minimizer-webpack-plugin": "^7.0.0",
+    "cssnano": "^7.0.6",
+    "daisyui": "^1.14.0",
+    "mini-css-extract-plugin": "^2.6.0",
+    "postcss": "^8.4.47",
+    "postcss-cli": "^8.3.1",
+    "postcss-loader": "^6.2.1",
+    "tailwindcss": "^2.2.19",
     "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4"
   },
@@ -9,7 +18,8 @@
   "description": "This extension aims to make life as an SE (Sales / Solutions Engineer) easier but also to make demos more attractive to prospects.",
   "main": "tailwind.config.js",
   "scripts": {
-    "build": "webpack"
+    "build:css": "postcss css/input.css -o dist/output.css",
+    "build": "npm run build:css && webpack"
   },
   "keywords": [],
   "author": "",

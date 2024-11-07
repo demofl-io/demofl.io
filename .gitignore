@@ -132,3 +132,4 @@ package-lock.json
 demoflio-extension.zip
 assets/data.json
 tailwindcss
+dist/output.css

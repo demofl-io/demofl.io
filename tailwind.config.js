@@ -1,15 +1,17 @@
 module.exports = {
-    content: ["./src/**/*.{html,js}", "./profiles/**/*.{html,js}", "./**/*.{html,js}"],
-    theme: {
-        extend: {},
-        colors: {
-            transparent: 'transparent',
-            current: 'currentColor',
-            brandcolor: 'rgb(52, 110, 74)'
-        },
-    },
-    darkMode: 'class',
-    plugins: [
-
-    ],
+  content: ["./html/**/*.html", "./js/**/*.js"],
+  theme: {
+    extend: {},
+  },
+  darkMode: 'class',
+  plugins: [
+    require('daisyui')
+  ],
+  daisyui: {
+    themes: ["business"],
+    darkTheme: "business", // Set business theme as default
+    base: true, // This ensures the theme is applied by default
+    styled: true,
+    utils: true
+  }
 }

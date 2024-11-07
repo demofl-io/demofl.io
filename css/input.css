@@ -1,3 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Your custom styles here */
+
 /* Ensure the icon-dropdown and icon-item have appropriate dark mode styles */
 
 .icon-dropdown {

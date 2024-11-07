@@ -61,6 +61,8 @@ If you prefer to install **Demofl.io** manually or improve the extension, follow
     ```bash
     npm init -y
     npm install webpack webpack-cli --save-dev
+    npm install cssnano postcss --save-dev
+    npm install css-minimizer-webpack-plugin --save-dev
     ```
 4. **Build the Project:**
     ```bash
