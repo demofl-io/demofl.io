@@ -96,6 +96,10 @@ If you prefer to install **Demofl.io** manually or improve the extension, follow
 ![Persona Overlay 2](screenshots/4-overlay2.png)
 *Draggable persona overlay on demo pages*
 
+## Privacy Policy
+You can read our privacy policy [here](./PRIVACY_POLICY.md).
+
+
 ## 🛠️ To Do
 
 - **UI Enhancements**
