@@ -8,7 +8,7 @@
 - [🎯 Value Proposition](#-value-proposition)
 - [🚀 Getting Started](#-getting-started)
 - [📷 Screenshots](#-screenshots)
-- [🛠️ To Do](#to-do)
+- [🛠️ To Do](#-to-do)
 
 ## 📌 Features
 
