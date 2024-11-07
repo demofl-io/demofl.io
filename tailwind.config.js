@@ -8,6 +8,7 @@ module.exports = {
             brandcolor: 'rgb(52, 110, 74)'
         },
     },
+    darkMode: 'class',
     plugins: [
 
     ],

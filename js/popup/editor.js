@@ -1,6 +1,6 @@
-// js/popup/editor.js
 import { saveTemplate } from './templates.js';
 
+import availableIcons from '../../assets/material-icons.json';
 document.addEventListener('DOMContentLoaded', async () => {
     const form = document.getElementById('editForm');
     const addPersonaBtn = document.getElementById('addPersonaBtn');
@@ -8,15 +8,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const addStepBtn = document.getElementById('addStepBtn');
     const stepsContainer = document.getElementById('stepsContainer');
 
-    // Define available Material Icons
-    const availableIcons = [
-        { name: 'Description', value: 'description', class: 'material-icons' },
-        { name: 'Assessment', value: 'assessment', class: 'material-icons' },
-        { name: 'Build', value: 'build', class: 'material-icons' },
-        { name: 'Search', value: 'search', class: 'material-icons' },
-        { name: 'TrendingUp', value: 'trending_up', class: 'material-icons' },
-        // Add more icons as needed
-    ];
+    // Convert icon names to objects with display-friendly names
+    const formattedIcons = availableIcons.map(iconName => ({
+        name: iconName.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase()), // Capitalize and replace underscores
+        value: iconName,
+        class: 'material-icons'
+    }));
 
     // Load the template to edit
     const result = await chrome.storage.local.get('editingTemplate');
@@ -68,15 +65,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('customerLogo').value = data.customer.logourl || '';
 
     // Populate Personas
-    const personas = data.personnas || {};
+    const personas = data.personas || {};
     for (const [key, persona] of Object.entries(personas)) {
         addPersonaField(key, persona); // Pass both key and persona
     }
 
+    // **Clear Existing Steps Before Adding New Ones**
+    stepsContainer.innerHTML = ''; // Clear any existing content
+
     // Populate Steps
     const steps = data.steps || [];
     steps.forEach((step, index) => {
-        addStepField(step.title || '', step.description || '', step.urls || [], step.personna || '', step.icon || '');
+        addStepField(step.title || '', step.description || '', step.urls || [], step.persona || '', step.icon || '');
     });
 
     // Handle Add Persona
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         addStepField();
     });
 
-    // Handle Form Submission
+    // Form Submission Handler
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -116,16 +116,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             logourl: document.getElementById('customerLogo').value
         };
 
-        // Gather Personas Data
+        // Gather Personas Data (Corrected from 'personnas' to 'personas')
         const personasElements = personasContainer.querySelectorAll('.persona');
-        const personnas = {};
+        const personas = {};
         personasElements.forEach(personaEl => {
-            const key = personaEl.querySelector('.persona-key').value.trim();
-            const name = personaEl.querySelector('.persona-display-name').value.trim();
-            const title = personaEl.querySelector('.persona-title').value.trim();
-            const pictureurl = personaEl.querySelector('.persona-picture').value.trim();
-            if (key && name && title) {
-                personnas[key] = { name, title, pictureurl };
+            const key = personaEl.querySelector('.persona-key')?.value.trim();
+            const name = personaEl.querySelector('.persona-display-name')?.value.trim();
+            const title = personaEl.querySelector('.persona-title')?.value.trim();
+            const pictureurl = personaEl.querySelector('.persona-picture')?.value.trim();
+            const icon = personaEl.querySelector('.persona-icon')?.value.trim();
+
+            if (key && name && title && icon) {
+                personas[key] = { name, title, pictureurl, icon };
             }
         });
 
@@ -133,26 +135,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         const stepsElements = stepsContainer.querySelectorAll('.step');
         const steps = [];
         stepsElements.forEach(stepEl => {
-            const title = stepEl.querySelector('.step-title').value.trim();
-            const description = stepEl.querySelector('.step-description').value.trim();
-            const personaKey = stepEl.querySelector('.step-persona').value;
-            const icon = stepEl.querySelector('.step-icon').value;
+            const title = stepEl.querySelector('.step-title')?.value.trim();
+            const description = stepEl.querySelector('.step-description')?.value.trim();
+            const personaKey = stepEl.querySelector('.step-persona')?.value;
+            const icon = stepEl.querySelector('.step-icon')?.value;
             const urls = Array.from(stepEl.querySelectorAll('.step-url'))
                 .map(input => input.value.trim())
                 .filter(url => url);
+
             if (title && description && personaKey && icon && urls.length > 0) {
-                steps.push({ title, description, urls, personna: personaKey, icon });
+                steps.push({ title, description, urls, persona: personaKey, icon });
+            } else {
+                console.warn('Incomplete step data:', { title, description, personaKey, icon, urls });
             }
         });
 
-        // Construct the updated template
+        // Construct the updated template (Corrected from 'personnas' to 'personas')
         const updatedTemplate = {
             theme,
             product,
             customer,
-            personnas,
+            personas, // Updated key
             steps
         };
+
+        // Debug: Log the updated template to verify
+        console.log('Updated Template:', updatedTemplate);
 
         // Save the updated template
         const saveSuccess = await saveTemplate(updatedTemplate, name, type);
@@ -171,6 +179,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const personaDiv = document.createElement('div');
         personaDiv.className = 'persona flex space-x-4 items-center';
 
+        // Generate Icon Options (Optional if using search)
+        // const iconOptions = formattedIcons.map(icon => `
+        //     <option value="${icon.value}" ${persona.icon === icon.value ? 'selected' : ''}>${icon.name}</option>
+        // `).join('');
+
         personaDiv.innerHTML = `
             <input type="text" class="input input-bordered persona-key w-24" placeholder="Key" value="${key}" required>
             <input type="text" class="input input-bordered persona-display-name flex-1" placeholder="Name" value="${persona.name || ''}" required>
@@ -187,19 +200,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         personasContainer.appendChild(personaDiv);
     }
 
-    // Function to Add Step Fields
-    function addStepField(title = '', description = '', urls = [], personna = '', icon = '') {
+    // Function to Add Step Fields with Searchable Icon Selector
+    function addStepField(title = '', description = '', urls = [], persona = '', icon = '') {
         const stepDiv = document.createElement('div');
         stepDiv.className = 'step p-4 border border-gray-300 rounded-lg';
 
-        // Generate Persona Options
-        const personaOptions = Object.keys(data.personnas).map(key => `
-            <option value="${key}" ${personna === key ? 'selected' : ''}>${data.personnas[key].name}</option>
-        `).join('');
-
-        // Generate Material Icon Options
-        const iconOptions = availableIcons.map(iconOption => `
-            <option value="${iconOption.value}" ${icon === iconOption.value ? 'selected' : ''}>${iconOption.name}</option>
+        // Generate Icon Items with Search Functionality
+        const iconItems = formattedIcons.map(iconObj => `
+            <div class="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer icon-item" data-icon="${iconObj.value}">
+                <span class="${iconObj.class} mr-2 dark:text-white">${iconObj.value}</span>
+                <span class="dark:text-white">${iconObj.name}</span>
+            </div>
         `).join('');
 
         stepDiv.innerHTML = `
@@ -212,10 +223,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <label class="label">
                         <span class="label-text">Title</span>
                     </label>
-                    <div class="flex items-center">
-                        <input type="text" class="input input-bordered step-title w-full" placeholder="Step Title" value="${title}" required>
-
-                    </div>
+                    <input type="text" class="input input-bordered step-title w-full" placeholder="Step Title" value="${title}" required>
                 </div>
                 <div>
                     <label class="label">
@@ -228,31 +236,33 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <span class="label-text">Persona</span>
                     </label>
                     <select class="select select-bordered step-persona w-full" required>
-                        <option value="" disabled>Select Persona</option>
-                        ${personaOptions}
+                        <option value="" disabled ${!persona ? 'selected' : ''}>Select Persona</option>
+                        ${Object.keys(data.personas).map(key => `
+                            <option value="${key}" ${persona === key ? 'selected' : ''}>${data.personas[key].name}</option>
+                        `).join('')}
                     </select>
                 </div>
-                <div>
+                <div class="relative">
                     <label class="label">
                         <span class="label-text">Icon</span>
                     </label>
-                    <select class="select select-bordered step-icon w-full" required>
-                        <option value="" disabled>Select Icon</option>
-                        ${iconOptions}
-                    </select>
-                         <span class="material-icons md-24 icon-preview ml-2">
-                            ${icon ? icon : 'help_outline'}
-                        </span>
+                    <!-- Search Input -->
+                    <input type="text" class="input input-bordered step-icon-search w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Search Icon" />
+                    
+                    <!-- Icon Dropdown -->
+                    <div class="absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 z-10 max-h-60 overflow-y-auto hidden icon-dropdown">
+                        ${iconItems}
+                    </div>
                 </div>
             </div>
             <div class="mt-4">
                 <label class="label">
-                    <span class="label-text">URLs</span>
+                    <span class="label-text dark:text-white">URLs</span>
                 </label>
                 <div class="urls-container space-y-2">
                     ${urls.map(url => `
                         <div class="flex space-x-2 items-center">
-                            <input type="url" class="input input-bordered step-url flex-1" placeholder="https://example.com" value="${url}" required>
+                            <input type="url" class="input input-bordered step-url flex-1 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="https://example.com" value="${url}" required>
                             <button type="button" class="btn btn-sm btn-error removeUrl">🗑️</button>
                         </div>
                     `).join('')}
@@ -278,12 +288,54 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         });
 
-        // Update Icon Preview on Change
-        const iconSelect = stepDiv.querySelector('.step-icon');
-        const iconPreview = stepDiv.querySelector('.icon-preview');
+        // Handle Icon Selection (Search Functionality)
+        const searchInput = stepDiv.querySelector('.step-icon-search');
+        const iconDropdown = stepDiv.querySelector('.icon-dropdown');
 
-        iconSelect.addEventListener('change', (e) => {
-            iconPreview.textContent = e.target.value || 'help_outline';
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.toLowerCase();
+            const icons = iconDropdown.querySelectorAll('.icon-item');
+            icons.forEach(icon => {
+                const iconName = icon.getAttribute('data-icon').toLowerCase();
+                if (iconName.includes(query)) {
+                    icon.style.display = 'flex';
+                } else {
+                    icon.style.display = 'none';
+                }
+            });
+        });
+
+        iconDropdown.querySelectorAll('.icon-item').forEach(iconItem => {
+            iconItem.addEventListener('click', () => {
+                const selectedIcon = iconItem.getAttribute('data-icon');
+                // Update the icon input value or display as needed
+                // For example, you can set it to a hidden input or display the icon name
+                // Assuming you have a hidden input to store the selected icon
+                let hiddenInput = stepDiv.querySelector('.selected-icon');
+                if (!hiddenInput) {
+                    hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.className = 'selected-icon';
+                    stepDiv.appendChild(hiddenInput);
+                }
+                hiddenInput.value = selectedIcon;
+                // Optionally, display the selected icon
+                const iconDisplay = stepDiv.querySelector('.icon-display');
+                if (iconDisplay) {
+                    iconDisplay.textContent = selectedIcon;
+                }
+                iconDropdown.classList.add('hidden');
+            });
+        });
+
+        searchInput.addEventListener('focus', () => {
+            iconDropdown.classList.remove('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!stepDiv.contains(e.target)) {
+                iconDropdown.classList.add('hidden');
+            }
         });
 
         stepsContainer.appendChild(stepDiv);
@@ -295,7 +347,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         urlDiv.className = 'flex space-x-2 items-center';
 
         urlDiv.innerHTML = `
-            <input type="url" class="input input-bordered step-url flex-1" placeholder="https://example.com" value="${url}" required>
+            <input type="url" class="input input-bordered step-url flex-1 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="https://example.com" value="${url}" required>
             <button type="button" class="btn btn-sm btn-error removeUrl">🗑️</button>
         `;
 

@@ -60,7 +60,7 @@ export function generatePersonasHTML(demoData) {
 
       <main class="container mx-auto px-4 pb-16">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          ${Object.entries(demoData.personnas).map(([key, persona]) => {
+          ${Object.entries(demoData.personas).map(([key, persona]) => {
             const pictureUrl = persona.pictureurl ? 
               chrome.runtime.getURL(`pictures/${persona.pictureurl}`) : null;
             

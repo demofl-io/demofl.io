@@ -30,6 +30,18 @@ module.exports = [{
         filename: 'editor-bundle.js',
         path: path.resolve(__dirname, 'dist'),
     },
+    module: {
+      rules: [
+          // Other loaders (e.g., for CSS)
+          {
+              test: /\.json$/,
+              type: 'json'
+          }
+      ]
+  },
+  resolve: {
+      extensions: ['.js', '.json']
+  },
     mode: 'production',
 },
 {

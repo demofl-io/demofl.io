@@ -1,0 +1,38 @@
+/* Ensure the icon-dropdown and icon-item have appropriate dark mode styles */
+
+.icon-dropdown {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+}
+
+.dark .icon-dropdown {
+    background-color: #1f2937; /* Dark gray */
+    border-color: #374151;
+}
+
+.icon-item {
+    color: #000000;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.dark .icon-item {
+    color: #ffffff;
+}
+
+.icon-item:hover {
+    background-color: #f3f4f6;
+}
+
+.dark .icon-item:hover {
+    background-color: #4b5563;
+}
+
+.icon-preview {
+    font-size: 24px;
+    color: #555555;
+}
+
+.dark .icon-preview {
+    color: #d1d5db;
+}

@@ -16,7 +16,7 @@
     "name": "Dunder Mifflin",
     "logourl": "https://www.bettercloud.com/wp-content/uploads/sites/3/2013/07/DunderMifflinLogo.jpg"
   },
-  "personnas": {
+  "personas": {
     "CEO": {
       "name": "Mickael",
       "title": "CEO",
@@ -38,7 +38,7 @@
       "id": "step1",
       "title": "Grow your business",
       "description": "Bring more business to your company ...",
-      "personna": "CEO",
+      "persona": "CEO",
       "icon": "house",
       "onlyShowUrls": true,
       "urls": ["http://www.google.com","http://www.google.com","http://www.cnn.com"]
@@ -47,7 +47,7 @@
       "id": "step2",
       "title": "Help your customers",
       "description": "Increase customer satisfaction ...",
-      "personna": "CTO",
+      "persona": "CTO",
       "incognito": false,
       "icon": "lightbulb",
       "urls": ["http://www.yahoo.com"]
@@ -55,7 +55,7 @@
     {
       "id": "step3",
       "title": "Profit !!",
-      "personna": "CFO",
+      "persona": "CFO",
       "description": "Money money money ...",
       "icon": "lightbulb",
       "urls": ["http://www.bing.com"]

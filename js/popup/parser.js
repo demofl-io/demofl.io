@@ -66,12 +66,12 @@ export async function parseDemoFile(demoData) {
 
                 stepTabIds.push(tab.id);
 
-                if (demoData.steps[i].personna) {
+                if (demoData.steps[i].persona) {
                     await new Promise((resolve) => {
                         chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
                             if (tabId === tab.id && info.status === 'complete') {
                                 chrome.tabs.onUpdated.removeListener(listener);
-                                const personaData = demoData.personnas[demoData.steps[i].personna];
+                                const personaData = demoData.personas[demoData.steps[i].persona];
 
                                 chrome.storage.local.get(['personaTabs'], (result) => {
                                     const personaTabs = result.personaTabs || {};
