@@ -39,7 +39,7 @@ export function createTemplateItem(type, name) {
 
     // Create a new tab that will handle the template processing
     await chrome.tabs.create({
-      url: chrome.runtime.getURL('processor.html'),
+      url: chrome.runtime.getURL('html/processor.html'),
       active: true
     });
   };
@@ -94,7 +94,7 @@ export function createTemplateItem(type, name) {
 
     // Open the editor page
     await chrome.tabs.create({
-      url: chrome.runtime.getURL('editor.html'),
+      url: chrome.runtime.getURL('html/editor.html'),
       active: true
     });
   };

@@ -23,7 +23,7 @@
   "background": {
     "service_worker": "dist/background-bundle.js"
   },
-  "options_page": "options.html",
+  "options_page": "html/options.html",
   "incognito": "spanning",
   "commands": {
     "_execute_action": {
@@ -58,6 +58,6 @@
   "action": {
     "default_title": "demofl.io",
 
-    "default_popup": "popup.html"
+    "default_popup": "html/popup.html"
   }
 }
