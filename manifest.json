@@ -1,7 +1,7 @@
 {
   "name": "demofl.io",
   "manifest_version": 3,
-  "version": "0.0.0.1",
+  "version": "2024.11.07.001",
   "description": "This extension aims to make life as an SE (Sales / Solutions Engineer) easier but also to make demos more attractive to prospects",
   "permissions": [
 
@@ -51,7 +51,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["assets/*","pictures/*", "demos/*", "logos/*", "profiles/*", "flow/*", "content.js", "processor.html"],
+      "resources": ["css/*","assets/*","pictures/*", "demos/*", "logos/*", "profiles/*", "flow/*", "content.js", "processor.html"],
       "matches": ["http://*/*", "https://*/*"]
     }
   ],
