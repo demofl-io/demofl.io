@@ -8,9 +8,9 @@ module.exports = {
     require('daisyui')
   ],
   daisyui: {
-    themes: ["business"],
-    darkTheme: "business", // Set business theme as default
-    base: true, // This ensures the theme is applied by default
+    themes: ["dark", "business"],
+    darkTheme: "business",
+    base: true,
     styled: true,
     utils: true
   }
