@@ -1,6 +1,7 @@
 // js/popup/list.js
 import { loadBuiltInTemplates } from './templates.js';
 import { openJSONFile } from './parser.js';
+import { saveTemplate } from './templates.js'; // Ensure this is imported
 
 export function createTemplateItem(type, name) {
   const demoFolder = 'demos';
@@ -11,9 +12,9 @@ export function createTemplateItem(type, name) {
   const info = document.createElement('div');
   info.className = 'flex items-center gap-2';
   info.innerHTML = `
-      <span class="text-lg">${type === 'builtin' ? '📚' : '📝'}</span>
-      <span class="font-medium">${name}</span>
-    `;
+    <span class="text-lg">${type === 'builtin' ? '📚' : '📝'}</span>
+    <span class="font-medium">${name}</span>
+  `;
 
   // Action buttons
   const actions = document.createElement('div');
@@ -25,7 +26,6 @@ export function createTemplateItem(type, name) {
   runBtn.innerHTML = '▶';
   runBtn.title = 'Run Template';
   runBtn.onclick = async () => {
-    // Store the template info in local storage first
     if (type === 'user') {
       const result = await chrome.storage.local.get('userTemplates');
       const template = result.userTemplates[name];
@@ -43,6 +43,7 @@ export function createTemplateItem(type, name) {
       active: true
     });
   };
+  actions.appendChild(runBtn);
 
   // Export button
   const exportBtn = document.createElement('button');
@@ -70,11 +71,36 @@ export function createTemplateItem(type, name) {
 
     URL.revokeObjectURL(url);
   };
-
-  actions.appendChild(runBtn);
   actions.appendChild(exportBtn);
 
-  // Add delete button for user templates
+  // Add Edit button
+  const editBtn = document.createElement('button');
+  editBtn.className = 'btn btn-sm btn-warning';
+  editBtn.innerHTML = '✏️';
+  editBtn.title = 'Edit Template';
+  editBtn.onclick = async () => {
+    let template;
+    if (type === 'user') {
+      const result = await chrome.storage.local.get('userTemplates');
+      template = result.userTemplates[name];
+    } else {
+      const flowurl = chrome.runtime.getURL(`/${demoFolder}/${name}.json`);
+      const response = await fetch(flowurl);
+      template = await response.json();
+    }
+
+    // Store the template info in local storage for editing
+    await chrome.storage.local.set({ editingTemplate: { name, data: template, type } });
+
+    // Open the editor page
+    await chrome.tabs.create({
+      url: chrome.runtime.getURL('editor.html'),
+      active: true
+    });
+  };
+  actions.appendChild(editBtn);
+
+  // Add Delete button for user templates
   if (type === 'user') {
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'btn btn-sm btn-error';

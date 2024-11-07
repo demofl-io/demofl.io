@@ -12,15 +12,24 @@ export async function loadBuiltInTemplates() {
   }
 }
 
-export async function saveTemplate(templateData, templateName) {
+// js/popup/templates.js
+export async function saveTemplate(template, name, type) {
   try {
-    const result = await chrome.storage.local.get('userTemplates');
-    const userTemplates = result.userTemplates || {};
-    userTemplates[templateName] = templateData;
-    await chrome.storage.local.set({ userTemplates });
-    return true;
+      if (type === 'user') {
+          const result = await chrome.storage.local.get('userTemplates');
+          const userTemplates = result.userTemplates || {};
+          userTemplates[name] = template;
+          await chrome.storage.local.set({ userTemplates });
+      } else {
+          // For built-in templates, save to userTemplates to allow editing
+          const result = await chrome.storage.local.get('userTemplates');
+          const userTemplates = result.userTemplates || {};
+          userTemplates[name] = template;
+          await chrome.storage.local.set({ userTemplates });
+      }
+      return true;
   } catch (error) {
-    console.error('Error saving template:', error);
-    return false;
+      console.error('Error saving template:', error);
+      return false;
   }
 }
