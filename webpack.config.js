@@ -25,7 +25,7 @@ module.exports = [{
     mode: 'production',
 },
 {
-    entry: './js/popup/editor.js', // Ensure editor.js is included
+    entry: './js/editor/index.js', // Ensure editor.js is included
     output: {
         filename: 'editor-bundle.js',
         path: path.resolve(__dirname, 'dist'),
