@@ -27,6 +27,8 @@
     "airline_seat_legroom_normal",
     "airline_seat_legroom_reduced",
     "airline_seat_recline_extra",
-    "airline_seat_recline_normal"
+    "airline_seat_recline_normal",
+    "house",
+    "lightbulb"
 
 ]
