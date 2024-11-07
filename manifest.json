@@ -4,11 +4,11 @@
   "version": "0.0.0.1",
   "description": "This extension aims to make life as an SE (Sales / Solutions Engineer) easier but also to make demos more attractive to prospects",
   "permissions": [
-    "downloads",
+
     "windows",
     "activeTab",
     "tabs",
-    "scripting",
+
     "tabGroups",
     "storage",
     "background"
