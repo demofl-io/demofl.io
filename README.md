@@ -79,6 +79,11 @@ If you prefer to install **Demofl.io** manually or improve the extension, follow
     - Click the icon to ensure the extension is working correctly.
 
 
+### 🛠️ Demo File
+
+What a demo file looks like :
+
+https://github.com/demofl-io/demofl.io/blob/109b3bdcabfc6cb55ec33190d6fcf0421f97d018/demos/template1.json
 
 # 📷 Screenshots
 
