@@ -54,7 +54,7 @@ export function createStepField(title = '', description = '', urls = [], persona
                     <div class="flex space-x-2">
                         <!-- Icon Preview -->
                         <div class="w-10 h-10 flex items-center justify-center border rounded-lg dark:border-gray-600">
-                            <span class="selected-icon-preview ${icon ? icon : ''}">${icon || ''}</span>
+                            <span class="selected-icon-preview material-icons ${icon ? 'dark:text-white' : ''}">${icon}</span>
                         </div>
                         <!-- Search Input -->
                         <div class="flex-1">
