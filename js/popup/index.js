@@ -6,3 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
   loadDemoList();
   initializeImport();
 });
+
+document.getElementById('configLogos').addEventListener('click', () => {
+    chrome.tabs.create({
+        url: chrome.runtime.getURL('html/config.html')
+    });
+});

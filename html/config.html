@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="business" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logo Configuration</title>
+  <link href="../dist/output.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="p-6 dark bg-base-300 text-base-content">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold">Logo Management</h1>
+      <label class="btn btn-primary">
+        Upload New Logo
+        <input type="file" id="logoUpload" class="hidden" accept="image/*">
+      </label>
+    </div>
+    
+    <div id="logoGrid" class="logo-grid">
+      <!-- Logos will be inserted here -->
+    </div>
+  </div>
+
+  <script src="../dist/config-bundle.js" type="module"></script>
+</body>
+</html>

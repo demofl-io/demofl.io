@@ -1,64 +1,73 @@
 {
-  "theme": {
-    "brand-color": "#15384e",
-    "brand-font": "Arial",
-    "overlay-color": "#ffffff",
-    "overlay-background": "#111827",
-    "overlay-h": "center",
-    "overlay-v": "top",
-    "overlay-scale": "140%"
-  },
-  "product": {
-    "name": "Planet Express",
-    "logourl": "https://www.graphicdesignforum.com/uploads/default/optimized/2X/a/a03dd3a60bb57b4071d9502290849bda1cbae5cc_2_690x649.png"
-  },
   "customer": {
-    "name": "Dunder Mifflin",
-    "logourl": "https://www.bettercloud.com/wp-content/uploads/sites/3/2013/07/DunderMifflinLogo.jpg"
+    "logourl": "logo_default_testDunder-Mifflin.jpg",
+    "name": "Dunder Mifflin"
   },
   "personas": {
     "CEO": {
       "name": "Mickael",
-      "title": "CEO",
-      "pictureurl": "mickael.jpg"
+      "pictureurl": "default_mickael.jpg",
+      "title": "CEO"
     },
     "CFO": {
       "name": "Pam",
-      "title": "CFO",
-      "pictureurl": "pam.jpg"
+      "pictureurl": "default_pam.jpg",
+      "title": "CFO"
     },
     "CTO": {
       "name": "Dwigth",
-      "title": "CTO",
-      "pictureurl": "dwight.jpg"
+      "pictureurl": "default_dwight.jpg",
+      "title": "CTO"
     }
+  },
+  "product": {
+    "logourl": "logo_default_testplanetexpress.png",
+    "name": "Planet Express"
   },
   "steps": [
     {
-      "id": "step1",
-      "title": "Grow your business",
       "description": "Bring more business to your company ...",
-      "persona": "CEO",
       "icon": "house",
-      "onlyShowUrls": true,
-      "urls": ["http://www.google.com","http://www.google.com","http://www.cnn.com"]
-    },
-    {
-      "id": "step2",
-      "title": "Help your customers",
-      "description": "Increase customer satisfaction ...",
-      "persona": "CTO",
       "incognito": false,
-      "icon": "lightbulb",
-      "urls": ["http://www.yahoo.com"]
+      "onlyShowUrls": false,
+      "persona": "CEO",
+      "title": "Grow your business",
+      "urls": [
+        "http://www.google.com",
+        "http://www.google.com",
+        "http://www.cnn.com"
+      ]
     },
     {
-      "id": "step3",
-      "title": "Profit !!",
-      "persona": "CFO",
+      "description": "Increase customer satisfaction ...",
+      "icon": "lightbulb",
+      "incognito": false,
+      "onlyShowUrls": false,
+      "persona": "CTO",
+      "title": "Help your customers",
+      "urls": [
+        "http://www.yahoo.com"
+      ]
+    },
+    {
       "description": "Money money money ...",
       "icon": "lightbulb",
-      "urls": ["http://www.bing.com"]
+      "incognito": false,
+      "onlyShowUrls": false,
+      "persona": "CFO",
+      "title": "Profit !!",
+      "urls": [
+        "http://www.bing.com"
+      ]
     }
-  ]
+  ],
+  "theme": {
+    "brand-color": "#15384e",
+    "brand-font": "Arial",
+    "overlay-background": "#111827",
+    "overlay-color": "#ffffff",
+    "overlay-h": "center",
+    "overlay-scale": "140%",
+    "overlay-v": "top"
+  }
 }

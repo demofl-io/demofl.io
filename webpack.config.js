@@ -8,7 +8,8 @@ module.exports = [{
         content: './js/content/index.js',
         background: './js/background.js',
         editor: './js/editor/index.js',
-        processor: './js/processor.js'
+        processor: './js/processor.js',
+        config: './js/config/index.js'  // Add this line
     },
     output: {
         filename: '[name]-bundle.js',

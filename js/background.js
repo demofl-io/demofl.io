@@ -29,6 +29,13 @@ chrome.runtime.onInstalled.addListener(async (details) => {
             // Add more default pictures as needed
         ];
 
+        // List of default logos to bundle with the extension
+        const defaultLogos = [
+            'testDunder-Mifflin.jpg',
+            'testplanetexpress.png'
+            // Add more default logos as needed
+        ];
+
         // Load and store each default picture
         for (const pictureName of defaultPictures) {
             const response = await fetch(chrome.runtime.getURL(`pictures/${pictureName}`));
@@ -38,6 +45,23 @@ chrome.runtime.onInstalled.addListener(async (details) => {
             reader.onloadend = async () => {
                 await chrome.storage.local.set({
                     [`default_${pictureName}`]: reader.result
+                });
+            };
+            
+            reader.readAsDataURL(blob);
+        }
+
+        // Load and store each default logo
+        for (const logoName of defaultLogos) {
+            const response = await fetch(chrome.runtime.getURL(`logos/${logoName}`));
+            const blob = await response.blob();
+            const reader = new FileReader();
+            
+            reader.onloadend = async () => {
+                const displayName = logoName.replace(/\.[^/.]+$/, '').replace(/-/g, ' ');
+                await chrome.storage.local.set({
+                    [`logo_default_${logoName}`]: reader.result,
+                    [`logo_default_${logoName}_displayName`]: displayName
                 });
             };
             
