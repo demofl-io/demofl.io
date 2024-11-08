@@ -170,6 +170,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    // Set demo name in header
+    document.getElementById('demoName').textContent = result.editingTemplate.name;
+
     // Initialize form with template data
     initFormHandler(document.getElementById('editForm'), result.editingTemplate);
 
