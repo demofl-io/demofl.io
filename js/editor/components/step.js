@@ -19,7 +19,6 @@ function generatePersonaOptions(personas, selectedPersona) {
 export function createStepField(title = '', description = '', urls = [], persona = '', icon = '', formattedIcons, personas) {
     const stepDiv = document.createElement('div');
     stepDiv.className = 'step p-4 border border-gray-300 rounded-lg';
-
     const iconItems = generateIconItems(formattedIcons);
     const personaOptions = generatePersonaOptions(personas, persona);
     
@@ -33,13 +32,13 @@ export function createStepField(title = '', description = '', urls = [], persona
                 <label class="label">
                     <span class="label-text">Title</span>
                 </label>
-                <input type="text" class="input input-bordered step-title w-full" placeholder="Step Title" value="${title}" required>
+                <input type="text" class="input input-bordered step-title w-full" value="${title}">
             </div>
             <div>
                 <label class="label">
                     <span class="label-text">Description</span>
                 </label>
-                <textarea class="textarea textarea-bordered step-description w-full" placeholder="Step Description" required>${description}</textarea>
+                <textarea class="textarea textarea-bordered step-description w-full">${description}</textarea>
             </div>
             <div>
                 <label class="label">
@@ -54,41 +53,35 @@ export function createStepField(title = '', description = '', urls = [], persona
                     <div class="persona-dropdown hidden absolute left-0 top-full w-full max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg z-50">
                         ${personaOptions}
                     </div>
-                    <input type="hidden" class="selected-persona" value="${persona}" required>
+                    <input type="hidden" class="selected-persona" value="${persona}">
                 </div>
             </div>
-                <div class="relative">
-                    <label class="label">
-                        <span class="label-text">Icon</span>
-                    </label>
-                    <div class="flex space-x-2">
-                        <!-- Icon Preview -->
-                        <div class="w-10 h-10 flex items-center justify-center border rounded-lg dark:border-gray-600">
-                            <span class="selected-icon-preview material-icons ${icon ? 'dark:text-white' : ''}">${icon}</span>
-                        </div>
-                        <!-- Search Input -->
-                        <div class="flex-1">
-                            <input type="text" class="input input-bordered step-icon-search w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Search Icon" value="${icon}"/>
-                        </div>
+            <div>
+                <label class="label">
+                    <span class="label-text">Icon</span>
+                </label>
+                <div class="flex space-x-2">
+                    <div class="w-10 h-10 flex items-center justify-center border rounded-lg">
+                        <span class="selected-icon-preview material-icons">${icon}</span>
                     </div>
-                    
-                    <!-- Icon Dropdown -->
-                    <div class="absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 z-10 max-h-60 overflow-y-auto hidden icon-dropdown">
-                        ${iconItems}
+                    <div class="flex-1">
+                        <input type="text" class="input input-bordered step-icon-search w-full" value="${icon}">
                     </div>
-                    
-                    <!-- Hidden Input to Store Selected Icon -->
-                    <input type="hidden" class="selected-icon" value="${icon}">
                 </div>
+                <div class="icon-dropdown hidden mt-1 border rounded-lg">
+                    ${iconItems}
+                </div>
+                <input type="hidden" class="selected-icon" value="${icon}">
+            </div>
         </div>
         <div class="mt-4">
             <label class="label">
-                <span class="label-text dark:text-white">URLs</span>
+                <span class="label-text">URLs</span>
             </label>
             <div class="urls-container space-y-2">
                 ${urls.map(url => `
                     <div class="flex space-x-2 items-center">
-                        <input type="url" class="input input-bordered step-url flex-1 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="https://example.com" value="${url}" required>
+                        <input type="url" class="input input-bordered step-url flex-1" value="${url}">
                         <button type="button" class="btn btn-sm btn-error removeUrl">🗑️</button>
                     </div>
                 `).join('')}

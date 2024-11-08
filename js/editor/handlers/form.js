@@ -199,28 +199,33 @@ async function collectFormData(form) {
 
     // Gather Steps Data
     const stepsElements = form.querySelector('#stepsContainer').querySelectorAll('.step');
+    console.log('Found steps elements:', stepsElements.length);
+    
     const steps = [];
-    stepsElements.forEach(stepEl => {
-        const title = stepEl.querySelector('.step-title')?.value.trim();
-        const description = stepEl.querySelector('.step-description')?.value.trim();
-        const personaKey = stepEl.querySelector('.step-persona')?.value;
+    stepsElements.forEach((stepEl, index) => {
+        const title = stepEl.querySelector('.step-title')?.value?.trim();
+        const description = stepEl.querySelector('.step-description')?.value?.trim();
+        const personaKey = stepEl.querySelector('.selected-persona')?.value;
         const icon = stepEl.querySelector('.selected-icon')?.value;
         const urls = Array.from(stepEl.querySelectorAll('.step-url'))
             .map(input => input.value.trim())
             .filter(url => url);
 
-        if (title && description && personaKey && icon && urls.length > 0) {
+        console.log(`Step ${index + 1}:`, { title, description, personaKey, icon, urls });
+
+        // More lenient validation - only require title
+        if (title) {
             steps.push({
                 title,
-                description,
-                urls,
-                persona: personaKey,
-                icon,
-                incognito: stepEl.querySelector('.step-incognito')?.checked || false,
-                onlyShowUrls: stepEl.querySelector('.step-only-show-urls')?.checked || false
+                description: description || '',
+                urls: urls || [],
+                persona: personaKey || '',
+                icon: icon || ''
             });
         }
     });
+
+    console.log('Final steps array:', steps);
 
     return {
         theme,
@@ -245,6 +250,7 @@ async function handleFormSubmit(template, name, type) {
         alert('Template saved successfully.');
         // Clear the editingTemplate from storage
         await chrome.storage.local.remove('editingTemplate');
+        console.log(template);
         window.close();
         return true;
     } else {
