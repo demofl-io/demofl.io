@@ -100,6 +100,29 @@ https://github.com/demofl-io/demofl.io/blob/109b3bdcabfc6cb55ec33190d6fcf0421f97
 ![Persona Overlay 2](screenshots/4-overlay2.png)
 *Draggable persona overlay on demo pages*
 
+### Demo Editor
+![Product Settings](screenshots/5-edit-product.png)
+*Configure product details and branding*
+
+![Theme Configuration](screenshots/6-edit-theme.png)
+*Customize colors and appearance settings*
+
+![Customer Information](screenshots/7-edit-customer.png)
+*Set up customer-specific details*
+
+![Persona Management](screenshots/8-edit-personas.png)
+*Define personas for your demo story*
+
+![Demo Steps](screenshots/9-edit-steps.png)
+*Create and organize your demo flow steps*
+
+### Asset Management
+![Logo Management](screenshots/10-manage-logos.png)
+*Manage and organize your product and customer logos*
+
+![Picture Management](screenshots/11-manage-pictures.png)
+*Handle persona pictures and profile images*
+
 ## Privacy Policy
 You can read our privacy policy [here](./PRIVACY_POLICY.md).
 
