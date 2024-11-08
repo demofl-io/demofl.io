@@ -60,18 +60,18 @@ export function createStepField(title = '', description = '', urls = [], persona
                 <label class="label">
                     <span class="label-text">Icon</span>
                 </label>
-                <div class="flex space-x-2">
+                <div class="flex space-x-2 relative">
                     <div class="w-10 h-10 flex items-center justify-center border rounded-lg">
                         <span class="selected-icon-preview material-icons">${icon}</span>
                     </div>
                     <div class="flex-1">
                         <input type="text" class="input input-bordered step-icon-search w-full" value="${icon}">
                     </div>
+                    <div class="icon-dropdown hidden absolute left-0 top-full w-full mt-1 border rounded-lg bg-white dark:bg-gray-800 shadow-lg z-50 max-h-60 overflow-y-auto">
+                        ${iconItems}
+                    </div>
+                    <input type="hidden" class="selected-icon" value="${icon}">
                 </div>
-                <div class="icon-dropdown hidden mt-1 border rounded-lg">
-                    ${iconItems}
-                </div>
-                <input type="hidden" class="selected-icon" value="${icon}">
             </div>
         </div>
         <div class="mt-4">
@@ -122,6 +122,7 @@ export function createStepField(title = '', description = '', urls = [], persona
     // Handle Icon Selection (Search Functionality)
     const searchInput = stepDiv.querySelector('.step-icon-search');
     const iconDropdown = stepDiv.querySelector('.icon-dropdown');
+    const iconContainer = stepDiv.querySelector('.flex.space-x-2.relative'); // Add this line
 
     searchInput.addEventListener('input', () => {
         const query = searchInput.value.toLowerCase();
@@ -163,7 +164,7 @@ export function createStepField(title = '', description = '', urls = [], persona
     });
 
     document.addEventListener('click', (e) => {
-        if (!stepDiv.contains(e.target)) {
+        if (!iconContainer.contains(e.target)) {
             iconDropdown.classList.add('hidden');
         }
     });
