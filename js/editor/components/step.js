@@ -1,10 +1,77 @@
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
 function generateIconItems(formattedIcons) {
-    return formattedIcons.map(iconObj => `
-        <div class="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer icon-item" data-icon="${iconObj.value}">
-            <span class="${iconObj.class} mr-2 dark:text-white">${iconObj.value}</span>
-            <span class="dark:text-white">${iconObj.name}</span>
+    // Create a container div instead of generating all HTML at once
+    return '<div class="icons-virtual-list" style="height: 300px; overflow-y: auto;"></div>';
+}
+
+function renderVisibleIcons(container, formattedIcons, searchQuery = '') {
+    const itemHeight = 40; // approximate height of each icon item
+    const containerHeight = container.clientHeight;
+    const scrollTop = container.scrollTop;
+    
+    const filteredIcons = searchQuery 
+        ? formattedIcons.filter(icon => 
+            icon.value.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            icon.name.toLowerCase().includes(searchQuery.toLowerCase()))
+        : formattedIcons;
+
+    const startIndex = Math.floor(scrollTop / itemHeight);
+    const visibleItems = Math.ceil(containerHeight / itemHeight);
+    const endIndex = Math.min(startIndex + visibleItems + 5, filteredIcons.length); // +5 for buffer
+
+    const content = filteredIcons
+        .slice(startIndex, endIndex)
+        .map(iconObj => `
+            <div class="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer icon-item" 
+                 data-icon="${iconObj.value}"
+                 style="height: ${itemHeight}px;">
+                <span class="${iconObj.class} mr-2 dark:text-white">${iconObj.value}</span>
+                <span class="dark:text-white">${iconObj.name}</span>
+            </div>
+        `).join('');
+
+    container.innerHTML = `
+        <div style="height: ${filteredIcons.length * itemHeight}px; position: relative;">
+            <div style="position: absolute; top: ${startIndex * itemHeight}px; width: 100%;">
+                ${content}
+            </div>
         </div>
-    `).join('');
+    `;
+
+    // Reattach click handlers to visible items
+    container.querySelectorAll('.icon-item').forEach(iconItem => {
+        attachIconItemHandler(iconItem);
+    });
+}
+
+function attachIconItemHandler(iconItem) {
+    iconItem.addEventListener('click', () => {
+        const stepDiv = iconItem.closest('.step');
+        const selectedIcon = iconItem.getAttribute('data-icon');
+        const iconClass = iconItem.querySelector('span').className;
+        
+        const hiddenInput = stepDiv.querySelector('.selected-icon');
+        const preview = stepDiv.querySelector('.selected-icon-preview');
+        const searchInput = stepDiv.querySelector('.step-icon-search');
+        const iconDropdown = stepDiv.querySelector('.icon-dropdown');
+        
+        hiddenInput.value = selectedIcon;
+        preview.className = `selected-icon-preview ${iconClass}`;
+        preview.textContent = selectedIcon;
+        searchInput.value = selectedIcon;
+        iconDropdown.classList.add('hidden');
+    });
 }
 
 function generatePersonaOptions(personas, selectedPersona) {
@@ -122,41 +189,23 @@ export function createStepField(title = '', description = '', urls = [], persona
     // Handle Icon Selection (Search Functionality)
     const searchInput = stepDiv.querySelector('.step-icon-search');
     const iconDropdown = stepDiv.querySelector('.icon-dropdown');
-    const iconContainer = stepDiv.querySelector('.flex.space-x-2.relative'); // Add this line
+    const iconContainer = stepDiv.querySelector('.flex.space-x-2.relative');
+    const virtualList = iconDropdown.querySelector('.icons-virtual-list');
 
-    searchInput.addEventListener('input', () => {
-        const query = searchInput.value.toLowerCase();
-        const icons = iconDropdown.querySelectorAll('.icon-item');
-        icons.forEach(iconItem => {
-            const iconName = iconItem.getAttribute('data-icon').toLowerCase();
-            if (iconName.includes(query)) {
-                iconItem.style.display = 'flex';
-            } else {
-                iconItem.style.display = 'none';
-            }
-        });
+    // Initial render of visible icons
+    renderVisibleIcons(virtualList, formattedIcons);
+
+    // Debounced search handler
+    const debouncedSearch = debounce((query) => {
+        renderVisibleIcons(virtualList, formattedIcons, query);
+    }, 150);
+
+    searchInput.addEventListener('input', (e) => {
+        debouncedSearch(e.target.value);
     });
 
-    iconDropdown.querySelectorAll('.icon-item').forEach(iconItem => {
-        iconItem.addEventListener('click', () => {
-            const selectedIcon = iconItem.getAttribute('data-icon');
-            const iconClass = iconItem.querySelector('span').className;
-            
-            // Update the hidden input value
-            const hiddenInput = stepDiv.querySelector('.selected-icon');
-            hiddenInput.value = selectedIcon;
-            
-            // Update the preview
-            const preview = stepDiv.querySelector('.selected-icon-preview');
-            preview.className = `selected-icon-preview ${iconClass}`;
-            preview.textContent = selectedIcon;
-            
-            // Update the search input
-            searchInput.value = selectedIcon;
-            
-            // Hide the dropdown
-            iconDropdown.classList.add('hidden');
-        });
+    virtualList.addEventListener('scroll', () => {
+        renderVisibleIcons(virtualList, formattedIcons, searchInput.value);
     });
 
     searchInput.addEventListener('focus', () => {
