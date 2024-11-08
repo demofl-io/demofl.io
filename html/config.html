@@ -9,16 +9,40 @@
 </head>
 <body class="p-6 dark bg-base-300 text-base-content">
   <div class="max-w-4xl mx-auto">
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold">Logo Management</h1>
-      <label class="btn btn-primary">
-        Upload New Logo
-        <input type="file" id="logoUpload" class="hidden" accept="image/*">
-      </label>
+    <!-- Tab Navigation -->
+    <div class="tabs tabs-boxed mb-6">
+      <a class="tab tab-lg tab-active" data-tab="logos">Logos</a>
+      <a class="tab tab-lg" data-tab="personas">Persona Pictures</a>
     </div>
-    
-    <div id="logoGrid" class="logo-grid">
-      <!-- Logos will be inserted here -->
+
+    <!-- Logos Tab -->
+    <div id="logosTab" class="tab-content">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">Logo Management</h1>
+        <label class="btn btn-primary">
+          Upload New Logo
+          <input type="file" id="logoUpload" class="hidden" accept="image/*">
+        </label>
+      </div>
+      
+      <div id="logoGrid" class="logo-grid">
+        <!-- Logos will be inserted here -->
+      </div>
+    </div>
+
+    <!-- Personas Tab -->
+    <div id="personasTab" class="tab-content hidden">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">Persona Pictures</h1>
+        <label class="btn btn-primary">
+          Upload New Picture
+          <input type="file" id="personaUpload" class="hidden" accept="image/*">
+        </label>
+      </div>
+      
+      <div id="personaGrid" class="logo-grid">
+        <!-- Persona pictures will be inserted here -->
+      </div>
     </div>
   </div>
 
