@@ -28,9 +28,15 @@ export function createPersonaField(key = '', persona = {}) {
             📤
             <input type="file" class="hidden persona-upload" accept="image/*">
         </label>
-        <img class="w-10 h-10 object-cover rounded" src="" alt="Preview" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 fill=%22%23eee%22/></svg>'">
+        <img class="w-10 h-10 object-cover rounded" src="" alt="Preview">
         <button type="button" class="btn btn-sm removePersona">🗑️</button>
     `;
+
+    // Add error handler for preview image
+    const previewImg = personaDiv.querySelector('img');
+    previewImg.addEventListener('error', function() {
+        this.src = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 fill=%22%23eee%22/></svg>';
+    });
 
     const pictureInput = personaDiv.querySelector('.persona-picture');
     const customSelect = personaDiv.querySelector('.custom-select');

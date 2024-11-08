@@ -10,8 +10,7 @@ function generateIconItems(formattedIcons) {
 function generatePersonaOptions(personas, selectedPersona) {
     return Object.entries(personas).map(([key, persona]) => `
         <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2 persona-option" data-value="${key}">
-            <img class="w-8 h-8 object-cover rounded" src="" alt="" data-picture-id="${persona.pictureurl || ''}" 
-                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 fill=%22%23eee%22/>';this.onerror=null;">
+            <img class="w-8 h-8 object-cover rounded" src="" alt="" data-picture-id="${persona.pictureurl || ''}">
             <span class="dark:text-gray-200">${persona.name}</span>
         </div>
     `).join('');
@@ -48,8 +47,7 @@ export function createStepField(title = '', description = '', urls = [], persona
                 </label>
                 <div class="custom-select relative w-full">
                     <button type="button" class="select select-bordered w-full flex items-center space-x-2">
-                        <img class="w-6 h-6 object-cover rounded selected-persona-img" src="" alt=""
-                             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 fill=%22%23eee%22/>';this.onerror=null;">
+                        <img class="w-6 h-6 object-cover rounded selected-persona-img" src="" alt="">
                         <span class="flex-1 text-left selected-persona-name">${persona ? personas[persona]?.name : 'Select Persona...'}</span>
                         <span class="arrow">▼</span>
                     </button>
@@ -99,55 +97,83 @@ export function createStepField(title = '', description = '', urls = [], persona
         </div>
     `;
 
-
-        // Handle Icon Selection (Search Functionality)
-        const searchInput = stepDiv.querySelector('.step-icon-search');
-        const iconDropdown = stepDiv.querySelector('.icon-dropdown');
-
-        searchInput.addEventListener('input', () => {
-            const query = searchInput.value.toLowerCase();
-            const icons = iconDropdown.querySelectorAll('.icon-item');
-            icons.forEach(iconItem => {
-                const iconName = iconItem.getAttribute('data-icon').toLowerCase();
-                if (iconName.includes(query)) {
-                    iconItem.style.display = 'flex';
-                } else {
-                    iconItem.style.display = 'none';
-                }
-            });
+    // Add remove URL button handlers
+    stepDiv.querySelectorAll('.removeUrl').forEach(button => {
+        button.addEventListener('click', function() {
+            this.closest('.flex').remove();
         });
+    });
 
-        iconDropdown.querySelectorAll('.icon-item').forEach(iconItem => {
-            iconItem.addEventListener('click', () => {
-                const selectedIcon = iconItem.getAttribute('data-icon');
-                const iconClass = iconItem.querySelector('span').className;
-                
-                // Update the hidden input value
-                const hiddenInput = stepDiv.querySelector('.selected-icon');
-                hiddenInput.value = selectedIcon;
-                
-                // Update the preview
-                const preview = stepDiv.querySelector('.selected-icon-preview');
-                preview.className = `selected-icon-preview ${iconClass}`;
-                preview.textContent = selectedIcon;
-                
-                // Update the search input
-                searchInput.value = selectedIcon;
-                
-                // Hide the dropdown
-                iconDropdown.classList.add('hidden');
-            });
+    // Add URL button handler
+    stepDiv.querySelector('.addUrl').addEventListener('click', () => {
+        const urlsContainer = stepDiv.querySelector('.urls-container');
+        const urlDiv = document.createElement('div');
+        urlDiv.className = 'flex space-x-2 items-center';
+        urlDiv.innerHTML = `
+            <input type="url" class="input input-bordered step-url flex-1 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="https://example.com" required>
+            <button type="button" class="btn btn-sm btn-error removeUrl">🗑️</button>
+        `;
+        
+        urlDiv.querySelector('.removeUrl').addEventListener('click', function() {
+            urlsContainer.removeChild(urlDiv);
         });
+        
+        urlsContainer.appendChild(urlDiv);
+    });
 
-        searchInput.addEventListener('focus', () => {
-            iconDropdown.classList.remove('hidden');
-        });
+    // Add remove step button handler
+    stepDiv.querySelector('.removeStep').addEventListener('click', () => {
+        stepDiv.remove();
+    });
 
-        document.addEventListener('click', (e) => {
-            if (!stepDiv.contains(e.target)) {
-                iconDropdown.classList.add('hidden');
+    // Handle Icon Selection (Search Functionality)
+    const searchInput = stepDiv.querySelector('.step-icon-search');
+    const iconDropdown = stepDiv.querySelector('.icon-dropdown');
+
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase();
+        const icons = iconDropdown.querySelectorAll('.icon-item');
+        icons.forEach(iconItem => {
+            const iconName = iconItem.getAttribute('data-icon').toLowerCase();
+            if (iconName.includes(query)) {
+                iconItem.style.display = 'flex';
+            } else {
+                iconItem.style.display = 'none';
             }
         });
+    });
+
+    iconDropdown.querySelectorAll('.icon-item').forEach(iconItem => {
+        iconItem.addEventListener('click', () => {
+            const selectedIcon = iconItem.getAttribute('data-icon');
+            const iconClass = iconItem.querySelector('span').className;
+            
+            // Update the hidden input value
+            const hiddenInput = stepDiv.querySelector('.selected-icon');
+            hiddenInput.value = selectedIcon;
+            
+            // Update the preview
+            const preview = stepDiv.querySelector('.selected-icon-preview');
+            preview.className = `selected-icon-preview ${iconClass}`;
+            preview.textContent = selectedIcon;
+            
+            // Update the search input
+            searchInput.value = selectedIcon;
+            
+            // Hide the dropdown
+            iconDropdown.classList.add('hidden');
+        });
+    });
+
+    searchInput.addEventListener('focus', () => {
+        iconDropdown.classList.remove('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!stepDiv.contains(e.target)) {
+            iconDropdown.classList.add('hidden');
+        }
+    });
 
     // Add event handlers for persona selector
     const personaSelect = stepDiv.querySelector('.custom-select');
@@ -201,6 +227,13 @@ export function createStepField(title = '', description = '', urls = [], persona
         if (!personaSelect.contains(e.target)) {
             personaDropdown.classList.add('hidden');
         }
+    });
+
+    // Add error handlers for all images
+    stepDiv.querySelectorAll('img').forEach(img => {
+        img.addEventListener('error', function() {
+            this.src = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 fill=%22%23eee%22/>';
+        });
     });
 
     return stepDiv;
