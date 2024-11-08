@@ -8,6 +8,7 @@
 - [🎯 Value Proposition](#-value-proposition)
 - [🚀 Getting Started](#-getting-started)
 - [📷 Screenshots](#-screenshots)
+- [💡 Tip](#-tip)
 - [🛠️ To Do](#%EF%B8%8F-to-do)
 
 ## 📌 Features
@@ -126,6 +127,8 @@ https://github.com/demofl-io/demofl.io/blob/109b3bdcabfc6cb55ec33190d6fcf0421f97
 ## Privacy Policy
 You can read our privacy policy [here](./PRIVACY_POLICY.md).
 
+## 💡 Tip
+Create a new [browser profile](https://support.google.com/chrome/answer/2364824?hl=en&co=GENIE.Platform=Desktop) separate from your day to day usage so that the extension will only inject the script during your demo
 
 ## 🛠️ To Do
 

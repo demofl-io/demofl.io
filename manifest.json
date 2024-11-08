@@ -1,7 +1,7 @@
 {
   "name": "demofl.io",
   "manifest_version": 3,
-  "version": "2024.11.07.001",
+  "version": "2024.11.08.001",
   "description": "Demofl.io is a powerful Chrome extension designed to streamline the demo creation process for Sales and Solutions Engineers (SEs). It simplifies the way you build, manage, and present demo flows, making your presentations more engaging and effective for prospects.",
   "permissions": [
     "windows",
@@ -22,16 +22,7 @@
   },
   "options_page": "html/config.html",
   "incognito": "spanning",
-  "commands": {
-    "_execute_action": {
-      "suggested_key": "Alt+Y",
-      "description": "Start the extension"
-    },
-    "TestAction": {
-      "suggested_key": "Alt+B",
-      "description": "TestAction"
-    }
-  },
+  "commands": {},
   "content_scripts": [
     {
       "matches": ["https://*/*", "http://*/*"],
@@ -41,17 +32,7 @@
       "all_frames": true
     }
   ],
-  "host_permissions": [
-    "http://*/*",
-    "https://*/*",
-    "file:///*"
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": ["dist/","css/*","assets/*","pictures/*", "demos/*", "logos/*", "profiles/*", "flow/*", "content.js", "processor.html"],
-      "matches": ["http://*/*", "https://*/*"]
-    }
-  ],
+
   "action": {
     "default_title": "demofl.io",
     "default_popup": "html/popup.html"
