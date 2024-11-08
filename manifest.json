@@ -20,7 +20,7 @@
   "background": {
     "service_worker": "dist/background-bundle.js"
   },
-  "options_page": "html/options.html",
+  "options_page": "html/config.html",
   "incognito": "spanning",
   "commands": {
     "_execute_action": {
