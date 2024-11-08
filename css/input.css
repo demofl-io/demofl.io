@@ -42,3 +42,24 @@
 .dark .icon-preview {
     color: #d1d5db;
 }
+
+
+
+.custom-select .dropdown-options {
+    background: hsl(var(--b1));  /* Use DaisyUI base color */
+    border: 1px solid hsl(var(--b3));
+    margin-top: 4px;
+}
+
+.custom-select .dropdown-options::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-select .dropdown-options::-webkit-scrollbar-track {
+    background: hsl(var(--b2));
+}
+
+.custom-select .dropdown-options::-webkit-scrollbar-thumb {
+    background: hsl(var(--bc) / 0.5);
+    border-radius: 4px;
+}
