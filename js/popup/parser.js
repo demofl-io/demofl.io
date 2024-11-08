@@ -36,7 +36,7 @@ export async function parseDemoFile(demoData) {
         });
 
         // Create personas page
-        const personasHTML = generatePersonasHTML(demoData);
+        const personasHTML = await generatePersonasHTML(demoData);
         const personasBlob = new Blob([personasHTML], { type: 'text/html' });
         const personasUrl = URL.createObjectURL(personasBlob);
 

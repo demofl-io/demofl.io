@@ -19,6 +19,33 @@ chrome.tabs.onUpdated.addListener(tabUpdatedAction);
 // Keyboard shortcuts (see Manifest.json)
 chrome.commands.onCommand.addListener(keyboardAction);
 
+// Handle extension installation
+chrome.runtime.onInstalled.addListener(async (details) => {
+   // if (details.reason === 'install') {
+        // List of default pictures to bundle with the extension
+        const defaultPictures = [
+            'dwight.jpg',
+            'id_clara.png','id_clark.png','id_daniel.png','id_patrick.png','id_thomas.png','id_vicky.png','kevin.jpg','mickael.jpg','pam.jpg'
+            // Add more default pictures as needed
+        ];
+
+        // Load and store each default picture
+        for (const pictureName of defaultPictures) {
+            const response = await fetch(chrome.runtime.getURL(`pictures/${pictureName}`));
+            const blob = await response.blob();
+            const reader = new FileReader();
+            
+            reader.onloadend = async () => {
+                await chrome.storage.local.set({
+                    [`default_${pictureName}`]: reader.result
+                });
+            };
+            
+            reader.readAsDataURL(blob);
+        }
+   // }
+});
+
 function receiverAction(request, sender, sendResponse) {
     console.log(sender.tab.id + " = " + request);
     console.log(sender.tab.url + " = " + request.message);

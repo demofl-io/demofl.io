@@ -1,8 +1,22 @@
 // js/popup/templates/personas.js
 import { hexToHSL } from '../utils/colors.js';
 
-export function generatePersonasHTML(demoData) {
+export async function generatePersonasHTML(demoData) {
     const hslColor = hexToHSL(demoData.theme["brand-color"]);
+    
+    // Pre-fetch all persona pictures
+    const personaPictures = {};
+    for (const [key, persona] of Object.entries(demoData.personas)) {
+        if (persona.pictureurl) {
+            try {
+                const result = await chrome.storage.local.get(persona.pictureurl);
+                personaPictures[key] = result[persona.pictureurl];
+            } catch (err) {
+                console.error(`Failed to load picture for ${persona.name}:`, err);
+                personaPictures[key] = null;
+            }
+        }
+    }
 
     return `
     <!DOCTYPE html>
@@ -61,16 +75,15 @@ export function generatePersonasHTML(demoData) {
       <main class="container mx-auto px-4 pb-16">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           ${Object.entries(demoData.personas).map(([key, persona]) => {
-            const pictureUrl = persona.pictureurl ? 
-              chrome.runtime.getURL(`pictures/${persona.pictureurl}`) : null;
+            const pictureData = persona.pictureurl ? personaPictures[key] : null;
             
             return `
               <div class="persona-card card bg-base-100 shadow-xl hover:shadow-2xl">
                 <div class="card-body items-center text-center p-8">
                   <div class="avatar large placeholder mb-4">
                     <div class="bg-primary text-primary-content rounded-full w-24 h-24 ring ring-primary ring-offset-2">
-                      ${pictureUrl ?
-                        `<img src="${pictureUrl}" alt="${persona.name}" class="mask mask-circle">` :
+                      ${pictureData ?
+                        `<img src="${pictureData}" alt="${persona.name}" class="mask mask-circle">` :
                         `<span class="text-3xl font-bold">${persona.name.charAt(0)}</span>`
                       }
                     </div>

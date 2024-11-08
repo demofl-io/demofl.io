@@ -1,5 +1,6 @@
-// js/content/overlay/content.js
-export function createOverlayContent(persona, theme) {
+import { getPersonaPicture } from '../../editor/components/persona.js';
+
+export async function createOverlayContent(persona, theme) {
   const content = document.createElement('div');
   content.style.cssText = `
     display: flex;
@@ -8,9 +9,13 @@ export function createOverlayContent(persona, theme) {
     pointer-events: none;
   `;
 
-    // Get full URL for picture from extension resources
-    const pictureUrl = persona.pictureurl ? 
-    chrome.runtime.getURL(`pictures/${persona.pictureurl}`) : null;
+  let pictureUrl = null;
+  if (persona.pictureurl) {
+    const storedPicture = await getPersonaPicture(persona.pictureurl);
+    if (storedPicture) {
+      pictureUrl = storedPicture;
+    }
+  }
 
   content.innerHTML = `
     ${pictureUrl ? 
