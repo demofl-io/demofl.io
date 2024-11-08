@@ -130,7 +130,7 @@ You can read our privacy policy [here](./PRIVACY_POLICY.md).
 ## 🛠️ To Do
 
 - **UI Enhancements**
-  - Develop a user-friendly interface for building and managing demo flows.
+  - ~~Develop a user-friendly interface for building and managing demo flows.~~
   - Expand theme customization options for more personalization.
 
 - **Additional Functionalities**
