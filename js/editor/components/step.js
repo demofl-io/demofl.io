@@ -9,7 +9,11 @@ function generateIconItems(formattedIcons) {
 
 function generatePersonaOptions(personas, selectedPersona) {
     return Object.entries(personas).map(([key, persona]) => `
-        <option value="${key}" ${selectedPersona === key ? 'selected' : ''}>${persona.name}</option>
+        <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2 persona-option" data-value="${key}">
+            <img class="w-8 h-8 object-cover rounded" src="" alt="" data-picture-id="${persona.pictureurl || ''}" 
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 fill=%22%23eee%22/>';this.onerror=null;">
+            <span class="dark:text-gray-200">${persona.name}</span>
+        </div>
     `).join('');
 }
 
@@ -42,10 +46,18 @@ export function createStepField(title = '', description = '', urls = [], persona
                 <label class="label">
                     <span class="label-text">Persona</span>
                 </label>
-                <select class="select select-bordered step-persona w-full" required>
-                    <option value="" disabled ${!persona ? 'selected' : ''}>Select Persona</option>
-                    ${personaOptions}
-                </select>
+                <div class="custom-select relative w-full">
+                    <button type="button" class="select select-bordered w-full flex items-center space-x-2">
+                        <img class="w-6 h-6 object-cover rounded selected-persona-img" src="" alt=""
+                             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 fill=%22%23eee%22/>';this.onerror=null;">
+                        <span class="flex-1 text-left selected-persona-name">${persona ? personas[persona]?.name : 'Select Persona...'}</span>
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="persona-dropdown hidden absolute left-0 top-full w-full max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg z-50">
+                        ${personaOptions}
+                    </div>
+                    <input type="hidden" class="selected-persona" value="${persona}" required>
+                </div>
             </div>
                 <div class="relative">
                     <label class="label">
@@ -137,6 +149,59 @@ export function createStepField(title = '', description = '', urls = [], persona
             }
         });
 
+    // Add event handlers for persona selector
+    const personaSelect = stepDiv.querySelector('.custom-select');
+    const personaButton = personaSelect.querySelector('button');
+    const personaDropdown = personaSelect.querySelector('.persona-dropdown');
+    const personaInput = personaSelect.querySelector('.selected-persona');
+    const selectedImg = personaSelect.querySelector('.selected-persona-img');
+
+    // Load initial persona picture if exists
+    if (persona && personas[persona]?.pictureurl) {
+        chrome.storage.local.get(personas[persona].pictureurl).then(result => {
+            if (result[personas[persona].pictureurl]) {
+                selectedImg.src = result[personas[persona].pictureurl];
+            }
+        });
+    }
+
+    // Load all persona pictures in dropdown
+    personaDropdown.querySelectorAll('img[data-picture-id]').forEach(img => {
+        const pictureId = img.dataset.pictureId;
+        if (pictureId) {
+            chrome.storage.local.get(pictureId).then(result => {
+                if (result[pictureId]) {
+                    img.src = result[pictureId];
+                }
+            });
+        }
+    });
+
+    // Toggle dropdown
+    personaButton.addEventListener('click', () => {
+        personaDropdown.classList.toggle('hidden');
+    });
+
+    // Handle selection
+    personaDropdown.querySelectorAll('.persona-option').forEach(option => {
+        option.addEventListener('click', () => {
+            const value = option.dataset.value;
+            const img = option.querySelector('img');
+            const name = option.querySelector('span').textContent;
+            
+            personaInput.value = value;
+            selectedImg.src = img.src;
+            personaButton.querySelector('.selected-persona-name').textContent = name;
+            personaDropdown.classList.add('hidden');
+        });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!personaSelect.contains(e.target)) {
+            personaDropdown.classList.add('hidden');
+        }
+    });
 
     return stepDiv;
 }
