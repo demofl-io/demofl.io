@@ -3,7 +3,7 @@ import { loadBuiltInTemplates } from './templates.js';
 import { openJSONFile } from './parser.js';
 import { saveTemplate } from './templates.js'; // Ensure this is imported
 
-export function createTemplateItem(type, name) {
+export function createDemoFlowItem(type, name) {
   const demoFolder = 'demos';
   const item = document.createElement('div');
   item.className = 'flex items-center justify-between p-2 bg-gray-800 rounded-lg';
@@ -22,9 +22,9 @@ export function createTemplateItem(type, name) {
 
   // Run button
   const runBtn = document.createElement('button');
-  runBtn.className = 'btn btn-sm btn-primary'; // Blue - Primary action
+  runBtn.className = 'btn btn-sm bg-gray-800';
   runBtn.innerHTML = '▶';
-  runBtn.title = 'Run Template';
+  runBtn.title = 'Run Demo Flow';
   runBtn.onclick = async () => {
     if (type === 'user') {
       const result = await chrome.storage.local.get('userTemplates');
@@ -47,9 +47,9 @@ export function createTemplateItem(type, name) {
 
   // Export button
   const exportBtn = document.createElement('button');
-  exportBtn.className = 'btn btn-sm btn-secondary'; // Gray - Secondary action
+  exportBtn.className = 'btn btn-sm bg-gray-800';
   exportBtn.innerHTML = '⬇';
-  exportBtn.title = 'Export Template';
+  exportBtn.title = 'Export Demo Flow';
   exportBtn.onclick = async () => {
     let template;
     if (type === 'user') {
@@ -73,43 +73,16 @@ export function createTemplateItem(type, name) {
   };
   actions.appendChild(exportBtn);
 
-  // Add Edit button
-  const editBtn = document.createElement('button');
-  editBtn.className = 'btn btn-sm btn-primary'; // Blue - Primary action
-  editBtn.innerHTML = '✏️';
-  editBtn.title = 'Edit Template';
-  editBtn.onclick = async () => {
-    let template;
-    if (type === 'user') {
-      const result = await chrome.storage.local.get('userTemplates');
-      template = result.userTemplates[name];
-    } else {
-      const flowurl = chrome.runtime.getURL(`/${demoFolder}/${name}.json`);
-      const response = await fetch(flowurl);
-      template = await response.json();
-    }
-
-    // Store the template info in local storage for editing
-    await chrome.storage.local.set({ editingTemplate: { name, data: template, type } });
-
-    // Open the editor page
-    await chrome.tabs.create({
-      url: chrome.runtime.getURL('html/editor.html'),
-      active: true
-    });
-  };
-  actions.appendChild(editBtn);
-
-  // Add copy button
+  // Add copy button - available for all templates
   const copyBtn = document.createElement('button');
-  copyBtn.className = 'btn btn-sm btn-primary'; // Blue - Primary action
+  copyBtn.className = 'btn btn-sm bg-gray-800';
   copyBtn.innerHTML = '📋';
-  copyBtn.title = 'Copy Template';
+  copyBtn.title = 'Copy Demo Flow';
   copyBtn.onclick = async () => {
-    let newName = window.prompt("Enter a name for the copied template:", `${name}-copy`);
+    let newName = window.prompt("Enter a name for the copied demo flow:", `${name}-copy`);
     
     if (!newName) {
-      alert("Template name is required!");
+      alert("Demo flow name is required!");
       return;
     }
     
@@ -119,7 +92,7 @@ export function createTemplateItem(type, name) {
     const userTemplates = result.userTemplates || {};
     
     if (userTemplates[newName]) {
-      alert("A template with this name already exists!");
+      alert("A demo flow with this name already exists!");
       return;
     }
 
@@ -149,22 +122,51 @@ export function createTemplateItem(type, name) {
   };
   actions.appendChild(copyBtn);
 
-  // Add Delete button for user templates
+  // Add Edit button - only for user demo flows
   if (type === 'user') {
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'btn btn-sm btn-error'; // Red - Destructive action
-    deleteBtn.innerHTML = '🗑';
-    deleteBtn.title = 'Delete Template';
-    deleteBtn.onclick = async () => {
-      if (confirm(`Delete template "${name}"?`)) {
+    const editBtn = document.createElement('button');
+    editBtn.className = 'btn btn-sm bg-gray-800';
+    editBtn.innerHTML = '✏️';
+    editBtn.title = 'Edit Demo Flow';
+    editBtn.onclick = async () => {
+      let template;
+      if (type === 'user') {
         const result = await chrome.storage.local.get('userTemplates');
-        const userTemplates = result.userTemplates || {};
-        delete userTemplates[name];
-        await chrome.storage.local.set({ userTemplates });
-        await loadDemoList();
+        template = result.userTemplates[name];
+      } else {
+        const flowurl = chrome.runtime.getURL(`/${demoFolder}/${name}.json`);
+        const response = await fetch(flowurl);
+        template = await response.json();
       }
+
+      // Store the template info in local storage for editing
+      await chrome.storage.local.set({ editingTemplate: { name, data: template, type } });
+
+      // Open the editor page
+      await chrome.tabs.create({
+        url: chrome.runtime.getURL('html/editor.html'),
+        active: true
+      });
     };
-    actions.appendChild(deleteBtn);
+    actions.appendChild(editBtn);
+
+    // Add Delete button for user demo flows
+    if (type === 'user') {
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn btn-sm bg-red-800 hover:bg-red-700';
+      deleteBtn.innerHTML = '🗑';
+      deleteBtn.title = 'Delete Demo Flow';
+      deleteBtn.onclick = async () => {
+        if (confirm(`Delete demo flow "${name}"?`)) {
+          const result = await chrome.storage.local.get('userTemplates');
+          const userTemplates = result.userTemplates || {};
+          delete userTemplates[name];
+          await chrome.storage.local.set({ userTemplates });
+          await loadDemoList();
+        }
+      };
+      actions.appendChild(deleteBtn);
+    }
   }
 
   item.appendChild(info);
@@ -176,28 +178,28 @@ export async function loadDemoList() {
   const container = document.getElementById("templateList");
   container.innerHTML = '';
 
-  // Add "New Template" button at the top
-  const newTemplateDiv = document.createElement('div');
-  newTemplateDiv.className = 'flex items-center justify-between p-2 bg-gray-700 rounded-lg mb-4';
+  // Add "New Demo Flow" button at the top
+  const newDemoFlowDiv = document.createElement('div');
+  newDemoFlowDiv.className = 'flex items-center justify-between p-2 bg-gray-700 rounded-lg mb-4';
   
-  const newTemplateInfo = document.createElement('div');
-  newTemplateInfo.className = 'flex items-center gap-2';
-  newTemplateInfo.innerHTML = `
+  const newDemoFlowInfo = document.createElement('div');
+  newDemoFlowInfo.className = 'flex items-center gap-2';
+  newDemoFlowInfo.innerHTML = `
     <span class="text-lg">✨</span>
-    <span class="font-medium">Create New Template</span>
+    <span class="font-medium">Create New Demo Flow</span>
   `;
 
   const createBtn = document.createElement('button');
-  createBtn.className = 'btn btn-sm btn-primary'; // Blue - Primary action
+  createBtn.className = 'btn btn-sm bg-gray-700';
   createBtn.innerHTML = '🆕';
-  createBtn.title = 'Create New Template';
+  createBtn.title = 'Create New Demo Flow';
   createBtn.onclick = async () => {
     // Prompt for template name
-    let templateName = window.prompt("Enter a name for your new template:", "");
+    let templateName = window.prompt("Enter a name for your new demo flow:", "");
     
     // Validate name
     if (!templateName) {
-        alert("Template name is required!");
+        alert("Demo flow name is required!");
         return;
     }
     
@@ -209,7 +211,7 @@ export async function loadDemoList() {
     const userTemplates = result.userTemplates || {};
     
     if (userTemplates[templateName]) {
-        alert("A template with this name already exists!");
+        alert("A demo flow with this name already exists!");
         return;
     }
 
@@ -250,9 +252,9 @@ export async function loadDemoList() {
     });
   };
 
-  newTemplateDiv.appendChild(newTemplateInfo);
-  newTemplateDiv.appendChild(createBtn);
-  container.appendChild(newTemplateDiv);
+  newDemoFlowDiv.appendChild(newDemoFlowInfo);
+  newDemoFlowDiv.appendChild(createBtn);
+  container.appendChild(newDemoFlowDiv);
 
   // Load existing templates
   const builtinTemplates = await loadBuiltInTemplates();
@@ -260,10 +262,10 @@ export async function loadDemoList() {
   const userTemplates = result.userTemplates || {};
 
   for (const template of builtinTemplates) {
-    container.appendChild(createTemplateItem('builtin', template.name));
+    container.appendChild(createDemoFlowItem('builtin', template.name));
   }
 
   for (const [name, _] of Object.entries(userTemplates)) {
-    container.appendChild(createTemplateItem('user', name));
+    container.appendChild(createDemoFlowItem('user', name));
   }
 }

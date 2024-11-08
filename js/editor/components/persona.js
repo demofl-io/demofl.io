@@ -23,13 +23,13 @@ export function createPersonaField(key = '', persona = {}) {
                 </div>
             </div>
         </div>
-        <input type="text" class="input input-bordered persona-picture flex-1" placeholder="Picture URL" value="${persona.pictureurl || ''}" readonly>
-        <label class="btn btn-sm btn-secondary">
+        <input type="hidden" class="input input-bordered persona-picture flex-1" placeholder="Picture URL" value="${persona.pictureurl || ''}" readonly>
+        <label class="btn btn-sm">
             📤
             <input type="file" class="hidden persona-upload" accept="image/*">
         </label>
         <img class="w-10 h-10 object-cover rounded" src="" alt="Preview" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 fill=%22%23eee%22/></svg>'">
-        <button type="button" class="btn btn-sm btn-error removePersona">🗑️</button>
+        <button type="button" class="btn btn-sm removePersona">🗑️</button>
     `;
 
     const pictureInput = personaDiv.querySelector('.persona-picture');
