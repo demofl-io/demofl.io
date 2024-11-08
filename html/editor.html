@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<body class="bg-base-200 p-8 dark" >
+<body class="bg-base-200 p-8 dark">
     <div class="container mx-auto">
         <h1 class="text-3xl font-bold mb-6">Edit Template</h1>
         <!-- Tabs Navigation -->
@@ -93,9 +93,25 @@
                     </div>
                     <div>
                         <label class="label">
-                            <span class="label-text">Product Logo URL</span>
+                            <span class="label-text">Product Logo</span>
                         </label>
-                        <input type="url" id="productLogo" class="input input-bordered w-full" required>
+                        <div class="custom-select relative w-full">
+                            <button type="button" class="select select-bordered w-full flex items-center space-x-2">
+                                <span class="flex-1 text-left">Select logo...</span>
+                                <span class="arrow">▼</span>
+                            </button>
+                            <div class="dropdown-options hidden absolute left-0 top-full w-full max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg z-50">
+                                <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2" data-value="">
+                                    <div class="w-8 h-8 flex-shrink-0 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                                    <span class="dark:text-gray-200">Select logo...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="productLogo" value="">
+                        <label class="btn btn-sm mt-2">
+                            📤 Upload new logo
+                            <input type="file" class="hidden product-logo-upload" accept="image/*">
+                        </label>
                     </div>
                 </div>
             </div>
@@ -112,9 +128,25 @@
                     </div>
                     <div>
                         <label class="label">
-                            <span class="label-text">Customer Logo URL</span>
+                            <span class="label-text">Customer Logo</span>
                         </label>
-                        <input type="url" id="customerLogo" class="input input-bordered w-full" required>
+                        <div class="custom-select relative w-full">
+                            <button type="button" class="select select-bordered w-full flex items-center space-x-2">
+                                <span class="flex-1 text-left">Select logo...</span>
+                                <span class="arrow">▼</span>
+                            </button>
+                            <div class="dropdown-options hidden absolute left-0 top-full w-full max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg z-50">
+                                <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2" data-value="">
+                                    <div class="w-8 h-8 flex-shrink-0 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                                    <span class="dark:text-gray-200">Select logo...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="customerLogo" value="">
+                        <label class="btn btn-sm mt-2">
+                            📤 Upload new logo
+                            <input type="file" class="hidden customer-logo-upload" accept="image/*">
+                        </label>
                     </div>
                 </div>
             </div>

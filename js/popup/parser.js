@@ -25,7 +25,7 @@ export async function parseDemoFile(demoData) {
         await saveDemoToLocalStorage(demoData);
 
         // Create overview page first
-        const overviewHTML = generateOverviewHTML(demoData);
+        const overviewHTML = await generateOverviewHTML(demoData);
         const overviewBlob = new Blob([overviewHTML], { type: 'text/html' });
         const overviewUrl = URL.createObjectURL(overviewBlob);
 

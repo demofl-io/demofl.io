@@ -1,20 +1,21 @@
 // js/popup/templates/personas.js
 import { hexToHSL } from '../utils/colors.js';
+import { getStoredImage } from '../../editor/utils/images.js';
 
 export async function generatePersonasHTML(demoData) {
     const hslColor = hexToHSL(demoData.theme["brand-color"]);
     
+    // Pre-fetch all images
+    const [productLogo, customerLogo] = await Promise.all([
+        getStoredImage(demoData.product.logourl),
+        getStoredImage(demoData.customer.logourl)
+    ]);
+
     // Pre-fetch all persona pictures
     const personaPictures = {};
     for (const [key, persona] of Object.entries(demoData.personas)) {
         if (persona.pictureurl) {
-            try {
-                const result = await chrome.storage.local.get(persona.pictureurl);
-                personaPictures[key] = result[persona.pictureurl];
-            } catch (err) {
-                console.error(`Failed to load picture for ${persona.name}:`, err);
-                personaPictures[key] = null;
-            }
+            personaPictures[key] = await getStoredImage(persona.pictureurl);
         }
     }
 
@@ -62,9 +63,9 @@ export async function generatePersonasHTML(demoData) {
         <div class="hero-content text-center">
           <div>
             <div class="flex justify-center items-center gap-8 mb-6">
-              <img src="${demoData.product.logourl}" alt="${demoData.product.name}" class="h-16 md:h-24">
+              <img src="${productLogo || ''}" alt="${demoData.product.name}" class="h-16 md:h-24">
               <div class="divider divider-horizontal">x</div>
-              <img src="${demoData.customer.logourl}" alt="${demoData.customer.name}" class="h-16 md:h-24">
+              <img src="${customerLogo || ''}" alt="${demoData.customer.name}" class="h-16 md:h-24">
             </div>
             <h1 class="text-5xl font-bold mb-2">Meet the Team</h1>
             <p class="text-xl opacity-75">The key players in this demo story</p>
@@ -75,7 +76,7 @@ export async function generatePersonasHTML(demoData) {
       <main class="container mx-auto px-4 pb-16">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           ${Object.entries(demoData.personas).map(([key, persona]) => {
-            const pictureData = persona.pictureurl ? personaPictures[key] : null;
+            const pictureData = personaPictures[key];
             
             return `
               <div class="persona-card card bg-base-100 shadow-xl hover:shadow-2xl">

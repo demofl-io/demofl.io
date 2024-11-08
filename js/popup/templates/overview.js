@@ -1,8 +1,15 @@
 // js/popup/templates/overview.js
 import { hexToHSL } from '../utils/colors.js';
+import { getStoredImage } from '../../editor/utils/images.js';
 
-export function generateOverviewHTML(demoData) {
+export async function generateOverviewHTML(demoData) {
     const hslColor = hexToHSL(demoData.theme["brand-color"]);
+
+    // Fetch stored logos
+    const [productLogo, customerLogo] = await Promise.all([
+        getStoredImage(demoData.product.logourl),
+        getStoredImage(demoData.customer.logourl)
+    ]);
 
     return `
       <!DOCTYPE html>
@@ -78,9 +85,9 @@ export function generateOverviewHTML(demoData) {
           <div class="hero-content text-center px-4">
             <div>
               <div class="flex justify-center items-center gap-4 md:gap-8 mb-6">
-                <img src="${demoData.product.logourl}" alt="${demoData.product.name}" class="h-16 md:h-24">
+                <img src="${productLogo || ''}" alt="${demoData.product.name}" class="h-16 md:h-24">
                 <div class="divider divider-horizontal">x</div>
-                <img src="${demoData.customer.logourl}" alt="${demoData.customer.name}" class="h-16 md:h-24">
+                <img src="${customerLogo || ''}" alt="${demoData.customer.name}" class="h-16 md:h-24">
               </div>
               <h1 class="text-3xl md:text-5xl font-bold mb-2">Demo Journey</h1>
               <p class="text-lg md:text-xl opacity-75">Follow the story step by step</p>
