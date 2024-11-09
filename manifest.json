@@ -32,7 +32,9 @@
       "all_frames": true
     }
   ],
-
+  "author": "demofl.io",
+  "homepage_url": "https://github.com/demofl-io/demofl.io",
+  "license": "MIT",
   "action": {
     "default_title": "demofl.io",
     "default_popup": "html/popup.html"
