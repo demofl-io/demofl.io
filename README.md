@@ -126,6 +126,9 @@ https://github.com/demofl-io/demofl.io/blob/109b3bdcabfc6cb55ec33190d6fcf0421f97
 ![Picture Management](screenshots/11-manage-pictures.png)
 *Handle persona pictures and profile images*
 
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 ## Privacy Policy
 You can read our privacy policy [here](./PRIVACY_POLICY.md).
 
