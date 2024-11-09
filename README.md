@@ -52,7 +52,7 @@ If you prefer to install **Demofl.io** manually, follow these steps:
 
 1. **Download the latest release and extract the zip locally:**
     ```
-    https://github.com/demofl-io/demofl.io/releases/latest/
+    https://github.com/demofl-io/demofl.io/releases/latest/download/demoflio-extension.zip
     ```
 2. **Navigate to the Project Directory:**
     ```bash
