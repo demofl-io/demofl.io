@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+    environment: prod 
     steps:
     - uses: actions/checkout@v3
     
@@ -33,5 +33,5 @@ jobs:
         files: demoflio-extension.zip
         draft: false
         prerelease: false
-      # env:
-      #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
