@@ -28,7 +28,7 @@ jobs:
         zip -r demoflio-extension.zip manifest.json html/ dist/ demos/ pictures/ assets/ -x "assets/data.json"
         
     - name: Create Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: demoflio-extension.zip
         draft: false
