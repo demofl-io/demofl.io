@@ -11,7 +11,8 @@ jobs:
     environment: prod 
     steps:
     - uses: actions/checkout@v3
-    
+    - name: Generate Changelog
+      run: echo "# Good things have arrived" > ${{ github.workspace }}-CHANGELOG.txt
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
@@ -30,6 +31,7 @@ jobs:
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
+        body_path: ${{ github.workspace }}-CHANGELOG.txt
         files: demoflio-extension.zip
         draft: false
         prerelease: false
