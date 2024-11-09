@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Generate Changelog
       run: echo "# Good things have arrived" > ${{ github.workspace }}-CHANGELOG.txt
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '20'
         
