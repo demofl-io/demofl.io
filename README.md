@@ -1,5 +1,11 @@
 # Demofl.io
 
+![GitHub License](https://img.shields.io/github/license/demofl-io/demofl.io)
+![GitHub Release](https://img.shields.io/github/v/release/demofl-io/demofl.io)
+
+
+
+
 **Demofl.io** is a powerful Chrome extension designed to streamline the demo creation process for Sales and Solutions Engineers (SEs). It simplifies the way you build, manage, and present demo flows, making your presentations more engaging and effective for prospects.
 
 ## 📋 Table of Contents
