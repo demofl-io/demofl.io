@@ -48,25 +48,17 @@ You can install **Demofl.io** either directly from the Chrome Web Store or manua
 
 ### 🛠️ Manual Installation
 
-If you prefer to install **Demofl.io** manually or improve the extension, follow these steps:
+If you prefer to install **Demofl.io** manually, follow these steps:
 
-1. **Clone the Repository:**
-    ```bash
-    git clone https://github.com/demofl-io/demofl.io.git
+1. **Download the latest release and extract the zip locally:**
+    ```
+    https://github.com/demofl-io/demofl.io/releases/latest/
     ```
 2. **Navigate to the Project Directory:**
     ```bash
     cd demofl.io
     ```
-3. **Install Dependencies:**
-    ```bash
-    npm install
-    ```
-4. **Build the Project:**
-    ```bash
-    npm run build
-    ```
-5. **Load the Extension into Chrome:**
+3. **Load the Extension into Chrome:**
     - Open Chrome and navigate to `chrome://extensions/`.
     - Enable "Developer mode" by toggling the switch in the top right corner.
     - Click on the "Load unpacked" button.
@@ -74,10 +66,20 @@ If you prefer to install **Demofl.io** manually or improve the extension, follow
 
 
 
-6. **Verify Installation:**
+4. **Verify Installation:**
     - Once loaded, the Demofl.io icon should appear in your Chrome toolbar.
     - Click the icon to ensure the extension is working correctly.
 
+### 🛠️ Dev Installation
+
+1. **Install Dependencies:**
+    ```bash
+    npm install
+    ```
+2. **Build the Project:**
+    ```bash
+    npm run build
+    ```
 
 ### 🛠️ Demo File
 
