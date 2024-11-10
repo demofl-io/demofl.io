@@ -4,10 +4,12 @@
 [![GitHub Release](https://img.shields.io/github/v/release/demofl-io/demofl.io)](https://github.com/demofl-io/demofl.io/releases)
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/abobjbfojjkoonmfffjppmkobmbcebdj)](https://chromewebstore.google.com/detail/demoflio/abobjbfojjkoonmfffjppmkobmbcebdj?authuser=1&hl=en&pli=1)
 
-
+<a href="https://www.buymeacoffee.com/guigui42" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 30px !important;width: 108px !important;" ></a>
 
 
 **Demofl.io** is a powerful Chrome extension designed to streamline the demo creation process for Sales and Solutions Engineers (SEs). It simplifies the way you build, manage, and present demo flows, making your presentations more engaging and effective for prospects.
+
+
 
 ## 📋 Table of Contents
 
