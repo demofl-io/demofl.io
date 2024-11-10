@@ -44,9 +44,9 @@
 
 You can install **Demofl.io** either directly from the Chrome Web Store or manually by following the steps below.
 
-### 🛒 Install from the Chrome Web Store [currently being reviewed by Google]
+### 🛒 Install from the Chrome Web Store
 
-1. **Visit the [Demofl.io Chrome Web Store page](https://chrome.google.com/webstore/detail/demoflio/your-extension-id).**
+1. **Visit the [Demofl.io Chrome Web Store page](https://chromewebstore.google.com/detail/demoflio/abobjbfojjkoonmfffjppmkobmbcebdj?authuser=1&hl=en&pli=1).**
 2. **Click on the "Add to Chrome" button.**
 3. **Confirm the installation by clicking "Add extension" in the popup dialog.**
 4. **Once installed, you'll see the Demofl.io icon in your Chrome toolbar. Click the icon to start using the extension.**
