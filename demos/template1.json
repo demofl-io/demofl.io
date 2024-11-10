@@ -28,6 +28,7 @@
     {
       "description": "Bring more business to your company ...",
       "icon": "house",
+      "tabColor": "green",
       "incognito": false,
       "onlyShowUrls": false,
       "persona": "CEO",
@@ -41,6 +42,7 @@
     {
       "description": "Increase customer satisfaction ...",
       "icon": "lightbulb",
+      "tabColor": "blue",
       "incognito": false,
       "onlyShowUrls": false,
       "persona": "CTO",
@@ -52,6 +54,7 @@
     {
       "description": "Money money money ...",
       "icon": "lightbulb",
+      "tabColor": "yellow",
       "incognito": false,
       "onlyShowUrls": false,
       "persona": "CFO",

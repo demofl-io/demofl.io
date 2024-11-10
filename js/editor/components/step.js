@@ -19,9 +19,9 @@ function renderVisibleIcons(container, formattedIcons, searchQuery = '') {
     const itemHeight = 40; // approximate height of each icon item
     const containerHeight = container.clientHeight;
     const scrollTop = container.scrollTop;
-    
-    const filteredIcons = searchQuery 
-        ? formattedIcons.filter(icon => 
+
+    const filteredIcons = searchQuery
+        ? formattedIcons.filter(icon =>
             icon.value.toLowerCase().includes(searchQuery.toLowerCase()) ||
             icon.name.toLowerCase().includes(searchQuery.toLowerCase()))
         : formattedIcons;
@@ -60,12 +60,12 @@ function attachIconItemHandler(iconItem) {
         const stepDiv = iconItem.closest('.step');
         const selectedIcon = iconItem.getAttribute('data-icon');
         const iconClass = iconItem.querySelector('span').className;
-        
+
         const hiddenInput = stepDiv.querySelector('.selected-icon');
         const preview = stepDiv.querySelector('.selected-icon-preview');
         const searchInput = stepDiv.querySelector('.step-icon-search');
         const iconDropdown = stepDiv.querySelector('.icon-dropdown');
-        
+
         hiddenInput.value = selectedIcon;
         preview.className = `selected-icon-preview ${iconClass}`;
         preview.textContent = selectedIcon;
@@ -83,25 +83,35 @@ function generatePersonaOptions(personas, selectedPersona) {
     `).join('');
 }
 
-export function createStepField(title = '', description = '', urls = [], persona = '', icon = '', formattedIcons, personas) {
+export function createStepField(title = '', description = '', urls = [], persona = '', icon = '', formattedIcons, personas, tabColor = 'green') {
     const stepDiv = document.createElement('div');
     stepDiv.className = 'step p-4 border border-gray-300 rounded-lg';
     const iconItems = generateIconItems(formattedIcons);
     const personaOptions = generatePersonaOptions(personas, persona);
+
+    // Add color options array
+    const tabColors = ['grey', 'blue', 'red', 'yellow', 'green', 'pink', 'purple', 'cyan', 'orange'];
     
+    // Debug log to check incoming tabColor value
+    console.log('Creating step field with tab color:', tabColor);
+
+    // Ensure tabColor is a string and lowercase for comparison
+    const normalizedTabColor = String(tabColor).toLowerCase();
+
     stepDiv.innerHTML = `
         <div class="flex justify-between items-center mb-2">
             <h3 class="text-lg font-semibold">Step</h3>
             <button type="button" class="btn btn-sm btn-error removeStep">🗑️</button>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
+        <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+            <div class="md:col-span-2">
                 <label class="label">
                     <span class="label-text">Title</span>
                 </label>
                 <input type="text" class="input input-bordered step-title w-full" value="${title}">
             </div>
-            <div>
+
+            <div class="md:col-span-3">
                 <label class="label">
                     <span class="label-text">Description</span>
                 </label>
@@ -140,6 +150,18 @@ export function createStepField(title = '', description = '', urls = [], persona
                     <input type="hidden" class="selected-icon" value="${icon}">
                 </div>
             </div>
+               <div class="md:col-span-1">
+                <label class="label">
+                    <span class="label-text">Tab Color</span>
+                </label>
+                <select class="select select-bordered w-full step-tab-color text-sm">
+                    ${tabColors.map(color => `
+                        <option value="${color}" ${color === normalizedTabColor ? 'selected' : ''}>
+                            ${color.charAt(0).toUpperCase() + color.slice(1)}
+                        </option>
+                    `).join('')}
+                </select>
+            </div>
         </div>
         <div class="mt-4">
             <label class="label">
@@ -159,7 +181,7 @@ export function createStepField(title = '', description = '', urls = [], persona
 
     // Add remove URL button handlers
     stepDiv.querySelectorAll('.removeUrl').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             this.closest('.flex').remove();
         });
     });
@@ -173,11 +195,11 @@ export function createStepField(title = '', description = '', urls = [], persona
             <input type="url" class="input input-bordered step-url flex-1 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="https://example.com" required>
             <button type="button" class="btn btn-sm btn-error removeUrl">🗑️</button>
         `;
-        
-        urlDiv.querySelector('.removeUrl').addEventListener('click', function() {
+
+        urlDiv.querySelector('.removeUrl').addEventListener('click', function () {
             urlsContainer.removeChild(urlDiv);
         });
-        
+
         urlsContainer.appendChild(urlDiv);
     });
 
@@ -257,7 +279,7 @@ export function createStepField(title = '', description = '', urls = [], persona
             const value = option.dataset.value;
             const img = option.querySelector('img');
             const name = option.querySelector('span').textContent;
-            
+
             personaInput.value = value;
             selectedImg.src = img.src;
             personaButton.querySelector('.selected-persona-name').textContent = name;
@@ -274,7 +296,7 @@ export function createStepField(title = '', description = '', urls = [], persona
 
     // Add error handlers for all images
     stepDiv.querySelectorAll('img').forEach(img => {
-        img.addEventListener('error', function() {
+        img.addEventListener('error', function () {
             this.src = 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 fill=%22%23eee%22/>';
         });
     });

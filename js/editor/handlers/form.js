@@ -207,20 +207,22 @@ async function collectFormData(form) {
         const description = stepEl.querySelector('.step-description')?.value?.trim();
         const personaKey = stepEl.querySelector('.selected-persona')?.value;
         const icon = stepEl.querySelector('.selected-icon')?.value;
+        const tabColor = stepEl.querySelector('.step-tab-color')?.value || 'green';
+        
+        console.log(`Step ${index + 1} tab color:`, tabColor); // Add debug logging
+        
         const urls = Array.from(stepEl.querySelectorAll('.step-url'))
             .map(input => input.value.trim())
             .filter(url => url);
 
-        console.log(`Step ${index + 1}:`, { title, description, personaKey, icon, urls });
-
-        // More lenient validation - only require title
         if (title) {
             steps.push({
                 title,
                 description: description || '',
                 urls: urls || [],
                 persona: personaKey || '',
-                icon: icon || ''
+                icon: icon || '',
+                tabColor: tabColor // Ensure tabColor is included in the step data
             });
         }
     });

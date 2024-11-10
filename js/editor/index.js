@@ -40,7 +40,8 @@ function initializeComponents(data, formattedIcons) {
             step.persona || '', 
             step.icon || '',
             formattedIcons,
-            personas
+            personas,
+            step.tabColor || 'green'
         );
 
         // Add event listeners for remove step

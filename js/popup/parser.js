@@ -109,7 +109,14 @@ export async function parseDemoFile(demoData) {
                     tabIds: stepTabIds,
                     createProperties: { windowId: stepWindowId }
                 });
-                await chrome.tabGroups.update(group, { title: demoData.steps[i].title });
+                
+                const validColors = ['grey', 'blue', 'red', 'yellow', 'green', 'pink', 'purple', 'cyan', 'orange'];
+                const tabColor = demoData.steps[i].tabColor;
+                
+                await chrome.tabGroups.update(group, { 
+                    title: demoData.steps[i].title,
+                    color: validColors.includes(tabColor) ? tabColor : 'green'
+                });
             }
         }
     } catch (error) {
