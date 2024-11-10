@@ -1,7 +1,8 @@
 # Demofl.io
 
-![GitHub License](https://img.shields.io/github/license/demofl-io/demofl.io)
-![GitHub Release](https://img.shields.io/github/v/release/demofl-io/demofl.io)
+[![GitHub License](https://img.shields.io/github/license/demofl-io/demofl.io)](https://github.com/demofl-io/demofl.io?tab=MIT-1-ov-file)
+[![GitHub Release](https://img.shields.io/github/v/release/demofl-io/demofl.io)](https://github.com/demofl-io/demofl.io/releases)
+[![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/abobjbfojjkoonmfffjppmkobmbcebdj)](https://chromewebstore.google.com/detail/demoflio/abobjbfojjkoonmfffjppmkobmbcebdj?authuser=1&hl=en&pli=1)
 
 
 
