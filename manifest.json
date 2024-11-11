@@ -1,7 +1,7 @@
 {
   "name": "demofl.io",
   "manifest_version": 3,
-  "version": "2024.11.11.004",
+  "version": "2024.11.11.005",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuF2m/i6+rssNBswHImu8nDRzyLLKA6hrYT/EqBXYwM66JIcBSU8Pr8AQkfhkFpA+3nj6CgDXY/RsTn4iE6IS7MXea0z017/726IfpwPaOHIUp1cd3uoG9LmldU0io4zCxxS69rmJUEvvpTP8tThOd+RsEmn0xcKFwGR6g/4i7aK5XkJFaKLRzFHXa7z9N8QGFh3VtqtdTeHvGcQYltNrUmACug7yKhbAlII4fWr904cDitsdHJ8TeLjJOcM9jVC133zTWK/WMbYZvZswfUeB0Nq64hUTeVIazuPPLQSXlyd496PTIYK148MUn589ZHo9YjkUXo86iSZVbeYVq8SGSwIDAQAB",
   "description": "Demofl.io simplifies how manage, and present demo flows, making your presentations more engaging and effective for prospects",
   "permissions": [
