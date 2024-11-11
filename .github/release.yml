@@ -4,8 +4,6 @@ changelog:
   exclude:
     labels:
       - ignore-for-release
-    authors:
-      - guigui42
   categories:
     - title: Breaking Changes 🛠
       labels:
