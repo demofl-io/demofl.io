@@ -23,5 +23,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "extpay": "^3.0.7"
+  }
 }

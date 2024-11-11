@@ -9,7 +9,8 @@ module.exports = [{
         background: './js/background.js',
         editor: './js/editor/index.js',
         processor: './js/processor.js',
-        config: './js/config/index.js'  // Add this line
+        config: './js/config/index.js'  ,// Add this line
+       // extpay: './js/ExtPay.js'  // Add this line
     },
     output: {
         filename: '[name]-bundle.js',
@@ -20,6 +21,10 @@ module.exports = [{
             filename: '[name].css'
         })
     ],
+    resolve: {
+        extensions: ['.js'],
+        modules: ['node_modules']
+    },
     module: {
         rules: [
             {

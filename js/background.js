@@ -1,3 +1,12 @@
+// background.js
+
+import ExtPay from 'extpay';
+
+var extpay = ExtPay('abobjbfojjkoonmfffjppmkobmbcebdj'); // Careful! See note below
+extpay.startBackground(); 
+
+
+
 chrome.runtime.onStartup.addListener( () => {
     console.log(`onStartup()`);
 });
