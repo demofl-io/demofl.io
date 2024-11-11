@@ -39,7 +39,14 @@ export function createPersonaField(key = '', persona = {}) {
             </label>
             <div class="fake-text-list space-y-2">
                 ${(persona.fakeText || []).map((text, index) => `
-                    <div class="flex space-x-2 fake-text-entry">
+                    <div class="flex space-x-2 fake-text-entry items-center">
+                        <div class="flex-none flex items-center space-x-1 text-sm opacity-70">
+                            <kbd class="kbd kbd-sm bg-base-200 text-base-content">ctrl</kbd>
+                            <span>+</span>
+                            <kbd class="kbd kbd-sm bg-base-200 text-base-content">alt</kbd>
+                            <span>+</span>
+                            <kbd class="kbd kbd-sm bg-base-200 text-base-content">${index + 1}</kbd>
+                        </div>
                         <input type="text" class="input input-bordered flex-1 fake-text" value="${text}" placeholder="Enter fake text...">
                         <button type="button" class="btn btn-sm btn-error remove-fake-text">🗑️</button>
                     </div>
@@ -168,9 +175,17 @@ export function createPersonaField(key = '', persona = {}) {
             return;
         }
 
+        const index = fakeTextList.children.length;
         const fakeTextEntry = document.createElement('div');
-        fakeTextEntry.className = 'flex space-x-2 fake-text-entry';
+        fakeTextEntry.className = 'flex space-x-2 fake-text-entry items-center';
         fakeTextEntry.innerHTML = `
+            <div class="flex-none flex items-center space-x-1 text-sm opacity-70">
+                <kbd class="kbd kbd-sm bg-base-200 text-base-content">ctrl</kbd>
+                <span>+</span>
+                <kbd class="kbd kbd-sm bg-base-200 text-base-content">alt</kbd>
+                <span>+</span>
+                <kbd class="kbd kbd-sm bg-base-200 text-base-content">${index + 1}</kbd>
+            </div>
             <input type="text" class="input input-bordered flex-1 fake-text" placeholder="Enter fake text...">
             <button type="button" class="btn btn-sm btn-error remove-fake-text">🗑️</button>
         `;
