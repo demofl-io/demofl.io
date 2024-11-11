@@ -7,17 +7,20 @@
     "CEO": {
       "name": "Mickael",
       "pictureurl": "default_mickael.jpg",
-      "title": "CEO"
+      "title": "CEO",
+      "fakeText" : ["This is a fake text", "This is another fake text"]
     },
     "CFO": {
       "name": "Pam",
       "pictureurl": "default_pam.jpg",
-      "title": "CFO"
+      "title": "CFO",
+      "fakeText" : ["This is a fake text", "This is another fake text", "This is a third fake text", "This is a fourth fake text"]
     },
     "CTO": {
       "name": "Dwigth",
       "pictureurl": "default_dwight.jpg",
-      "title": "CTO"
+      "title": "CTO",
+      "fakeText" : ["This is a fake text", "This is another fake text", "This is a third fake text", "This is a fourth fake text", "This is a fifth fake text"]
     }
   },
   "product": {

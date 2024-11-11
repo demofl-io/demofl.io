@@ -191,9 +191,14 @@ async function collectFormData(form) {
         const name = personaEl.querySelector('.persona-display-name')?.value.trim();
         const title = personaEl.querySelector('.persona-title')?.value.trim();
         const pictureurl = personaEl.querySelector('.persona-picture')?.value.trim();
+        
+        // Collect fake texts
+        const fakeText = Array.from(personaEl.querySelectorAll('.fake-text'))
+            .map(input => input.value.trim())
+            .filter(text => text);
 
         if (key && name && title) {
-            personas[key] = { name, title, pictureurl };
+            personas[key] = { name, title, pictureurl, fakeText };
         }
     });
 

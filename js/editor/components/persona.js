@@ -6,30 +6,46 @@ export async function getPersonaPicture(pictureId) {
 
 export function createPersonaField(key = '', persona = {}) {
     const personaDiv = document.createElement('div');
-    personaDiv.className = 'persona flex space-x-4 items-center';
+    personaDiv.className = 'persona flex flex-col space-y-4';
     personaDiv.innerHTML = `
-        <input type="text" class="input input-bordered persona-key w-24" placeholder="Key" value="${key}" required>
-        <input type="text" class="input input-bordered persona-display-name flex-1" placeholder="Name" value="${persona.name || ''}" required>
-        <input type="text" class="input input-bordered persona-title w-32" placeholder="Title" value="${persona.title || ''}" required>
-        <div class="custom-select relative w-40">
-            <button type="button" class="select select-bordered w-full flex items-center space-x-2">
-                <span class="flex-1 text-left">Select picture...</span>
-                <span class="arrow">▼</span>
-            </button>
-            <div class="dropdown-options hidden absolute left-0 top-full w-64 max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg z-50">
-                <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2" data-value="">
-                    <div class="w-8 h-8 flex-shrink-0 bg-gray-200 dark:bg-gray-600 rounded"></div>
-                    <span class="dark:text-gray-200">Select picture...</span>
+        <div class="flex space-x-4 items-center">
+            <input type="text" class="input input-bordered persona-key w-24" placeholder="Key" value="${key}" required>
+            <input type="text" class="input input-bordered persona-display-name flex-1" placeholder="Name" value="${persona.name || ''}" required>
+            <input type="text" class="input input-bordered persona-title w-32" placeholder="Title" value="${persona.title || ''}" required>
+            <div class="custom-select relative w-40">
+                <button type="button" class="select select-bordered w-full flex items-center space-x-2">
+                    <span class="flex-1 text-left">Select picture...</span>
+                    <span class="arrow">▼</span>
+                </button>
+                <div class="dropdown-options hidden absolute left-0 top-full w-64 max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg z-50">
+                    <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2" data-value="">
+                        <div class="w-8 h-8 flex-shrink-0 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                        <span class="dark:text-gray-200">Select picture...</span>
+                    </div>
                 </div>
             </div>
+            <input type="hidden" class="input input-bordered persona-picture flex-1" placeholder="Picture URL" value="${persona.pictureurl || ''}" readonly>
+            <label class="btn btn-sm">
+                📤
+                <input type="file" class="hidden persona-upload" accept="image/*">
+            </label>
+            <img class="w-10 h-10 object-cover rounded" src="" alt="Preview">
+            <button type="button" class="btn btn-sm removePersona">🗑️</button>
         </div>
-        <input type="hidden" class="input input-bordered persona-picture flex-1" placeholder="Picture URL" value="${persona.pictureurl || ''}" readonly>
-        <label class="btn btn-sm">
-            📤
-            <input type="file" class="hidden persona-upload" accept="image/*">
-        </label>
-        <img class="w-10 h-10 object-cover rounded" src="" alt="Preview">
-        <button type="button" class="btn btn-sm removePersona">🗑️</button>
+        <div class="fake-text-container pl-24">
+            <label class="label">
+                <span class="label-text">Fake Texts (max 9)</span>
+                <button type="button" class="btn btn-sm btn-primary add-fake-text ml-2">Add Text</button>
+            </label>
+            <div class="fake-text-list space-y-2">
+                ${(persona.fakeText || []).map((text, index) => `
+                    <div class="flex space-x-2 fake-text-entry">
+                        <input type="text" class="input input-bordered flex-1 fake-text" value="${text}" placeholder="Enter fake text...">
+                        <button type="button" class="btn btn-sm btn-error remove-fake-text">🗑️</button>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
     `;
 
     // Add error handler for preview image
@@ -138,6 +154,33 @@ export function createPersonaField(key = '', persona = {}) {
             };
             
             reader.readAsDataURL(file);
+        }
+    });
+
+    // Add handlers for fake text management
+    const fakeTextContainer = personaDiv.querySelector('.fake-text-container');
+    const fakeTextList = fakeTextContainer.querySelector('.fake-text-list');
+    const addButton = fakeTextContainer.querySelector('.add-fake-text');
+
+    addButton.addEventListener('click', () => {
+        if (fakeTextList.children.length >= 9) {
+            alert('Maximum 9 fake texts allowed');
+            return;
+        }
+
+        const fakeTextEntry = document.createElement('div');
+        fakeTextEntry.className = 'flex space-x-2 fake-text-entry';
+        fakeTextEntry.innerHTML = `
+            <input type="text" class="input input-bordered flex-1 fake-text" placeholder="Enter fake text...">
+            <button type="button" class="btn btn-sm btn-error remove-fake-text">🗑️</button>
+        `;
+
+        fakeTextList.appendChild(fakeTextEntry);
+    });
+
+    fakeTextList.addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove-fake-text')) {
+            e.target.closest('.fake-text-entry').remove();
         }
     });
 
