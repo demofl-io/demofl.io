@@ -31,7 +31,7 @@ jobs:
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
-        body_path: ${{ github.workspace }}-CHANGELOG.txt
+        # body_path: ${{ github.workspace }}-CHANGELOG.txt
         files: demoflio-extension.zip
         draft: false
         prerelease: false
