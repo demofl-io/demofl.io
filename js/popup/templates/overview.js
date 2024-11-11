@@ -46,6 +46,15 @@ export async function generateOverviewHTML(demoData) {
             scroll-snap-align: start;
             width: calc(100vw - 2rem);
             max-width: 400px;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+          }
+          .card-header-content {
+            padding: 1.5rem;
+            border-bottom: 1px solid hsl(var(--b3));
+           
+            border-radius: 1rem 1rem 0 0;
           }
           @media (min-width: 640px) {
             .step-card {
@@ -71,6 +80,10 @@ export async function generateOverviewHTML(demoData) {
           ::-webkit-scrollbar-thumb {
             background: #4b5563;
             border-radius: 4px;
+          }
+          .material-icons.icon-large {
+            font-size: 48px;
+            transform: scale(1.2);
           }
           main {
             flex: 1 0 auto;
@@ -99,15 +112,16 @@ export async function generateOverviewHTML(demoData) {
           <div class="steps-container flex gap-4 md:gap-6 overflow-x-auto pb-6">
             ${demoData.steps.map((step, index) => `
               <div class="step-card card bg-base-100 shadow-xl hover:shadow-2xl">
-                <div class="card-body p-4 md:p-6">
-                  <div class="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
-                                        <div class="badge badge-lg badge-primary flex items-center gap-2">
-                      <span class="material-icons">${step.icon}</span>
-                      <span>${index + 1}</span>
+                <div class="card-header-content">
+                  <div class="flex items-center gap-6">
+                    <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span class="material-icons icon-large ">${step.icon}</span>
                     </div>
-                    <h2 class="card-title text-xl md:text-2xl">${step.title}</h2>
+                    <h2 class="card-title text-xl md:text-2xl flex-1">${step.title}</h2>
                   </div>
-                  <p class="text-base-content/70 text-base md:text-lg">${step.description}</p>
+                </div>
+                <div class="card-body">
+                  <p class="text-base-content/70 text-lg leading-relaxed">${step.description}</p>
                 </div>
               </div>
             `).join('')}
