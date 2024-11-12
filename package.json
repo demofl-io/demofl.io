@@ -7,7 +7,7 @@
     "daisyui": "^1.14.0",
     "mini-css-extract-plugin": "^2.6.0",
     "postcss": "^8.4.47",
-    "postcss-cli": "^8.3.1",
+    "postcss-cli": "^11.0.0",
     "postcss-loader": "^6.2.1",
     "tailwindcss": "^2.2.19",
     "webpack": "^5.96.1",
