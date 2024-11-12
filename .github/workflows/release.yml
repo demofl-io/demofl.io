@@ -24,6 +24,12 @@ jobs:
     - name: Build extension
       run: npm run build
       
+    - name: Update manifest version
+      run: |
+        VERSION=${GITHUB_REF_NAME#v}
+        jq --arg version "$VERSION" '.version = $version' manifest.json > manifest.json.tmp
+        mv manifest.json.tmp manifest.json
+      
     - name: Create extension zip
       run: |
         zip -r demoflio-extension.zip manifest.json html/ dist/ demos/ pictures/ assets/ -x "assets/data.json"
@@ -31,7 +37,6 @@ jobs:
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
-        # body_path: ${{ github.workspace }}-CHANGELOG.txt
         files: demoflio-extension.zip
         draft: false
         prerelease: false
