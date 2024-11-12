@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "autoprefixer": "^10.4.2",
-    "css-loader": "^6.7.1",
+    "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^7.0.0",
     "cssnano": "^7.0.6",
     "daisyui": "^1.14.0",
