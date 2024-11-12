@@ -4,7 +4,7 @@
     "css-loader": "^6.7.1",
     "css-minimizer-webpack-plugin": "^7.0.0",
     "cssnano": "^7.0.6",
-    "daisyui": "^1.14.0",
+    "daisyui": "^4.12.14",
     "mini-css-extract-plugin": "^2.6.0",
     "postcss": "^8.4.47",
     "postcss-cli": "^8.3.1",
