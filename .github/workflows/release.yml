@@ -14,12 +14,14 @@ jobs:
       with:
         fetch-depth: 0  # Fetch all history for changelog generation
         
-    - name: Install git-cliff
-      run: cargo install git-cliff
-
     - name: Generate Changelog
-      run: git cliff --tag ${GITHUB_REF_NAME} --output CHANGELOG.md
-    
+      uses: orhun/git-cliff-action@v4
+      id: git-cliff
+      with:
+        config: cliff.toml
+        args: --latest --tag ${GITHUB_REF_NAME} 
+      env:
+        OUTPUT: CHANGELOG.md
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
