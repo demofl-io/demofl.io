@@ -10,7 +10,8 @@ module.exports = [{
         editor: './js/editor/index.js',
         processor: './js/processor.js',
         config: './js/config/index.js',
-        'auth-content': './js/auth/auth-content.js'
+        'auth-content': './js/auth/auth-content.js',
+        demofliocloud: './js/demofliocloud.js',
     },
     output: {
         filename: '[name]-bundle.js',

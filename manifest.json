@@ -10,14 +10,9 @@
     "tabs",
     "tabGroups",
     "storage",
-    "background",
-    "identity"
+    "background"
   ],
-  "host_permissions": [
-    "https://demoflio-zrzu8s.us1.zitadel.cloud/*",
-    "https://demoflio.us1.zitadel.cloud/*",
-    "https://my.demofl.io/*"
-  ],
+
   "icons": {
     "16": "assets/icons/icon32.png",
     "32": "assets/icons/icon32.png",
@@ -41,7 +36,10 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://*/*", "http://*/*"],
+      "matches": [
+        "https://*/*",
+        "http://*/*"
+      ],
       "run_at": "document_end",
       "js": ["dist/content-bundle.js"],
       "type": "module",
@@ -50,6 +48,11 @@
     {
       "matches": ["https://my.demofl.io/ext/callback*"],
       "js": ["dist/auth-content-bundle.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://my.demofl.io/*","http://127.0.0.1:7331/*"],
+      "js": ["dist/demofliocloud-bundle.js"],
       "run_at": "document_start"
     }
   ],

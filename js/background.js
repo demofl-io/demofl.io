@@ -8,8 +8,15 @@ extpay.startBackground();
 
 const authService = new AuthService();
 
-chrome.runtime.onStartup.addListener( () => {
-    console.log(`onStartup()`);
+
+// Keep service worker alive
+const keepAlive = () => setInterval(chrome.runtime.getPlatformInfo, 20e3);
+
+chrome.runtime.onStartup.addListener(keepAlive);
+chrome.runtime.onConnect.addListener(port => {
+    if (port.name === 'keepAlive') {
+        setTimeout(keepAlive, 295e3); // 5 minutes minus 5 seconds
+    }
 });
 
 // Listening for messages
@@ -57,6 +64,21 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         } catch (error) {
             console.error('Auth handling failed:', error);
         }
+        
+    }
+    if (message.type === 'EXTENSION_RUNDEMO') {
+        console.log('RUNDEMO YEEEA', message.payload);
+
+        const flowurl = chrome.runtime.getURL(`/demos/template1.json`);
+            const response = await fetch(flowurl);
+            const template = await response.json();
+            await chrome.storage.local.set({ pendingTemplate: template });
+      
+          // Create a new tab that will handle the template processing
+          await chrome.tabs.create({
+            url: chrome.runtime.getURL('html/processor.html'),
+            active: true
+          });
     }
     return true;
 });
