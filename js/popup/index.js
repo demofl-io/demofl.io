@@ -26,6 +26,7 @@ document.querySelector('#trial').addEventListener('click', func => {
 document.addEventListener('DOMContentLoaded', async () => {
     const isAuthenticated = await authService.isAuthenticated();
 
+    // demofl.io cloud for the team plan
     if (isAuthenticated) {
         document.querySelector('#payheader').innerHTML = 'Welcome to the cloud  🎉';
         // Add sign out button
@@ -39,8 +40,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         initializeImport();
     
     } else {
+        // always show cloud login button
         showLoginButton();
 
+        // here we use ExtPay to check if the user is logged in and paid for the personnal plan
         extpay.getUser().then(user => {
             if (user.email) {
                 document.querySelector('#login').remove();
@@ -48,20 +51,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (user.paid) {
                 document.querySelector('#payheader').innerHTML = 'Welcome ' + user.email + ' 🎉';
     
-                document.querySelector('#payheader').innerHTML = document.querySelector('#payheader').innerHTML + ' - <button  id="preferences"  class="btn btn-link">Manage your subscription</button>';
+                document.querySelector('#payheader').innerHTML += ' <button id="preferences" class="btn btn-link">Manage your subscription</button>';
+                document.querySelector('#payheader').innerHTML += ' <button id="extpay-signout" class="btn btn-link">Sign out</button>';
     
                 document.querySelector('#preferences').addEventListener('click', extpay.openPaymentPage);
+                document.querySelector('#extpay-signout').addEventListener('click', () => {
+                    // Clear ExtPay user data from storage
+                    chrome.storage.sync.remove(['extensionpay_api_key', 'extensionpay_user'], () => {
+                        window.location.reload();
+                    });
+                });
             } else {
                 const now = new Date();
                 const sevenDays = 1000 * 60 * 60 * 24 * 7 // in milliseconds
                 if (user.trialStartedAt && (now - user.trialStartedAt) < sevenDays) {
                     document.querySelector('#payheader').innerHTML = 'Welcome ' + user.email + ' . Your trial ends in ' + Math.floor((sevenDays - (now - user.trialStartedAt)) / (1000 * 60 * 60 * 24)) + ' days';
     
-                    // add html preferences button to payheader :
-    
-                    document.querySelector('#payheader').innerHTML = document.querySelector('#payheader').innerHTML + ' - <button id="preferences"  class="btn btn-link">Manage your subscription</button>';
+                    // add html preferences and signout buttons to payheader
+                    document.querySelector('#payheader').innerHTML += ' - <button id="preferences" class="btn btn-link">Manage your subscription</button>';
+                    document.querySelector('#payheader').innerHTML += ' <button id="extpay-signout" class="btn btn-link">Sign out</button>';
     
                     document.querySelector('#preferences').addEventListener('click', extpay.openPaymentPage);
+
+                    document.querySelector('#extpay-signout').addEventListener('click', () => {
+                        // Clear ExtPay user data from storage
+                        chrome.storage.sync.remove(['extensionpay_api_key', 'extensionpay_user'], () => {
+                            window.location.reload();
+                        });
+                    });
                 } else {
                     // user's trial is not active
                     document.querySelector('#demoflio').remove();
