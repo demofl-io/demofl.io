@@ -35,16 +35,30 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   return true;
 });
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     if (message.type === 'ZITADEL_AUTH_CODE') {
-        // Close the auth window using the sender tab
-        if (sender.tab) {
-            chrome.tabs.remove(sender.tab.id);
+        try {
+            // First handle the auth callback
+            await authService.handleCallback(message.code);
+            
+            // Then close the auth window
+            if (sender.tab) {
+                await chrome.tabs.remove(sender.tab.id);
+            }
+            
+            // Finally notify all extension views about success
+            chrome.runtime.sendMessage({ type: 'AUTH_SUCCESS' });
+            
+            // // Get the popup views
+            // const views = chrome.extension.getViews({ type: 'popup' });
+            // for (let view of views) {
+            //     view.location.reload();
+            // }
+        } catch (error) {
+            console.error('Auth handling failed:', error);
         }
-        
-        // Notify the popup about successful authentication
-        chrome.runtime.sendMessage({ type: 'AUTH_SUCCESS' });
     }
+    return true;
 });
 
 // On Page Refresh

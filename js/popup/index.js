@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function showLoginButton() {
     const loginButton = document.createElement('button');
-    loginButton.textContent = 'Login with Zitadel';
+    loginButton.textContent = 'Login with Demofl.io Cloud';
     loginButton.addEventListener('click', async () => {
         const authUrl = await authService.initiateLogin();
         chrome.windows.create({

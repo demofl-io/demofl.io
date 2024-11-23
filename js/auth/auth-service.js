@@ -27,48 +27,70 @@ export class AuthService {
         return Array.from(array, dec => ('0' + dec.toString(16)).substr(-2)).join('');
     }
 
+    async getClientConfig() {
+        const response = await fetch(this.config.config_endpoint, {
+            headers: {
+                'x-extension-id': chrome.runtime.id
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch auth config');
+        }
+        return response.json();
+    }
+
     async initiateLogin() {
         const { codeVerifier, codeChallenge } = await this.generateCodeChallenge();
+        const config = await this.getClientConfig();
         
         // Store code verifier for later use
         await chrome.storage.local.set({ codeVerifier });
 
         const params = new URLSearchParams({
-            client_id: this.config.client_id,
+            client_id: config.client_id,
             response_type: 'code',
-            scope: this.config.scope,
-            redirect_uri: this.config.redirect_uri,
+            scope: config.scope,
+            redirect_uri: config.redirect_uri,
             code_challenge: codeChallenge,
             code_challenge_method: 'S256'
         });
 
-        return `${this.config.authorization_endpoint}?${params.toString()}`;
+        return `${config.authorization_endpoint}?${params.toString()}`;
     }
 
     async handleCallback(code) {
-        const { codeVerifier } = await chrome.storage.local.get('codeVerifier');
-        
-        const tokenResponse = await fetch(this.config.token_endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-                grant_type: 'authorization_code',
-                client_id: this.config.client_id,
-                code_verifier: codeVerifier,
-                code: code,
-                redirect_uri: this.config.redirect_uri
-            })
-        });
+        try {
+            const { codeVerifier } = await chrome.storage.local.get('codeVerifier');
+            const config = await this.getClientConfig();
+            
+            const tokenResponse = await fetch(config.token_endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'x-extension-id': chrome.runtime.id
+                },
+                body: new URLSearchParams({
+                    grant_type: 'authorization_code',
+                    client_id: config.client_id,
+                    code_verifier: codeVerifier,
+                    code: code,
+                    redirect_uri: config.redirect_uri
+                })
+            });
 
-        if (!tokenResponse.ok) {
-            throw new Error('Token exchange failed');
+            if (!tokenResponse.ok) {
+                const errorData = await tokenResponse.text();
+                console.error('Token exchange failed:', errorData);
+                throw new Error(`Token exchange failed: ${tokenResponse.status} ${errorData}`);
+            }
+
+            const tokens = await tokenResponse.json();
+            await this.storeTokens(tokens);
+            return tokens;
+        } catch (error) {
+            console.error('Auth callback error:', error);
+            throw error;
         }
-
-        const tokens = await tokenResponse.json();
-        await this.storeTokens(tokens);
-        return tokens;
     }
 
     async storeTokens(tokens) {
