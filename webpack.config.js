@@ -9,8 +9,9 @@ module.exports = [{
         background: './js/background.js',
         editor: './js/editor/index.js',
         processor: './js/processor.js',
-        config: './js/config/index.js'  ,// Add this line
-       // extpay: './js/ExtPay.js'  // Add this line
+        config: './js/config/index.js',
+        'auth-callback': './js/auth/callback.js',
+        'auth-content': './js/auth/auth-content.js'
     },
     output: {
         filename: '[name]-bundle.js',

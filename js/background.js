@@ -1,11 +1,12 @@
 // background.js
 
 import ExtPay from 'extpay';
+import { AuthService } from './auth';
 
 var extpay = ExtPay('abobjbfojjkoonmfffjppmkobmbcebdj'); // Careful! See note below
 extpay.startBackground(); 
 
-
+const authService = new AuthService();
 
 chrome.runtime.onStartup.addListener( () => {
     console.log(`onStartup()`);
@@ -21,6 +22,29 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
     return true; // Required for async response
   }
+
+  if (request.type === 'AUTH_SUCCESS') {
+    // Broadcast authentication success to all extension views
+    chrome.runtime.sendMessage({ type: 'AUTH_SUCCESS' });
+  }
+
+  if (request.type === 'ZITADEL_AUTH_CODE') {
+    authService.handleCallback(request.code);
+  }
+
+  return true;
+});
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === 'ZITADEL_AUTH_CODE') {
+        // Close the auth window using the sender tab
+        if (sender.tab) {
+            chrome.tabs.remove(sender.tab.id);
+        }
+        
+        // Notify the popup about successful authentication
+        chrome.runtime.sendMessage({ type: 'AUTH_SUCCESS' });
+    }
 });
 
 // On Page Refresh

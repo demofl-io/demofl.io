@@ -10,7 +10,13 @@
     "tabs",
     "tabGroups",
     "storage",
-    "background"
+    "background",
+    "identity"
+  ],
+  "host_permissions": [
+    "https://demoflio-zrzu8s.us1.zitadel.cloud/*",
+    "https://demoflio.us1.zitadel.cloud/*",
+    "https://my.demofl.io/*"
   ],
   "icons": {
     "16": "assets/icons/icon32.png",
@@ -24,6 +30,15 @@
   "options_page": "html/config.html",
   "incognito": "spanning",
   "commands": {},
+  "web_accessible_resources": [{
+    "resources": [
+      "html/auth/callback.html"
+    ],
+    "matches": ["<all_urls>"]
+  }],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' https://demoflio-zrzu8s.us1.zitadel.cloud/oauth/v2/token https://demoflio-zrzu8s.us1.zitadel.cloud/* https://demoflio.us1.zitadel.cloud/* https://my.demofl.io/*"
+  },
   "content_scripts": [
     {
       "matches": ["https://*/*", "http://*/*"],
@@ -31,6 +46,11 @@
       "js": ["dist/content-bundle.js"],
       "type": "module",
       "all_frames": true
+    },
+    {
+      "matches": ["https://my.demofl.io/ext/callback*"],
+      "js": ["dist/auth-content-bundle.js"],
+      "run_at": "document_start"
     }
   ],
   "author": "demofl.io",
