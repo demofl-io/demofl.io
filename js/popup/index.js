@@ -46,26 +46,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'business' : 'light';
             
+            // Update the data-theme attribute
             html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('color-theme', newTheme);
+            
+            // Save the theme preference
+            localStorage.setItem('theme', newTheme);
             
             // Toggle icons
             sunIcon.classList.toggle('hidden');
             moonIcon.classList.toggle('hidden');
-    
-            // Ensure that theme changes do not hide tab contents
-            document.querySelectorAll('.tab-content').forEach(content => {
-                if (!content.classList.contains('hidden')) {
-                    content.classList.remove('hidden');
-                }
-            });
         }
     
         // Add click event listener to theme toggle button
         themeToggleBtn.addEventListener('click', toggleTheme);
     
         // Set initial theme based on localStorage
-        const savedTheme = localStorage.getItem('color-theme') || 'business';
+        const savedTheme = localStorage.getItem('theme') || 'business';
         document.documentElement.setAttribute('data-theme', savedTheme);
         
         // Set initial icon visibility
