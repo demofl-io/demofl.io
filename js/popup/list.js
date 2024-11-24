@@ -209,7 +209,6 @@ export async function loadDemoList() {
       <span class="text-lg">✨</span>
       <span class="font-medium">Create New Demo Flow</span>
     </div>
-    <span class="text-lg">🆕</span>
   `;
   newDemoFlowDiv.onclick = async () => {
     // Prompt for template name
