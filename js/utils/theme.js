@@ -8,7 +8,7 @@ export function initializeTheme() {
     function toggleTheme() {
         const html = document.documentElement;
         const currentTheme = html.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'business' : 'light';
+        const newTheme = currentTheme === 'corporate' ? 'business' : 'corporate';
         
         html.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
@@ -23,7 +23,7 @@ export function initializeTheme() {
     const savedTheme = localStorage.getItem('theme') || 'business';
     document.documentElement.setAttribute('data-theme', savedTheme);
     
-    if (savedTheme === 'light') {
+    if (savedTheme === 'corporate') {
         moonIcon.classList.add('hidden');
         sunIcon.classList.remove('hidden');
     } else {

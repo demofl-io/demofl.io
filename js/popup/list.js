@@ -23,10 +23,10 @@ export function createDemoFlowItem(type, name) {
   item.className = 'flex items-center gap-2';
 
   // Main clickable area for running demo
-  const mainArea = document.createElement('div');
-  mainArea.className = 'flex-1 flex items-center p-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-700';
+  const mainArea = document.createElement('button');
+  mainArea.className = 'btn flex-1 flex items-center justify-start gap-2 normal-case h-auto';
   mainArea.innerHTML = `
-    <span class="text-lg mr-2">${type === 'builtin' ? '📚' : '📝'}</span>
+    <span class="text-lg">${type === 'builtin' ? '📚' : '📝'}</span>
     <span class="font-medium">${name}</span>
   `;
   
@@ -57,7 +57,7 @@ export function createDemoFlowItem(type, name) {
 
   // Export button
   const exportBtn = document.createElement('button');
-  exportBtn.className = 'btn btn-sm bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded';
+  exportBtn.className = 'btn btn-square btn-sm';
   exportBtn.innerHTML = '⬇';
   exportBtn.title = 'Export Demo Flow';
   exportBtn.onclick = async () => {
@@ -85,7 +85,7 @@ export function createDemoFlowItem(type, name) {
 
   // Copy button
   const copyBtn = document.createElement('button');
-  copyBtn.className = 'btn btn-sm bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded';
+  copyBtn.className = 'btn btn-square btn-sm';
   copyBtn.innerHTML = '📋';
   copyBtn.title = 'Copy Demo Flow';
   copyBtn.onclick = async () => {
@@ -135,7 +135,7 @@ export function createDemoFlowItem(type, name) {
   // Edit and Delete buttons for user demos
   if (type === 'user') {
     const editBtn = document.createElement('button');
-    editBtn.className = 'btn btn-sm bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded';
+    editBtn.className = 'btn btn-square btn-sm';
     editBtn.innerHTML = '✏️';
     editBtn.title = 'Edit Demo Flow';
     editBtn.onclick = async () => {
@@ -161,7 +161,7 @@ export function createDemoFlowItem(type, name) {
     actions.appendChild(editBtn);
 
     const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'btn btn-sm bg-red-800 hover:bg-red-700 px-2 py-1 rounded';
+    deleteBtn.className = 'btn btn-square btn-sm btn-error';
     deleteBtn.innerHTML = '🗑';
     deleteBtn.title = 'Delete Demo Flow';
     deleteBtn.onclick = async () => {
@@ -200,14 +200,14 @@ export async function loadDemoList() {
 
   // Import button
   const importBtn = document.createElement('button');
-  importBtn.className = 'p-1.5 rounded bg-gray-700 hover:bg-gray-600';
+  importBtn.className = 'btn btn-square btn-sm';
   importBtn.innerHTML = '📥';
   importBtn.title = 'Import Demo Flow';
   importBtn.id = 'importTemplate'; // Add ID to work with existing import.js
 
   // Manage button
   const manageBtn = document.createElement('button');
-  manageBtn.className = 'p-1.5 rounded bg-gray-700 hover:bg-gray-600';
+  manageBtn.className = 'btn btn-square btn-sm';
   manageBtn.innerHTML = '⚙️';
   manageBtn.title = 'Manage Demo Flows';
   manageBtn.id = 'configLogos'; // Add ID to work with existing index.js
@@ -224,15 +224,13 @@ export async function loadDemoList() {
   controlsDiv.className = 'flex items-center gap-2 mb-4';
 
   // New demo flow button
-  const newDemoFlowDiv = document.createElement('div');
-  newDemoFlowDiv.className = 'flex-1 flex items-center justify-between p-2 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-600';
-  newDemoFlowDiv.innerHTML = `
-    <div class="flex items-center gap-2">
-      <span class="text-lg">✨</span>
-      <span class="font-medium">Create New Demo Flow</span>
-    </div>
+  const newDemoFlowBtn = document.createElement('button');
+  newDemoFlowBtn.className = 'btn flex-1 justify-start normal-case h-auto gap-2';
+  newDemoFlowBtn.innerHTML = `
+    <span class="text-lg">✨</span>
+    <span class="font-medium">Create New Demo Flow</span>
   `;
-  newDemoFlowDiv.onclick = async () => {
+  newDemoFlowBtn.onclick = async () => {
     // Prompt for template name
     let templateName = window.prompt("Enter a name for your new demo flow:", "");
     
@@ -292,18 +290,16 @@ export async function loadDemoList() {
   };
 
   // Clear tabs button
-  const clearTabsDiv = document.createElement('div');
-  clearTabsDiv.className = 'w-1/4 flex items-center justify-center p-2 bg-red-900 rounded-lg cursor-pointer hover:bg-red-800';
-  clearTabsDiv.innerHTML = `
-    <div class="flex items-center gap-2">
-      <span class="text-lg">🧹</span>
-      <span class="font-medium">Clear Tabs</span>
-    </div>
-  `;
-  clearTabsDiv.onclick = clearTabs;
+  const clearTabsBtn = document.createElement('button');
+  clearTabsBtn.className = 'btn btn-error w-1/4 gap-2 normal-case h-auto';
+  clearTabsBtn.innerHTML = `
+    <span class="text-lg">🧹</span>
 
-  controlsDiv.appendChild(newDemoFlowDiv);
-  controlsDiv.appendChild(clearTabsDiv);
+  `;
+  clearTabsBtn.onclick = clearTabs;
+
+  controlsDiv.appendChild(newDemoFlowBtn);
+  controlsDiv.appendChild(clearTabsBtn);
   container.appendChild(controlsDiv);
 
   // Load existing templates
