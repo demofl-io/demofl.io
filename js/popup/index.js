@@ -25,6 +25,14 @@ document.querySelector('#trial').addEventListener('click', func => {
 
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Add popout handler
+    document.getElementById('popout').addEventListener('click', () => {
+        chrome.tabs.create({
+            url: chrome.runtime.getURL('html/popup.html')
+        });
+        window.close();
+    });
+
     const isAuthenticated = await authService.isAuthenticated();
 
     // demofl.io cloud for the team plan
