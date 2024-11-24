@@ -1,7 +1,23 @@
-// js/popup/list.js
 import { loadBuiltInTemplates } from './templates.js';
-import { openJSONFile } from './parser.js';
-import { saveTemplate } from './templates.js'; // Ensure this is imported
+
+export async function clearTabs() {
+  // First check and close any existing demo tabs
+  console.log("clearing existing tabs");
+  const result = await chrome.storage.local.get('demoTabIds');
+  
+  if (result.demoTabIds && result.demoTabIds.length > 0) {
+    console.log("Clearing existing tabs:", result.demoTabIds);
+    try {
+      await chrome.tabs.remove(result.demoTabIds);
+    } catch (e) {
+      console.log("Some tabs were already closed:", e);
+    }
+    // Clear the stored tab IDs
+    await chrome.storage.local.remove('demoTabIds');
+  } else {
+    console.log("No existing tabs to clear");
+  }
+}
 
 export function createDemoFlowItem(type, name) {
   const demoFolder = 'demos';
@@ -27,21 +43,7 @@ export function createDemoFlowItem(type, name) {
   runBtn.title = 'Run Demo Flow';
   runBtn.onclick = async () => {
     // First check and close any existing demo tabs
-    console.log("clearing existing tabs");
-    const result = await chrome.storage.local.get('demoTabIds');
-    
-    if (result.demoTabIds && result.demoTabIds.length > 0) {
-      console.log("Clearing existing tabs:", result.demoTabIds);
-      try {
-        await chrome.tabs.remove(result.demoTabIds);
-      } catch (e) {
-        console.log("Some tabs were already closed:", e);
-      }
-      // Clear the stored tab IDs
-      await chrome.storage.local.remove('demoTabIds');
-    } else {
-      console.log("No existing tabs to clear");
-    }
+    clearTabs();
 
     if (type === 'user') {
       const result = await chrome.storage.local.get('userTemplates');
@@ -195,22 +197,21 @@ export async function loadDemoList() {
   const container = document.getElementById("templateList");
   container.innerHTML = '';
 
-  // Add "New Demo Flow" button at the top
-  const newDemoFlowDiv = document.createElement('div');
-  newDemoFlowDiv.className = 'flex items-center justify-between p-2 bg-gray-700 rounded-lg mb-4';
-  
-  const newDemoFlowInfo = document.createElement('div');
-  newDemoFlowInfo.className = 'flex items-center gap-2';
-  newDemoFlowInfo.innerHTML = `
-    <span class="text-lg">✨</span>
-    <span class="font-medium">Create New Demo Flow</span>
-  `;
+  // Add buttons at the top
+  const topDiv = document.createElement('div');
+  topDiv.className = 'flex items-center justify-between gap-2 mb-4';
 
-  const createBtn = document.createElement('button');
-  createBtn.className = 'btn btn-sm bg-gray-700';
-  createBtn.innerHTML = '🆕';
-  createBtn.title = 'Create New Demo Flow';
-  createBtn.onclick = async () => {
+  // New demo flow button
+  const newDemoFlowDiv = document.createElement('div');
+  newDemoFlowDiv.className = 'flex-1 flex items-center justify-between p-2 bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-600';
+  newDemoFlowDiv.innerHTML = `
+    <div class="flex items-center gap-2">
+      <span class="text-lg">✨</span>
+      <span class="font-medium">Create New Demo Flow</span>
+    </div>
+    <span class="text-lg">🆕</span>
+  `;
+  newDemoFlowDiv.onclick = async () => {
     // Prompt for template name
     let templateName = window.prompt("Enter a name for your new demo flow:", "");
     
@@ -269,9 +270,20 @@ export async function loadDemoList() {
     });
   };
 
-  newDemoFlowDiv.appendChild(newDemoFlowInfo);
-  newDemoFlowDiv.appendChild(createBtn);
-  container.appendChild(newDemoFlowDiv);
+  // Clear tabs button
+  const clearTabsDiv = document.createElement('div');
+  clearTabsDiv.className = 'flex-1 flex items-center justify-between p-2 bg-red-900 rounded-lg cursor-pointer hover:bg-red-800';
+  clearTabsDiv.innerHTML = `
+    <div class="flex items-center gap-2">
+      <span class="text-lg">🧹</span>
+      <span class="font-medium">Clear Demo Tabs</span>
+    </div>
+  `;
+  clearTabsDiv.onclick = clearTabs;
+
+  topDiv.appendChild(newDemoFlowDiv);
+  topDiv.appendChild(clearTabsDiv);
+  container.appendChild(topDiv);
 
   // Load existing templates
   const builtinTemplates = await loadBuiltInTemplates();
