@@ -35,6 +35,48 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const isAuthenticated = await authService.isAuthenticated();
 
+        // Theme Toggle Elements
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+    
+        // Function to toggle theme
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'business' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('color-theme', newTheme);
+            
+            // Toggle icons
+            sunIcon.classList.toggle('hidden');
+            moonIcon.classList.toggle('hidden');
+    
+            // Ensure that theme changes do not hide tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                if (!content.classList.contains('hidden')) {
+                    content.classList.remove('hidden');
+                }
+            });
+        }
+    
+        // Add click event listener to theme toggle button
+        themeToggleBtn.addEventListener('click', toggleTheme);
+    
+        // Set initial theme based on localStorage
+        const savedTheme = localStorage.getItem('color-theme') || 'business';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        // Set initial icon visibility
+        if (savedTheme === 'light') {
+            sunIcon.classList.remove('hidden');
+            moonIcon.classList.add('hidden');
+        } else {
+            sunIcon.classList.add('hidden');
+            moonIcon.classList.remove('hidden');
+        }
+
     // demofl.io cloud for the team plan
     if (isAuthenticated) {
         document.querySelector('#payheader').innerHTML = 'Welcome to the cloud  🎉';
