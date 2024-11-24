@@ -22,28 +22,19 @@ export async function clearTabs() {
 export function createDemoFlowItem(type, name) {
   const demoFolder = 'demos';
   const item = document.createElement('div');
-  item.className = 'flex items-center justify-between p-2 bg-gray-800 rounded-lg';
+  item.className = 'flex items-center gap-2';
 
-  // Template info
-  const info = document.createElement('div');
-  info.className = 'flex items-center gap-2';
-  info.innerHTML = `
-    <span class="text-lg">${type === 'builtin' ? '📚' : '📝'}</span>
+  // Main clickable area for running demo
+  const mainArea = document.createElement('div');
+  mainArea.className = 'flex-1 flex items-center p-2 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-700';
+  mainArea.innerHTML = `
+    <span class="text-lg mr-2">${type === 'builtin' ? '📚' : '📝'}</span>
     <span class="font-medium">${name}</span>
   `;
-
-  // Action buttons
-  const actions = document.createElement('div');
-  actions.className = 'flex gap-2';
-
-  // Run button
-  const runBtn = document.createElement('button');
-  runBtn.className = 'btn btn-sm bg-gray-800';
-  runBtn.innerHTML = '▶';
-  runBtn.title = 'Run Demo Flow';
-  runBtn.onclick = async () => {
-    // First check and close any existing demo tabs
-    clearTabs();
+  
+  // Add click handler for running demo
+  mainArea.onclick = async () => {
+    await clearTabs();
 
     if (type === 'user') {
       const result = await chrome.storage.local.get('userTemplates');
@@ -56,17 +47,19 @@ export function createDemoFlowItem(type, name) {
       await chrome.storage.local.set({ pendingTemplate: template });
     }
 
-    // Create a new tab that will handle the template processing
     await chrome.tabs.create({
       url: chrome.runtime.getURL('html/processor.html'),
       active: true
     });
   };
-  actions.appendChild(runBtn);
+
+  // Action buttons container
+  const actions = document.createElement('div');
+  actions.className = 'flex gap-1';
 
   // Export button
   const exportBtn = document.createElement('button');
-  exportBtn.className = 'btn btn-sm bg-gray-800';
+  exportBtn.className = 'btn btn-sm bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded';
   exportBtn.innerHTML = '⬇';
   exportBtn.title = 'Export Demo Flow';
   exportBtn.onclick = async () => {
@@ -92,9 +85,9 @@ export function createDemoFlowItem(type, name) {
   };
   actions.appendChild(exportBtn);
 
-  // Add copy button - available for all templates
+  // Copy button
   const copyBtn = document.createElement('button');
-  copyBtn.className = 'btn btn-sm bg-gray-800';
+  copyBtn.className = 'btn btn-sm bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded';
   copyBtn.innerHTML = '📋';
   copyBtn.title = 'Copy Demo Flow';
   copyBtn.onclick = async () => {
@@ -141,10 +134,10 @@ export function createDemoFlowItem(type, name) {
   };
   actions.appendChild(copyBtn);
 
-  // Add Edit button - only for user demo flows
+  // Edit and Delete buttons for user demos
   if (type === 'user') {
     const editBtn = document.createElement('button');
-    editBtn.className = 'btn btn-sm bg-gray-800';
+    editBtn.className = 'btn btn-sm bg-gray-800 hover:bg-gray-700 px-2 py-1 rounded';
     editBtn.innerHTML = '✏️';
     editBtn.title = 'Edit Demo Flow';
     editBtn.onclick = async () => {
@@ -169,26 +162,23 @@ export function createDemoFlowItem(type, name) {
     };
     actions.appendChild(editBtn);
 
-    // Add Delete button for user demo flows
-    if (type === 'user') {
-      const deleteBtn = document.createElement('button');
-      deleteBtn.className = 'btn btn-sm bg-red-800 hover:bg-red-700';
-      deleteBtn.innerHTML = '🗑';
-      deleteBtn.title = 'Delete Demo Flow';
-      deleteBtn.onclick = async () => {
-        if (confirm(`Delete demo flow "${name}"?`)) {
-          const result = await chrome.storage.local.get('userTemplates');
-          const userTemplates = result.userTemplates || {};
-          delete userTemplates[name];
-          await chrome.storage.local.set({ userTemplates });
-          await loadDemoList();
-        }
-      };
-      actions.appendChild(deleteBtn);
-    }
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'btn btn-sm bg-red-800 hover:bg-red-700 px-2 py-1 rounded';
+    deleteBtn.innerHTML = '🗑';
+    deleteBtn.title = 'Delete Demo Flow';
+    deleteBtn.onclick = async () => {
+      if (confirm(`Delete demo flow "${name}"?`)) {
+        const result = await chrome.storage.local.get('userTemplates');
+        const userTemplates = result.userTemplates || {};
+        delete userTemplates[name];
+        await chrome.storage.local.set({ userTemplates });
+        await loadDemoList();
+      }
+    };
+    actions.appendChild(deleteBtn);
   }
 
-  item.appendChild(info);
+  item.appendChild(mainArea);
   item.appendChild(actions);
   return item;
 }
