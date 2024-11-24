@@ -26,6 +26,23 @@ export function createDemoFlowItem(type, name) {
   runBtn.innerHTML = '▶';
   runBtn.title = 'Run Demo Flow';
   runBtn.onclick = async () => {
+    // First check and close any existing demo tabs
+    console.log("clearing existing tabs");
+    const result = await chrome.storage.local.get('demoTabIds');
+    
+    if (result.demoTabIds && result.demoTabIds.length > 0) {
+      console.log("Clearing existing tabs:", result.demoTabIds);
+      try {
+        await chrome.tabs.remove(result.demoTabIds);
+      } catch (e) {
+        console.log("Some tabs were already closed:", e);
+      }
+      // Clear the stored tab IDs
+      await chrome.storage.local.remove('demoTabIds');
+    } else {
+      console.log("No existing tabs to clear");
+    }
+
     if (type === 'user') {
       const result = await chrome.storage.local.get('userTemplates');
       const template = result.userTemplates[name];

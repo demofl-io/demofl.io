@@ -20,6 +20,7 @@ export async function parseDemoFile(demoData) {
     try {
         const currentWindow = await chrome.windows.getCurrent();
         let currentWindowId = currentWindow.id;
+        let demoTabIds = []; // Track all created tab IDs
 
         // Save demo data to storage first
         await saveDemoToLocalStorage(demoData);
@@ -28,23 +29,23 @@ export async function parseDemoFile(demoData) {
         const overviewHTML = await generateOverviewHTML(demoData);
         const overviewBlob = new Blob([overviewHTML], { type: 'text/html' });
         const overviewUrl = URL.createObjectURL(overviewBlob);
-
-        await chrome.tabs.create({
+        const overviewTab = await chrome.tabs.create({
             active: true,
             url: overviewUrl,
             windowId: currentWindowId
         });
+        demoTabIds.push(overviewTab.id);
 
         // Create personas page
         const personasHTML = await generatePersonasHTML(demoData);
         const personasBlob = new Blob([personasHTML], { type: 'text/html' });
         const personasUrl = URL.createObjectURL(personasBlob);
-
-        await chrome.tabs.create({
+        const personasTab = await chrome.tabs.create({
             active: false,
             url: personasUrl,
             windowId: currentWindowId
         });
+        demoTabIds.push(personasTab.id);
 
         // Process each step
         for (let i = 0; i < demoData.steps.length; i++) {
@@ -65,6 +66,7 @@ export async function parseDemoFile(demoData) {
                 });
 
                 stepTabIds.push(tab.id);
+                demoTabIds.push(tab.id);
 
                 if (demoData.steps[i].persona) {
                     await new Promise((resolve) => {
@@ -119,6 +121,9 @@ export async function parseDemoFile(demoData) {
                 });
             }
         }
+
+        // Store the tab IDs
+        await chrome.storage.local.set({"demoTabIds" : demoTabIds });
     } catch (error) {
         console.error("Error in parseDemoFile:", error);
         throw error;
