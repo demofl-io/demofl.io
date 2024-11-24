@@ -98,7 +98,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function showLoginButton() {
     const loginButton = document.createElement('button');
-    loginButton.textContent = 'Login with Demofl.io Cloud';
+    loginButton.className = 'btn btn-primary';
+    loginButton.textContent = 'Login with Demofl.io Cloud (coming soon)';
+    loginButton.disabled = true;
     loginButton.addEventListener('click', async () => {
         const authUrl = await authService.initiateLogin();
         chrome.windows.create({
