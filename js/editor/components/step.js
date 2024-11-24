@@ -91,9 +91,6 @@ export function createStepField(title = '', description = '', urls = [], persona
 
     // Add color options array
     const tabColors = ['grey', 'blue', 'red', 'yellow', 'green', 'pink', 'purple', 'cyan', 'orange'];
-    
-    // Debug log to check incoming tabColor value
-    console.log('Creating step field with tab color:', tabColor);
 
     // Ensure tabColor is a string and lowercase for comparison
     const normalizedTabColor = String(tabColor).toLowerCase();

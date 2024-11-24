@@ -150,7 +150,6 @@ async function deletePersonaPicture(pictureKey) {
 }
 
 async function deleteLogo(logoKey) {
-    console.log('Deleting logo:', logoKey);
     try {
         await chrome.storage.local.remove([
             logoKey,

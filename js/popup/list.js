@@ -14,9 +14,7 @@ export async function clearTabs() {
     }
     // Clear the stored tab IDs
     await chrome.storage.local.remove('demoTabIds');
-  } else {
-    console.log("No existing tabs to clear");
-  }
+  } 
 }
 
 export function createDemoFlowItem(type, name) {

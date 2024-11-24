@@ -14,7 +14,6 @@ export function init() {
         
         if (response && response.tabId) {
           currentTabId = response.tabId;
-          console.log("Tab ID set to:", currentTabId);
           
           // Connect to background first
           if (connectToBackground()) {

@@ -8,7 +8,7 @@ const authService = new AuthService();
 var extpay = ExtPay('abobjbfojjkoonmfffjppmkobmbcebdj'); // Careful! See note below
 
 extpay.getUser().then(user => {
-    console.log(user)
+
 })
 
 const trialDays = 30;

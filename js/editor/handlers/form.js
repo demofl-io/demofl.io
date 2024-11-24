@@ -214,8 +214,6 @@ async function collectFormData(form) {
         const icon = stepEl.querySelector('.selected-icon')?.value;
         const tabColor = stepEl.querySelector('.step-tab-color')?.value || 'green';
         
-        console.log(`Step ${index + 1} tab color:`, tabColor); // Add debug logging
-        
         const urls = Array.from(stepEl.querySelectorAll('.step-url'))
             .map(input => input.value.trim())
             .filter(url => url);
@@ -231,8 +229,6 @@ async function collectFormData(form) {
             });
         }
     });
-
-    console.log('Final steps array:', steps);
 
     return {
         theme,
@@ -257,7 +253,7 @@ async function handleFormSubmit(template, name, type) {
         alert('Template saved successfully.');
         // Clear the editingTemplate from storage
         await chrome.storage.local.remove('editingTemplate');
-        console.log(template);
+
         window.close();
         return true;
     } else {

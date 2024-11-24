@@ -26,8 +26,6 @@ document.addEventListener('visibilitychange', async () => {
 // Message listener
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "showPersona") {
-    console.log("Received showPersona message:", request.persona);
-    
     chrome.storage.local.get(["personaTabs"], (result) => {
       const personaTabs = result.personaTabs || {};
       personaTabs[currentTabId] = request.persona;
@@ -43,15 +41,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // Handle keyboard shortcuts
 document.addEventListener('keydown', async (e) => {
-  // Debug log all key combinations
-  console.log('Key pressed:', {
-    key: e.key,
-    ctrl: e.ctrlKey,
-    alt: e.altKey,
-    meta: e.metaKey,
-    keyCode: e.keyCode
-  });
-
   // Check if Ctrl+Alt + number key (1-9) is pressed
   if (e.key >= '1' && e.key <= '9') {
     if (e.ctrlKey && e.altKey) {
@@ -61,11 +50,7 @@ document.addEventListener('keydown', async (e) => {
 
       // Get the currently active persona for this tab
       chrome.storage.local.get(["personaTabs", "demo"], (result) => {
-
-     
         const persona = result.personaTabs?.[currentTabId];
-        
-        console.log("Current persona:", persona);
         if (persona && persona.fakeText) {
           const index = parseInt(e.key) - 1;
           const text = persona.fakeText[index];
@@ -97,6 +82,5 @@ document.addEventListener('keydown', async (e) => {
 
 // Handle reload/navigation
 window.addEventListener('load', async () => {
-  console.log("Page loaded, checking for stored persona");
   await checkStoredPersona(currentTabId);
 });

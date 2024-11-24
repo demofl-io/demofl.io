@@ -131,6 +131,5 @@ export async function parseDemoFile(demoData) {
 }
 
 export async function saveDemoToLocalStorage(demoData) {
-    console.log(demoData);
     await chrome.storage.local.set({ demo: demoData });
 }

@@ -139,17 +139,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
    // }
 });
 
-function receiverAction(request, sender, sendResponse) {
-    console.log(sender.tab.id + " = " + request);
-    console.log(sender.tab.url + " = " + request.message);
-    if (request.action === "getTabId") {
-        sendResponse({ tabId: sender.tab.id });
-        return true;
-      }
-}
-
 function tabUpdatedAction(tabId, changeInfo, tab) {
-    console.log(`updatedAction`);
     if (changeInfo.status === 'complete') {
         // chrome.tabs.sendMessage(tabId, { message: 'hello!' }, function (response) {
         //     console.log(response);
@@ -158,8 +148,6 @@ function tabUpdatedAction(tabId, changeInfo, tab) {
 }
 
 function keyboardAction(command, tab) {
-    console.log("listencommand....");
-    console.log(`Command "${command}" triggered`);
     chrome.tabs.sendMessage(tab.id, { message: 'command triggered!' }, function (response) {
 
     });

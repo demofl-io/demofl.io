@@ -19,7 +19,6 @@ export function connectToBackground() {
           if (document.visibilityState === 'hidden') {
             window.addEventListener('unload', () => {
               if (currentTabId) {
-                console.log("Cleaning up on tab close:", currentTabId);
                 chrome.storage.local.get(["personaTabs"], (result) => {
                   const personaTabs = result.personaTabs || {};
                   delete personaTabs[currentTabId];
