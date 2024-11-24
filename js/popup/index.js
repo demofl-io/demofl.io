@@ -11,12 +11,13 @@ extpay.getUser().then(user => {
     console.log(user)
 })
 
+const trialDays = 30;
 
 
 document.querySelector('#login').addEventListener('click', extpay.openLoginPage);
 document.querySelector('#paynow').addEventListener('click', extpay.openPaymentPage);
 document.querySelector('#trial').addEventListener('click', func => {
-    extpay.openTrialPage("Enter an email to start your *7-day* free trial");
+    extpay.openTrialPage("Enter an email to start your *"+trialDays+"-days* free trial");
 });
 
 
@@ -63,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
             } else {
                 const now = new Date();
-                const sevenDays = 1000 * 60 * 60 * 24 * 7 // in milliseconds
+                const sevenDays = 1000 * 60 * 60 * 24 * trialDays // in milliseconds
                 if (user.trialStartedAt && (now - user.trialStartedAt) < sevenDays) {
                     document.querySelector('#payheader').innerHTML = 'Welcome ' + user.email + ' . Your trial ends in ' + Math.floor((sevenDays - (now - user.trialStartedAt)) / (1000 * 60 * 60 * 24)) + ' days';
     
