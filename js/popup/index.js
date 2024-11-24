@@ -55,14 +55,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         // here we use ExtPay to check if the user is logged in and paid for the personnal plan
         extpay.getUser().then(user => {
             if (user.email) {
+                // Remove all payment-related buttons when user is logged in
                 document.querySelector('#login').remove();
+
             }
             if (user.paid) {
-                document.querySelector('#payheader').innerHTML = 'Welcome ' + user.email + ' 🎉';
-    
-                document.querySelector('#payheader').innerHTML += ' <button id="preferences" class="btn btn-link">Manage your subscription</button>';
-                document.querySelector('#payheader').innerHTML += ' <button id="extpay-signout" class="btn btn-link">Sign out</button>';
-    
+                document.querySelector('#paynow').remove();
+                document.querySelector('#trial').remove();
+                document.querySelector('#payheader').innerHTML = '<div class="flex flex-col">' +
+                    '<div>Welcome ' + user.email + ' 🎉</div>' +
+                    '<div class="flex gap-2">' +
+                    '<button id="preferences" class="btn btn-link">Manage your subscription</button>' +
+                    '<button id="extpay-signout" class="btn btn-link">Sign out</button>' +
+                    '</div></div>';
+
                 document.querySelector('#preferences').addEventListener('click', extpay.openPaymentPage);
                 document.querySelector('#extpay-signout').addEventListener('click', () => {
                     // Clear ExtPay user data from storage
@@ -71,15 +77,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                     });
                 });
             } else {
+
                 const now = new Date();
                 const sevenDays = 1000 * 60 * 60 * 24 * trialDays // in milliseconds
                 if (user.trialStartedAt && (now - user.trialStartedAt) < sevenDays) {
-                    document.querySelector('#payheader').innerHTML = 'Welcome ' + user.email + ' . Your trial ends in ' + Math.floor((sevenDays - (now - user.trialStartedAt)) / (1000 * 60 * 60 * 24)) + ' days';
-    
-                    // add html preferences and signout buttons to payheader
-                    document.querySelector('#payheader').innerHTML += ' - <button id="preferences" class="btn btn-link">Manage your subscription</button>';
-                    document.querySelector('#payheader').innerHTML += ' <button id="extpay-signout" class="btn btn-link">Sign out</button>';
-    
+                    document.querySelector('#paynow').remove();
+
+                    document.querySelector('#payheader').innerHTML = '<div class="flex flex-col">' +
+                        '<div>Welcome ' + user.email + ' . Your trial ends in ' + Math.floor((sevenDays - (now - user.trialStartedAt)) / (1000 * 60 * 60 * 24)) + ' days</div>' +
+                        '<div class="flex gap-2">' +
+                        '<button id="preferences" class="btn btn-link">Manage your subscription</button>' +
+                        '<button id="extpay-signout" class="btn btn-link">Sign out</button>' +
+                        '</div></div>';
+
                     document.querySelector('#preferences').addEventListener('click', extpay.openPaymentPage);
 
                     document.querySelector('#extpay-signout').addEventListener('click', () => {
