@@ -18,13 +18,15 @@ export async function clearTabs() {
 }
 
 export function createDemoFlowItem(type, name) {
-  const demoFolder = 'demos';
   const item = document.createElement('div');
-  item.className = 'flex items-center gap-2';
+  item.className = 'grid grid-cols-[1fr,auto] gap-2 w-full';
 
   // Main clickable area for running demo
   const mainArea = document.createElement('button');
-  mainArea.className = 'btn flex-1 flex items-center justify-start gap-2 normal-case h-auto';
+  mainArea.className = 'btn w-full h-12 justify-start normal-case';
+  if (type === 'user') {
+    mainArea.classList += ' btn-secondary';
+  }
   mainArea.innerHTML = `
     <span class="text-lg">${type === 'builtin' ? '📚' : '📝'}</span>
     <span class="font-medium">${name}</span>
@@ -53,11 +55,14 @@ export function createDemoFlowItem(type, name) {
 
   // Action buttons container
   const actions = document.createElement('div');
-  actions.className = 'flex gap-1';
+  actions.className = 'flex gap-1 h-12';
+
+  // Action buttons common classes
+  const actionBtnClasses = 'btn btn-square w-12 h-12';
 
   // Export button
   const exportBtn = document.createElement('button');
-  exportBtn.className = 'btn btn-square btn-sm';
+  exportBtn.className = actionBtnClasses;
   exportBtn.innerHTML = '⬇';
   exportBtn.title = 'Export Demo Flow';
   exportBtn.onclick = async () => {
@@ -85,7 +90,7 @@ export function createDemoFlowItem(type, name) {
 
   // Copy button
   const copyBtn = document.createElement('button');
-  copyBtn.className = 'btn btn-square btn-sm';
+  copyBtn.className = actionBtnClasses;
   copyBtn.innerHTML = '📋';
   copyBtn.title = 'Copy Demo Flow';
   copyBtn.onclick = async () => {
@@ -135,7 +140,7 @@ export function createDemoFlowItem(type, name) {
   // Edit and Delete buttons for user demos
   if (type === 'user') {
     const editBtn = document.createElement('button');
-    editBtn.className = 'btn btn-square btn-sm';
+    editBtn.className = actionBtnClasses;
     editBtn.innerHTML = '✏️';
     editBtn.title = 'Edit Demo Flow';
     editBtn.onclick = async () => {
@@ -161,7 +166,7 @@ export function createDemoFlowItem(type, name) {
     actions.appendChild(editBtn);
 
     const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'btn btn-square btn-sm btn-error';
+    deleteBtn.className = `${actionBtnClasses} btn-error`;
     deleteBtn.innerHTML = '🗑';
     deleteBtn.title = 'Delete Demo Flow';
     deleteBtn.onclick = async () => {
@@ -200,14 +205,14 @@ export async function loadDemoList() {
 
   // Import button
   const importBtn = document.createElement('button');
-  importBtn.className = 'btn btn-square btn-sm';
+  importBtn.className = 'btn btn-square w-12 h-12';
   importBtn.innerHTML = '📥';
   importBtn.title = 'Import Demo Flow';
   importBtn.id = 'importTemplate'; // Add ID to work with existing import.js
 
   // Manage button
   const manageBtn = document.createElement('button');
-  manageBtn.className = 'btn btn-square btn-sm';
+  manageBtn.className = 'btn btn-square w-12 h-12';
   manageBtn.innerHTML = '⚙️';
   manageBtn.title = 'Manage Demo Flows';
   manageBtn.id = 'configLogos'; // Add ID to work with existing index.js
@@ -221,11 +226,11 @@ export async function loadDemoList() {
 
   // Create New and Clear tabs buttons
   const controlsDiv = document.createElement('div');
-  controlsDiv.className = 'flex items-center gap-2 mb-4';
+  controlsDiv.className = 'grid grid-cols-[1fr,auto] gap-2 mb-4';
 
   // New demo flow button
   const newDemoFlowBtn = document.createElement('button');
-  newDemoFlowBtn.className = 'btn flex-1 justify-start normal-case h-auto gap-2';
+  newDemoFlowBtn.className = 'btn btn-primary w-full h-12 justify-start normal-case';
   newDemoFlowBtn.innerHTML = `
     <span class="text-lg">✨</span>
     <span class="font-medium">Create New Demo Flow</span>
@@ -291,11 +296,8 @@ export async function loadDemoList() {
 
   // Clear tabs button
   const clearTabsBtn = document.createElement('button');
-  clearTabsBtn.className = 'btn btn-error w-1/4 gap-2 normal-case h-auto';
-  clearTabsBtn.innerHTML = `
-    <span class="text-lg">🧹</span>
-
-  `;
+  clearTabsBtn.className = 'btn btn-error w-12 h-12';
+  clearTabsBtn.innerHTML = '🧹';
   clearTabsBtn.onclick = clearTabs;
 
   controlsDiv.appendChild(newDemoFlowBtn);
