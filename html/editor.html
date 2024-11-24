@@ -9,172 +9,174 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<body class="bg-base-200 p-8 dark">
+<body class="min-h-screen bg-base-300 p-8">
     <div class="container mx-auto">
-        <h1 class="text-3xl font-bold mb-6">
-            Edit Demo Flow
-            <div class="text-lg text-gray-400 mt-1" id="demoName"></div>
-        </h1>
-        <!-- Tabs Navigation -->
-        <div class="tabs">
-            <a class="tab tab-bordered tab-active" data-tab="theme">Theme</a>
-            <a class="tab tab-bordered" data-tab="product">Product</a>
-            <a class="tab tab-bordered" data-tab="customer">Customer</a>
-            <a class="tab tab-bordered" data-tab="personas">Personas</a>
-            <a class="tab tab-bordered" data-tab="steps">Steps</a>
+        <div class="editor-container">
+            <h1 class="text-3xl font-bold mb-6">
+                Edit Demo Flow
+                <div class="text-lg text-gray-400 mt-1" id="demoName"></div>
+            </h1>
+            <!-- Tabs Navigation -->
+            <div class="tabs">
+                <a class="tab tab-bordered tab-active" data-tab="theme">Theme</a>
+                <a class="tab tab-bordered" data-tab="product">Product</a>
+                <a class="tab tab-bordered" data-tab="customer">Customer</a>
+                <a class="tab tab-bordered" data-tab="personas">Personas</a>
+                <a class="tab tab-bordered" data-tab="steps">Steps</a>
+            </div>
+            <!-- Tabs Content -->
+            <form id="editForm" class="space-y-6 mt-4">
+                <!-- Theme Tab -->
+                <div id="theme" class="tab-content">
+                    <h2 class="text-xl font-semibold">Theme</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                        <div>
+                            <label class="label">
+                                <span class="label-text">Brand Color</span>
+                            </label>
+                            <input type="color" id="brandColor" class="input input-bordered w-full" required>
+                        </div>
+                        <div>
+                            <label class="label">
+                                <span class="label-text">Overlay Color</span>
+                            </label>
+                            <input type="color" id="overlayColor" class="input input-bordered w-full" required>
+                        </div>
+                        <div>
+                            <label class="label">
+                                <span class="label-text">Overlay Background</span>
+                            </label>
+                            <input type="color" id="overlayBackground" class="input input-bordered w-full" required>
+                        </div>
+                        <div>
+                            <label class="label">
+                                <span class="label-text">Brand Font</span>
+                            </label>
+                            <input type="text" id="brandFont" class="input input-bordered w-full" placeholder="e.g., Arial" required>
+                        </div>
+                        <div>
+                            <label class="label">
+                                <span class="label-text">Overlay Horizontal Position</span>
+                            </label>
+                            <select id="overlayH" class="select select-bordered w-full" required>
+                                <option value="left">Left</option>
+                                <option value="center">Center</option>
+                                <option value="right">Right</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="label">
+                                <span class="label-text">Overlay Vertical Position</span>
+                            </label>
+                            <select id="overlayV" class="select select-bordered w-full" required>
+                                <option value="top">Top</option>
+                                <option value="middle">Middle</option>
+                                <option value="bottom">Bottom</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="label">
+                                <span class="label-text">Overlay Scale</span>
+                            </label>
+                            <input type="text" id="overlayScale" class="input input-bordered w-full" placeholder="e.g., 140%" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Tab -->
+                <div id="product" class="tab-content hidden">
+                    <h2 class="text-xl font-semibold">Product</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                        <div>
+                            <label class="label">
+                                <span class="label-text">Product Name</span>
+                            </label>
+                            <input type="text" id="productName" class="input input-bordered w-full" required>
+                        </div>
+                        <div>
+                            <label class="label">
+                                <span class="label-text">Product Logo</span>
+                            </label>
+                            <div class="custom-select relative w-full">
+                                <button type="button" class="select select-bordered w-full flex items-center space-x-2">
+                                    <span class="flex-1 text-left">Select logo...</span>
+                                    <span class="arrow">▼</span>
+                                </button>
+                                <div class="dropdown-options hidden absolute left-0 top-full w-full max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg z-50">
+                                    <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2" data-value="">
+                                        <div class="w-8 h-8 flex-shrink-0 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                                        <span class="dark:text-gray-200">Select logo...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="productLogo" value="">
+                            <label class="btn btn-sm mt-2">
+                                📤 Upload new logo
+                                <input type="file" class="hidden product-logo-upload" accept="image/*">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Tab -->
+                <div id="customer" class="tab-content hidden">
+                    <h2 class="text-xl font-semibold">Customer</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                        <div>
+                            <label class="label">
+                                <span class="label-text">Customer Name</span>
+                            </label>
+                            <input type="text" id="customerName" class="input input-bordered w-full" required>
+                        </div>
+                        <div>
+                            <label class="label">
+                                <span class="label-text">Customer Logo</span>
+                            </label>
+                            <div class="custom-select relative w-full">
+                                <button type="button" class="select select-bordered w-full flex items-center space-x-2">
+                                    <span class="flex-1 text-left">Select logo...</span>
+                                    <span class="arrow">▼</span>
+                                </button>
+                                <div class="dropdown-options hidden absolute left-0 top-full w-full max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg z-50">
+                                    <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2" data-value="">
+                                        <div class="w-8 h-8 flex-shrink-0 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                                        <span class="dark:text-gray-200">Select logo...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="customerLogo" value="">
+                            <label class="btn btn-sm mt-2">
+                                📤 Upload new logo
+                                <input type="file" class="hidden customer-logo-upload" accept="image/*">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personas Tab -->
+                <div id="personas" class="tab-content hidden">
+                    <h2 class="text-xl font-semibold">Personas</h2>
+                    <div id="personasContainer" class="space-y-4 mt-2">
+                        <!-- Dynamic Persona Fields -->
+                    </div>
+                    <button type="button" id="addPersonaBtn" class="btn btn-sm btn-secondary mt-4">Add Persona</button>
+                </div>
+                <!-- Steps Tab -->
+                <div id="steps" class="tab-content hidden">
+                    <h2 class="text-xl font-semibold">Steps and URLs</h2>
+                    <div id="stepsContainer" class="space-y-4 mt-2">
+                        <!-- Existing steps will be dynamically added here -->
+                    </div>
+                    <button type="button" id="addStepBtn" class="btn btn-sm btn-secondary mt-4">Add Step</button>
+
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit" class="btn btn-primary">Save Template</button>
+                </div>
+            </form>
         </div>
-        <!-- Tabs Content -->
-        <form id="editForm" class="space-y-6 mt-4">
-            <!-- Theme Tab -->
-            <div id="theme" class="tab-content">
-                <h2 class="text-xl font-semibold">Theme</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                    <div>
-                        <label class="label">
-                            <span class="label-text">Brand Color</span>
-                        </label>
-                        <input type="color" id="brandColor" class="input input-bordered w-full" required>
-                    </div>
-                    <div>
-                        <label class="label">
-                            <span class="label-text">Overlay Color</span>
-                        </label>
-                        <input type="color" id="overlayColor" class="input input-bordered w-full" required>
-                    </div>
-                    <div>
-                        <label class="label">
-                            <span class="label-text">Overlay Background</span>
-                        </label>
-                        <input type="color" id="overlayBackground" class="input input-bordered w-full" required>
-                    </div>
-                    <div>
-                        <label class="label">
-                            <span class="label-text">Brand Font</span>
-                        </label>
-                        <input type="text" id="brandFont" class="input input-bordered w-full" placeholder="e.g., Arial" required>
-                    </div>
-                    <div>
-                        <label class="label">
-                            <span class="label-text">Overlay Horizontal Position</span>
-                        </label>
-                        <select id="overlayH" class="select select-bordered w-full" required>
-                            <option value="left">Left</option>
-                            <option value="center">Center</option>
-                            <option value="right">Right</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="label">
-                            <span class="label-text">Overlay Vertical Position</span>
-                        </label>
-                        <select id="overlayV" class="select select-bordered w-full" required>
-                            <option value="top">Top</option>
-                            <option value="middle">Middle</option>
-                            <option value="bottom">Bottom</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="label">
-                            <span class="label-text">Overlay Scale</span>
-                        </label>
-                        <input type="text" id="overlayScale" class="input input-bordered w-full" placeholder="e.g., 140%" required>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product Tab -->
-            <div id="product" class="tab-content hidden">
-                <h2 class="text-xl font-semibold">Product</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                    <div>
-                        <label class="label">
-                            <span class="label-text">Product Name</span>
-                        </label>
-                        <input type="text" id="productName" class="input input-bordered w-full" required>
-                    </div>
-                    <div>
-                        <label class="label">
-                            <span class="label-text">Product Logo</span>
-                        </label>
-                        <div class="custom-select relative w-full">
-                            <button type="button" class="select select-bordered w-full flex items-center space-x-2">
-                                <span class="flex-1 text-left">Select logo...</span>
-                                <span class="arrow">▼</span>
-                            </button>
-                            <div class="dropdown-options hidden absolute left-0 top-full w-full max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg z-50">
-                                <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2" data-value="">
-                                    <div class="w-8 h-8 flex-shrink-0 bg-gray-200 dark:bg-gray-600 rounded"></div>
-                                    <span class="dark:text-gray-200">Select logo...</span>
-                                </div>
-                            </div>
-                        </div>
-                        <input type="hidden" id="productLogo" value="">
-                        <label class="btn btn-sm mt-2">
-                            📤 Upload new logo
-                            <input type="file" class="hidden product-logo-upload" accept="image/*">
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Customer Tab -->
-            <div id="customer" class="tab-content hidden">
-                <h2 class="text-xl font-semibold">Customer</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                    <div>
-                        <label class="label">
-                            <span class="label-text">Customer Name</span>
-                        </label>
-                        <input type="text" id="customerName" class="input input-bordered w-full" required>
-                    </div>
-                    <div>
-                        <label class="label">
-                            <span class="label-text">Customer Logo</span>
-                        </label>
-                        <div class="custom-select relative w-full">
-                            <button type="button" class="select select-bordered w-full flex items-center space-x-2">
-                                <span class="flex-1 text-left">Select logo...</span>
-                                <span class="arrow">▼</span>
-                            </button>
-                            <div class="dropdown-options hidden absolute left-0 top-full w-full max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg z-50">
-                                <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2" data-value="">
-                                    <div class="w-8 h-8 flex-shrink-0 bg-gray-200 dark:bg-gray-600 rounded"></div>
-                                    <span class="dark:text-gray-200">Select logo...</span>
-                                </div>
-                            </div>
-                        </div>
-                        <input type="hidden" id="customerLogo" value="">
-                        <label class="btn btn-sm mt-2">
-                            📤 Upload new logo
-                            <input type="file" class="hidden customer-logo-upload" accept="image/*">
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Personas Tab -->
-            <div id="personas" class="tab-content hidden">
-                <h2 class="text-xl font-semibold">Personas</h2>
-                <div id="personasContainer" class="space-y-4 mt-2">
-                    <!-- Dynamic Persona Fields -->
-                </div>
-                <button type="button" id="addPersonaBtn" class="btn btn-sm btn-secondary mt-4">Add Persona</button>
-            </div>
-            <!-- Steps Tab -->
-            <div id="steps" class="tab-content hidden">
-                <h2 class="text-xl font-semibold">Steps and URLs</h2>
-                <div id="stepsContainer" class="space-y-4 mt-2">
-                    <!-- Existing steps will be dynamically added here -->
-                </div>
-                <button type="button" id="addStepBtn" class="btn btn-sm btn-secondary mt-4">Add Step</button>
-
-            </div>
-
-            <!-- Submit Button -->
-            <div>
-                <button type="submit" class="btn btn-primary">Save Template</button>
-            </div>
-        </form>
     </div>
 
     <script src="../dist/editor-bundle.js" type="module"></script>

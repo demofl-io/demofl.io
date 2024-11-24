@@ -2,37 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+    /* Editor layout */
+
+    .tab-content {
+        @apply block;
+    }
+
+
+    /* Form controls */
+    .custom-select {
+        @apply relative w-full;
+    }
+
+    .custom-select button {
+        @apply select select-bordered w-full flex items-center space-x-2;
+    }
+
+    .dropdown-options {
+        @apply absolute left-0 top-full w-full mt-1 max-h-60 overflow-y-auto 
+               bg-base-200 border border-base-300 rounded-lg shadow-lg z-50;
+    }
+
+    /* Icon selector */
+    .icon-dropdown {
+        @apply bg-base-200 border border-base-300 rounded-lg;
+    }
+
+    .icon-item {
+        @apply text-base-content p-2 cursor-pointer hover:bg-base-300 flex items-center gap-2;
+    }
+}
+
 /* Your custom styles here */
 
 /* Ensure the icon-dropdown and icon-item have appropriate dark mode styles */
-
-.icon-dropdown {
-    background-color: #ffffff;
-    border: 1px solid #d1d5db;
-}
-
-.dark .icon-dropdown {
-    background-color: #1f2937; /* Dark gray */
-    border-color: #374151;
-}
-
-.icon-item {
-    color: #000000;
-    padding: 0.5rem;
-    cursor: pointer;
-}
-
-.dark .icon-item {
-    color: #ffffff;
-}
-
-.icon-item:hover {
-    background-color: #f3f4f6;
-}
-
-.dark .icon-item:hover {
-    background-color: #4b5563;
-}
 
 .icon-preview {
     font-size: 24px;
@@ -42,8 +46,6 @@
 .dark .icon-preview {
     color: #d1d5db;
 }
-
-
 
 /* Logo Management Styles */
 .logo-grid {
