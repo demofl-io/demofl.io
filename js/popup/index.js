@@ -3,6 +3,7 @@ import { loadDemoList } from './list.js';
 import { initializeImport } from './import.js';
 import ExtPay from 'extpay';
 import { AuthService } from '../auth';
+import { initializeTheme } from '../utils/theme.js';
 
 const authService = new AuthService();
 var extpay = ExtPay('abobjbfojjkoonmfffjppmkobmbcebdj'); // Careful! See note below
@@ -20,11 +21,10 @@ document.querySelector('#trial').addEventListener('click', func => {
     extpay.openTrialPage("Enter an email to start your *"+trialDays+"-days* free trial");
 });
 
-
-
-
-
 document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize theme
+    initializeTheme();
+    
     // Add popout handler
     document.getElementById('popout').addEventListener('click', () => {
         chrome.tabs.create({
@@ -34,44 +34,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     const isAuthenticated = await authService.isAuthenticated();
-
-        // Theme Toggle Elements
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const sunIcon = document.getElementById('sun-icon');
-        const moonIcon = document.getElementById('moon-icon');
-    
-        // Function to toggle theme
-        function toggleTheme() {
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'business' : 'light';
-            
-            // Update the data-theme attribute
-            html.setAttribute('data-theme', newTheme);
-            
-            // Save the theme preference
-            localStorage.setItem('theme', newTheme);
-            
-            // Toggle icons
-            sunIcon.classList.toggle('hidden');
-            moonIcon.classList.toggle('hidden');
-        }
-    
-        // Add click event listener to theme toggle button
-        themeToggleBtn.addEventListener('click', toggleTheme);
-    
-        // Set initial theme based on localStorage
-        const savedTheme = localStorage.getItem('theme') || 'business';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        
-        // Set initial icon visibility
-        if (savedTheme === 'light') {
-            sunIcon.classList.remove('hidden');
-            moonIcon.classList.add('hidden');
-        } else {
-            sunIcon.classList.add('hidden');
-            moonIcon.classList.remove('hidden');
-        }
 
     // demofl.io cloud for the team plan
     if (isAuthenticated) {
