@@ -223,7 +223,7 @@ export async function loadDemoList() {
 
   // Create New and Clear tabs buttons
   const controlsDiv = document.createElement('div');
-  controlsDiv.className = 'flex items-center justify-between gap-2 mb-4';
+  controlsDiv.className = 'flex items-center gap-2 mb-4';
 
   // New demo flow button
   const newDemoFlowDiv = document.createElement('div');
@@ -295,11 +295,11 @@ export async function loadDemoList() {
 
   // Clear tabs button
   const clearTabsDiv = document.createElement('div');
-  clearTabsDiv.className = 'flex-1 flex items-center justify-between p-2 bg-red-900 rounded-lg cursor-pointer hover:bg-red-800';
+  clearTabsDiv.className = 'w-1/4 flex items-center justify-center p-2 bg-red-900 rounded-lg cursor-pointer hover:bg-red-800';
   clearTabsDiv.innerHTML = `
     <div class="flex items-center gap-2">
       <span class="text-lg">🧹</span>
-      <span class="font-medium">Clear Demo Tabs</span>
+      <span class="font-medium">Clear</span>
     </div>
   `;
   clearTabsDiv.onclick = clearTabs;
