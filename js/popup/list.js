@@ -187,9 +187,43 @@ export async function loadDemoList() {
   const container = document.getElementById("templateList");
   container.innerHTML = '';
 
-  // Add buttons at the top
-  const topDiv = document.createElement('div');
-  topDiv.className = 'flex items-center justify-between gap-2 mb-4';
+  // Top header with action buttons
+  const headerDiv = document.createElement('div');
+  headerDiv.className = 'flex items-center justify-between mb-4';
+
+  // Left side - title
+  const titleDiv = document.createElement('div');
+  titleDiv.className = 'text-lg font-medium';
+  titleDiv.textContent = 'Demo Flows';
+
+  // Right side - action buttons
+  const actionButtons = document.createElement('div');
+  actionButtons.className = 'flex gap-2';
+
+  // Import button
+  const importBtn = document.createElement('button');
+  importBtn.className = 'p-1.5 rounded bg-gray-700 hover:bg-gray-600';
+  importBtn.innerHTML = '📥';
+  importBtn.title = 'Import Demo Flow';
+  importBtn.id = 'importTemplate'; // Add ID to work with existing import.js
+
+  // Manage button
+  const manageBtn = document.createElement('button');
+  manageBtn.className = 'p-1.5 rounded bg-gray-700 hover:bg-gray-600';
+  manageBtn.innerHTML = '⚙️';
+  manageBtn.title = 'Manage Demo Flows';
+  manageBtn.id = 'configLogos'; // Add ID to work with existing index.js
+
+  actionButtons.appendChild(importBtn);
+  actionButtons.appendChild(manageBtn);
+  
+  headerDiv.appendChild(titleDiv);
+  headerDiv.appendChild(actionButtons);
+  container.appendChild(headerDiv);
+
+  // Create New and Clear tabs buttons
+  const controlsDiv = document.createElement('div');
+  controlsDiv.className = 'flex items-center justify-between gap-2 mb-4';
 
   // New demo flow button
   const newDemoFlowDiv = document.createElement('div');
@@ -270,9 +304,9 @@ export async function loadDemoList() {
   `;
   clearTabsDiv.onclick = clearTabs;
 
-  topDiv.appendChild(newDemoFlowDiv);
-  topDiv.appendChild(clearTabsDiv);
-  container.appendChild(topDiv);
+  controlsDiv.appendChild(newDemoFlowDiv);
+  controlsDiv.appendChild(clearTabsDiv);
+  container.appendChild(controlsDiv);
 
   // Load existing templates
   const builtinTemplates = await loadBuiltInTemplates();

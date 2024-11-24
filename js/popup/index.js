@@ -122,8 +122,3 @@ chrome.runtime.onMessage.addListener((message) => {
     }
 });
 
-document.getElementById('configLogos').addEventListener('click', () => {
-    chrome.tabs.create({
-        url: chrome.runtime.getURL('html/config.html')
-    });
-});

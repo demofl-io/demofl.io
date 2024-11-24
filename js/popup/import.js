@@ -26,5 +26,12 @@ export function initializeImport() {
         console.error('Error importing template:', error);
       }
     });
+
+
+    document.getElementById('configLogos').addEventListener('click', () => {
+      chrome.tabs.create({
+          url: chrome.runtime.getURL('html/config.html')
+      });
+  });
   }
 }
