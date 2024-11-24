@@ -299,7 +299,7 @@ export async function loadDemoList() {
   clearTabsDiv.innerHTML = `
     <div class="flex items-center gap-2">
       <span class="text-lg">🧹</span>
-      <span class="font-medium">Clear</span>
+      <span class="font-medium">Clear Tabs</span>
     </div>
   `;
   clearTabsDiv.onclick = clearTabs;
