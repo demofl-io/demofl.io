@@ -27,6 +27,8 @@ export const getOverviewStyles = (hslColor) => `
     }
     .step-card {
         transition: transform 0.2s ease-in-out;
+        position: relative;
+        margin-top: 1rem; /* Add space for the badge */
     }
     .step-card:hover {
         transform: translateY(-5px);
@@ -34,6 +36,7 @@ export const getOverviewStyles = (hslColor) => `
     .steps-container {
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
+        padding-top: 0.5rem; /* Add padding to container to prevent badge clipping */
     }
     .step-card {
         scroll-snap-align: start;
@@ -93,9 +96,12 @@ export const getOverviewStyles = (hslColor) => `
     }
     .current-step-badge {
         position: absolute;
-        top: -10px;
-        right: -10px;
-        z-index: 10;
+        top: -0.75rem;
+        right: 1rem;
+        z-index: 20;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 `;
 
@@ -127,9 +133,9 @@ export async function generateOverviewHTML(demoData, currentStep = null) {
                 <main class="container mx-auto p-4 md:p-8 flex-1">
                     <div class="steps-container flex gap-4 md:gap-6 overflow-x-auto pb-6">
                         ${demoData.steps.map((step, index) => `
-                            <div class="step-card card bg-base-100 shadow-xl hover:shadow-2xl relative ${currentStep === index ? 'current-step' : ''}">
+                            <div class="step-card card bg-base-100 shadow-xl hover:shadow-2xl ${currentStep === index ? 'current-step' : ''}">
                                 ${currentStep === index ? `
-                                    <div class="current-step-badge badge badge-primary">Current Step</div>
+                                    <div class="current-step-badge badge badge-primary badge-lg">Current Step</div>
                                 ` : ''}
                                 <div class="card-header-content">
                                     <div class="flex items-center gap-6">
