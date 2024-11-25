@@ -141,6 +141,11 @@ export async function parseDemoFile(demoData) {
                             demoTabIds.push(overviewTabend.id);
         // Store the tab IDs
         await chrome.storage.local.set({"demoTabIds" : demoTabIds });
+
+        // Focus on the first created tab (overview)
+        await chrome.tabs.update(demoTabIds[0], { active: true });
+        await chrome.windows.update(currentWindowId, { focused: true });
+
     } catch (error) {
         console.error("Error in parseDemoFile:", error);
         throw error;
