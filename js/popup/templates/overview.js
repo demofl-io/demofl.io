@@ -26,9 +26,10 @@ export const getOverviewStyles = (hslColor) => `
         flex-direction: column;
     }
     .step-card {
-        transition: transform 0.2s ease-in-out;
+        transition: all 0.3s ease-in-out;
         position: relative;
         margin-top: 1rem; /* Add space for the badge */
+        background: hsl(var(--b1));
     }
     .step-card:hover {
         transform: translateY(-5px);
@@ -36,15 +37,17 @@ export const getOverviewStyles = (hslColor) => `
     .steps-container {
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
-        padding-top: 0.5rem; /* Add padding to container to prevent badge clipping */
+        padding: 1rem 0.5rem; /* Add horizontal padding to show left border */
+        margin: -1rem -0.5rem; /* Compensate for padding */
     }
     .step-card {
         scroll-snap-align: start;
-        width: calc(100vw - 2rem);
+        width: calc(100vw - 3rem); /* Adjust for new padding */
         max-width: 400px;
         min-height: 280px;
         display: flex;
         flex-direction: column;
+        border: 1px solid hsl(var(--b3)); /* Base border for all cards */
     }
     .card-header-content {
         padding: 1.5rem;
@@ -86,13 +89,29 @@ export const getOverviewStyles = (hslColor) => `
     footer {
         flex-shrink: 0;
     }
+    @keyframes cardBump {
+        0%, 100% {
+            transform: translateY(-5px) scale(1.02);
+        }
+        50% {
+            transform: translateY(-10px) scale(1.02);
+        }
+    }
     .step-card.current-step {
-        border: 2px solid hsl(var(--p));
+        border-width: 2px;
+        border-color: hsl(var(--p));
         transform: translateY(-5px) scale(1.02);
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        z-index: 10;
+        background: hsl(var(--p) / 0.05);
+        animation: cardBump 3s ease-in-out infinite;
     }
     .step-card.current-step:hover {
-        transform: translateY(-5px) scale(1.02);
+        animation-play-state: paused;
+        transform: translateY(-10px) scale(1.02);
+    }
+    .step-card.current-step .card-header-content {
+        background: hsl(var(--p) / 0.1);
     }
     .current-step-badge {
         position: absolute;
@@ -101,7 +120,10 @@ export const getOverviewStyles = (hslColor) => `
         z-index: 20;
         padding: 0.5rem 1rem;
         font-weight: 600;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        background-color: hsl(var(--p));
+        color: hsl(var(--pc));
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        border: 2px solid hsl(var(--b1));
     }
 `;
 
