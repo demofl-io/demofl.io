@@ -11,9 +11,20 @@ module.exports = {
     require('daisyui')
   ],
   daisyui: {
-    themes: ["corporate", "business"],
+    themes: [{
+      lofi: {
+        ...require("daisyui/src/theming/themes")["lofi"],
+        "primary": "#1C4E80",
+        "secondary": "#7b92b2"
+      },
+    }, {
+      business: {
+        ...require("daisyui/src/theming/themes")["business"]
+
+      }
+    }],
     darkTheme: "business",
-    lightTheme: "corporate",
+    lightTheme: "lofi",
     base: true,
     styled: true,
     utils: true
