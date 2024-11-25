@@ -34,7 +34,7 @@ export function createDemoFlowItem(type, name) {
   mainArea.title = `Run ${name}`;
   // Add click handler for running demo
   mainArea.onclick = async () => {
-    await clearTabs();
+
 
     if (type === 'user') {
       const result = await chrome.storage.local.get('userTemplates');

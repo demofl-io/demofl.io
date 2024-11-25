@@ -1,8 +1,9 @@
 import { parseDemoFile } from './popup/parser.js';
-
+import { clearTabs } from './popup/list.js';
 // When this page loads, get the pending template and process it
 window.addEventListener('load', async () => {
     try {
+        clearTabs();
         const result = await chrome.storage.local.get('pendingTemplate');
         if (result.pendingTemplate) {
             await parseDemoFile(result.pendingTemplate);
