@@ -1,4 +1,5 @@
 import { generateOverviewHTML } from './templates/overview.js';
+import { initializeTheme } from '../utils/theme.js';
 
 async function loadOverviewContent() {
     try {
@@ -20,6 +21,9 @@ async function loadOverviewContent() {
 
         // Add content
         document.getElementById('content').innerHTML = content;
+
+        // Initialize theme after content is loaded
+        initializeTheme(document.body);
     } catch (error) {
         console.error('Error loading overview:', error);
         document.getElementById('content').innerHTML = `

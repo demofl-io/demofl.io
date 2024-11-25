@@ -1,5 +1,5 @@
-
 import { generatePersonasHTML } from './templates/personas.js';
+import { initializeTheme } from '../utils/theme.js';
 
 async function loadPersonasContent() {
     try {
@@ -16,6 +16,9 @@ async function loadPersonasContent() {
         document.head.appendChild(style);
 
         document.getElementById('content').innerHTML = content;
+
+        // Initialize theme after content is loaded
+        initializeTheme(document.body);
     } catch (error) {
         console.error('Error loading personas:', error);
         document.getElementById('content').innerHTML = `
