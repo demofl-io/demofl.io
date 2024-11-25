@@ -1,4 +1,4 @@
-import { loadBuiltInTemplates } from './templates.js';
+import { loadBuiltInTemplates, demoFolder } from './templates.js';
 
 export async function clearTabs() {
   // First check and close any existing demo tabs
