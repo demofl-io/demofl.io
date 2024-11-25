@@ -100,6 +100,16 @@ export async function parseDemoFile(demoData) {
                 }
             }
 
+
+                    // Create overview page at the end also
+
+        const overviewTabend = await chrome.tabs.create({
+            active: true,
+            url: chrome.runtime.getURL('html/overview.html'),
+            windowId: currentWindowId
+        });
+        demoTabIds.push(overviewTabend.id);
+
             // Group tabs
             if (stepTabIds.length > 0) {
                 const group = await chrome.tabs.group({

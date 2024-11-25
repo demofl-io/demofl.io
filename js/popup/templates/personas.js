@@ -13,6 +13,16 @@ export const getPersonasStyles = (hslColor) => `
         display: flex;
         flex-direction: column;
     }
+            #content {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    .page-content {
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: column;
+    }
     .persona-card {
         transition: transform 0.2s ease-in-out;
     }
@@ -32,23 +42,24 @@ export const getPersonasStyles = (hslColor) => `
 `;
 
 export async function generatePersonasHTML(demoData) {
-    const hslColor = hexToHSL(demoData.theme["brand-color"]);
-    
-    const [productLogo, customerLogo] = await Promise.all([
-        getStoredImage(demoData.product.logourl),
-        getStoredImage(demoData.customer.logourl)
-    ]);
+  const hslColor = hexToHSL(demoData.theme["brand-color"]);
 
-    const personaPictures = {};
-    for (const [key, persona] of Object.entries(demoData.personas)) {
-        if (persona.pictureurl) {
-            personaPictures[key] = await getStoredImage(persona.pictureurl);
-        }
+  const [productLogo, customerLogo] = await Promise.all([
+    getStoredImage(demoData.product.logourl),
+    getStoredImage(demoData.customer.logourl)
+  ]);
+
+  const personaPictures = {};
+  for (const [key, persona] of Object.entries(demoData.personas)) {
+    if (persona.pictureurl) {
+      personaPictures[key] = await getStoredImage(persona.pictureurl);
     }
+  }
 
-    return {
-        styles: getPersonasStyles(hslColor),
-        content: `
+  return {
+    styles: getPersonasStyles(hslColor),
+    content: `
+        <div class="page-content">
             <div class="hero bg-base-100 py-12 mb-8 shadow-lg">
                 <div class="hero-content text-center">
                     <div>
@@ -66,16 +77,16 @@ export async function generatePersonasHTML(demoData) {
             <main class="container mx-auto px-4 pb-16">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     ${Object.entries(demoData.personas).map(([key, persona]) => {
-                        const pictureData = personaPictures[key];
-                        return `
+      const pictureData = personaPictures[key];
+      return `
                             <div class="persona-card card bg-base-100 shadow-xl hover:shadow-2xl">
                                 <div class="card-body items-center text-center p-8">
                                     <div class="avatar large placeholder mb-4">
                                         <div class="bg-primary text-primary-content rounded-full w-24 h-24 ring ring-primary ring-offset-2">
                                             ${pictureData ?
-                                                `<img src="${pictureData}" alt="${persona.name}" class="mask mask-circle">` :
-                                                `<span class="text-3xl font-bold">${persona.name.charAt(0)}</span>`
-                                            }
+          `<img src="${pictureData}" alt="${persona.name}" class="mask mask-circle">` :
+          `<span class="text-3xl font-bold">${persona.name.charAt(0)}</span>`
+        }
                                         </div>
                                     </div>
                                     <h2 class="card-title text-2xl mb-1">${persona.name}</h2>
@@ -83,15 +94,15 @@ export async function generatePersonasHTML(demoData) {
                                 </div>
                             </div>
                         `;
-                    }).join('')}
+    }).join('')}
                 </div>
             </main>
-
+</div>
             <footer class="footer footer-center p-4 bg-base-300 text-base-content mt-auto">
                 <div>
                     <p>Demo Story Personas - ${demoData.product.name} x ${demoData.customer.name}</p>
                 </div>
             </footer>
         `
-    };
+  };
 }
