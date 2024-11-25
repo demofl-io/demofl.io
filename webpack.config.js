@@ -12,10 +12,12 @@ module.exports = [{
         config: './js/config/index.js',
         'auth-content': './js/auth/auth-content.js',
         demofliocloud: './js/demofliocloud.js',
+        overview: './js/popup/overview-loader.js',
+        personas: './js/popup/personas-loader.js'
     },
     output: {
         filename: '[name]-bundle.js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'dist')
     },
     plugins: [
         new MiniCssExtractPlugin({
@@ -60,5 +62,6 @@ module.exports = [{
             })
         ]
     },
+
     mode: 'production'
 }];

@@ -7,7 +7,7 @@ window.addEventListener('load', async () => {
         if (result.pendingTemplate) {
             await parseDemoFile(result.pendingTemplate);
             // Clear the pending template
-            await chrome.storage.local.remove('pendingTemplate');
+           // await chrome.storage.local.remove('pendingTemplate');
             
             // Close this processor tab
             chrome.tabs.getCurrent(tab => {

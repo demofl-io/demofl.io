@@ -26,23 +26,18 @@ export async function parseDemoFile(demoData) {
         await saveDemoToLocalStorage(demoData);
 
         // Create overview page first
-        const overviewHTML = await generateOverviewHTML(demoData);
-        const overviewBlob = new Blob([overviewHTML], { type: 'text/html' });
-        const overviewUrl = URL.createObjectURL(overviewBlob);
+
         const overviewTab = await chrome.tabs.create({
             active: true,
-            url: overviewUrl,
+            url: chrome.runtime.getURL('html/overview.html'),
             windowId: currentWindowId
         });
         demoTabIds.push(overviewTab.id);
 
         // Create personas page
-        const personasHTML = await generatePersonasHTML(demoData);
-        const personasBlob = new Blob([personasHTML], { type: 'text/html' });
-        const personasUrl = URL.createObjectURL(personasBlob);
         const personasTab = await chrome.tabs.create({
             active: false,
-            url: personasUrl,
+            url: chrome.runtime.getURL('html/personas.html'),
             windowId: currentWindowId
         });
         demoTabIds.push(personasTab.id);
