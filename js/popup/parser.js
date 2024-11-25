@@ -42,6 +42,7 @@ export async function parseDemoFile(demoData) {
         });
         demoTabIds.push(personasTab.id);
 
+
         // Process each step
         for (let i = 0; i < demoData.steps.length; i++) {
             let stepTabIds = [];
@@ -51,6 +52,16 @@ export async function parseDemoFile(demoData) {
                 const windownew = await chrome.windows.create({ incognito: true });
                 stepWindowId = windownew.id;
             }
+
+                                // Create overview page at the end also
+
+        const overviewTabstart = await chrome.tabs.create({
+            active: true,
+            url: chrome.runtime.getURL('html/overview.html'+`?step=${i}`),
+            windowId: currentWindowId
+        });
+        stepTabIds.push(overviewTabstart.id);
+        demoTabIds.push(overviewTabstart.id);
 
             // Create tabs for this step
             for (let j = 0; j < demoData.steps[i].urls.length; j++) {
@@ -101,14 +112,7 @@ export async function parseDemoFile(demoData) {
             }
 
 
-                    // Create overview page at the end also
 
-        const overviewTabend = await chrome.tabs.create({
-            active: true,
-            url: chrome.runtime.getURL('html/overview.html'),
-            windowId: currentWindowId
-        });
-        demoTabIds.push(overviewTabend.id);
 
             // Group tabs
             if (stepTabIds.length > 0) {
@@ -127,6 +131,14 @@ export async function parseDemoFile(demoData) {
             }
         }
 
+                            // Create overview page at the end also
+
+                            const overviewTabend = await chrome.tabs.create({
+                                active: true,
+                                url: chrome.runtime.getURL('html/overview.html'),
+                                windowId: currentWindowId
+                            });
+                            demoTabIds.push(overviewTabend.id);
         // Store the tab IDs
         await chrome.storage.local.set({"demoTabIds" : demoTabIds });
     } catch (error) {

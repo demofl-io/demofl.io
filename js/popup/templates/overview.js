@@ -2,6 +2,8 @@
 import { hexToHSL } from '../utils/colors.js';
 import { getStoredImage } from '../../editor/utils/images.js';
 
+
+
 export const getOverviewStyles = (hslColor) => `
     :root {
         --p: ${hslColor};
@@ -81,9 +83,23 @@ export const getOverviewStyles = (hslColor) => `
     footer {
         flex-shrink: 0;
     }
+    .step-card.current-step {
+        border: 2px solid hsl(var(--p));
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    .step-card.current-step:hover {
+        transform: translateY(-5px) scale(1.02);
+    }
+    .current-step-badge {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        z-index: 10;
+    }
 `;
 
-export async function generateOverviewHTML(demoData) {
+export async function generateOverviewHTML(demoData, currentStep = null) {
     const hslColor = hexToHSL(demoData.theme["brand-color"]);
 
     const [productLogo, customerLogo] = await Promise.all([
@@ -111,11 +127,14 @@ export async function generateOverviewHTML(demoData) {
                 <main class="container mx-auto p-4 md:p-8 flex-1">
                     <div class="steps-container flex gap-4 md:gap-6 overflow-x-auto pb-6">
                         ${demoData.steps.map((step, index) => `
-                            <div class="step-card card bg-base-100 shadow-xl hover:shadow-2xl">
+                            <div class="step-card card bg-base-100 shadow-xl hover:shadow-2xl relative ${currentStep === index ? 'current-step' : ''}">
+                                ${currentStep === index ? `
+                                    <div class="current-step-badge badge badge-primary">Current Step</div>
+                                ` : ''}
                                 <div class="card-header-content">
                                     <div class="flex items-center gap-6">
-                                        <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                                            <span class="material-icons icon-large ">${step.icon}</span>
+                                        <div class="w-16 h-16 rounded-full ${currentStep === index ? 'bg-primary text-primary-content' : 'bg-primary/10'} flex items-center justify-center">
+                                            <span class="material-icons icon-large">${step.icon}</span>
                                         </div>
                                         <h2 class="card-title text-xl md:text-2xl flex-1">${step.title}</h2>
                                     </div>

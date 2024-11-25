@@ -3,6 +3,9 @@ import { initializeTheme } from '../utils/theme.js';
 
 async function loadOverviewContent() {
     try {
+        const params = new URLSearchParams(window.location.search);
+        const currentStep = params.has('step') ? parseInt(params.get('step')) : null;
+
         // Get content from extension storage
         const result = await chrome.storage.local.get('pendingTemplate');
         console.log('result:', result);
@@ -12,7 +15,7 @@ async function loadOverviewContent() {
         }
 
         // Generate the HTML content
-        const { styles, content } = await generateOverviewHTML(result.pendingTemplate);
+        const { styles, content } = await generateOverviewHTML(result.pendingTemplate, currentStep);
 
         // Add styles
         const style = document.createElement('style');
@@ -21,6 +24,14 @@ async function loadOverviewContent() {
 
         // Add content
         document.getElementById('content').innerHTML = content;
+
+        // Scroll current step into view if specified
+        if (currentStep !== null) {
+            const currentStepCard = document.querySelector('.current-step');
+            if (currentStepCard) {
+                currentStepCard.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+            }
+        }
 
         // Initialize theme after content is loaded
         initializeTheme(document.body);
