@@ -31,7 +31,7 @@ export function createDemoFlowItem(type, name) {
     <span class="text-lg">${type === 'builtin' ? '📚' : '📝'}</span>
     <span class="font-medium">${name}</span>
   `;
-  
+  mainArea.title = `Run ${name}`;
   // Add click handler for running demo
   mainArea.onclick = async () => {
     await clearTabs();
@@ -231,6 +231,7 @@ export async function loadDemoList() {
   // New demo flow button
   const newDemoFlowBtn = document.createElement('button');
   newDemoFlowBtn.className = 'btn btn-primary w-full h-12 justify-start normal-case';
+  newDemoFlowBtn.title = 'Create New Demo Flow';
   newDemoFlowBtn.innerHTML = `
     <span class="text-lg">✨</span>
     <span class="font-medium">Create New Demo Flow</span>
@@ -298,6 +299,7 @@ export async function loadDemoList() {
   const clearTabsBtn = document.createElement('button');
   clearTabsBtn.className = 'btn btn-error w-12 h-12';
   clearTabsBtn.innerHTML = '🧹';
+  clearTabsBtn.title = 'Close all demo tabs';
   clearTabsBtn.onclick = clearTabs;
 
   controlsDiv.appendChild(newDemoFlowBtn);
