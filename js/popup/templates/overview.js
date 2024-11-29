@@ -60,6 +60,10 @@ export const getOverviewStyles = (hslColor) => `
         cursor: default;
         left: 20px;  /* Initial position */
         top: 20px;   /* Initial position */
+        resize: both;
+        overflow: hidden;
+        min-width: 150px;
+        min-height: 266px;
     }
     .video-drag-handle {
         padding: 8px;
@@ -80,6 +84,8 @@ export const getOverviewStyles = (hslColor) => `
         aspect-ratio: 9/16;
         position: relative;
         cursor: default;
+        width: 100%;
+        height: calc(100% - 32px); /* Subtract header height */
     }
     .video-content iframe {
         position: absolute;
@@ -106,6 +112,16 @@ export const getOverviewStyles = (hslColor) => `
     .video-container.dragging {
         opacity: 0.8;
         box-shadow: 0 8px 16px -2px rgba(0, 0, 0, 0.2);
+    }
+    .video-resize-handle {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 15px;
+        height: 15px;
+        cursor: se-resize;
+        background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.4) 50%);
+        border-radius: 0 0 0.5rem 0;
     }
     .card-header-content {
         padding: 1.5rem;
@@ -201,6 +217,8 @@ export const getOverviewStyles = (hslColor) => `
     .video-content {
         aspect-ratio: 9/16;
         position: relative;
+        width: 100%;
+        height: calc(100% - 32px); /* Subtract header height */
     }
     .video-content iframe {
         position: absolute;
@@ -245,6 +263,7 @@ export async function generateOverviewHTML(demoData, currentStep = null) {
                             allowfullscreen="true"
                         ></iframe>
                     </div>
+                    <div class="video-resize-handle"></div>
                 </div>
             ` : ''}
             <div class="page-content">

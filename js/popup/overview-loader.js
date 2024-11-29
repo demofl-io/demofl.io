@@ -40,18 +40,25 @@ async function loadOverviewContent() {
             
             if (videoContainer && dragHandle) {
                 let isDragging = false;
+                let isResizing = false;
                 let startX;
                 let startY;
                 let lastX = 20; // Default right position
                 let lastY = 20; // Default top position
+                let startWidth;
+                let startHeight;
                 
-                // Load saved position
-                const savedPosition = await chrome.storage.local.get('videoPosition');
-                if (savedPosition.videoPosition) {
-                    lastX = savedPosition.videoPosition.x;
-                    lastY = savedPosition.videoPosition.y;
+                // Load saved position and size
+                const savedState = await chrome.storage.local.get(['videoPosition', 'videoSize']);
+                if (savedState.videoPosition) {
+                    lastX = savedState.videoPosition.x;
+                    lastY = savedState.videoPosition.y;
                     videoContainer.style.left = `${lastX}px`;
                     videoContainer.style.top = `${lastY}px`;
+                }
+                if (savedState.videoSize) {
+                    videoContainer.style.width = `${savedState.videoSize.width}px`;
+                    videoContainer.style.height = `${savedState.videoSize.height}px`;
                 }
 
                 function dragStart(e) {
@@ -99,6 +106,51 @@ async function loadOverviewContent() {
                 dragHandle.addEventListener('mousedown', dragStart);
                 document.addEventListener('mousemove', drag);
                 document.addEventListener('mouseup', dragEnd);
+
+                // Add resize functionality
+                const resizeHandle = videoContainer.querySelector('.video-resize-handle');
+                
+                function resizeStart(e) {
+                    if (e.target === resizeHandle) {
+                        isResizing = true;
+                        startX = e.clientX;
+                        startY = e.clientY;
+                        startWidth = videoContainer.offsetWidth;
+                        startHeight = videoContainer.offsetHeight;
+                    }
+                }
+
+                function resize(e) {
+                    if (!isResizing) return;
+                    e.preventDefault();
+                    
+                    const width = startWidth + (e.clientX - startX);
+                    const height = startHeight + (e.clientY - startY);
+                    
+                    // Enforce minimum size
+                    if (width >= 150) {
+                        videoContainer.style.width = `${width}px`;
+                    }
+                    if (height >= 266) {
+                        videoContainer.style.height = `${height}px`;
+                    }
+
+                    // Save size
+                    chrome.storage.local.set({
+                        videoSize: {
+                            width: videoContainer.offsetWidth,
+                            height: videoContainer.offsetHeight
+                        }
+                    });
+                }
+
+                function resizeEnd() {
+                    isResizing = false;
+                }
+
+                resizeHandle.addEventListener('mousedown', resizeStart);
+                document.addEventListener('mousemove', resize);
+                document.addEventListener('mouseup', resizeEnd);
 
                 // Optional: Add minimize functionality
                 const minimizeBtn = dragHandle.querySelector('.minimize-btn');
