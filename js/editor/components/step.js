@@ -83,7 +83,7 @@ function generatePersonaOptions(personas, selectedPersona) {
     `).join('');
 }
 
-export function createStepField(title = '', description = '', urls = [], persona = '', icon = '', formattedIcons, personas, tabColor = 'green') {
+export function createStepField(title = '', description = '', urls = [], persona = '', icon = '', formattedIcons, personas, tabColor = 'green', video = '') {
     const stepDiv = document.createElement('div');
     stepDiv.className = 'step p-4 border border-gray-300 rounded-lg';
     const iconItems = generateIconItems(formattedIcons);
@@ -158,6 +158,12 @@ export function createStepField(title = '', description = '', urls = [], persona
                         </option>
                     `).join('')}
                 </select>
+            </div>
+            <div class="md:col-span-2">
+                <label class="label">
+                    <span class="label-text">Video ID (optional)</span>
+                </label>
+                <input type="text" class="input input-bordered step-video w-full" value="${video}" placeholder="Cloudflare Stream video ID">
             </div>
         </div>
         <div class="mt-4">

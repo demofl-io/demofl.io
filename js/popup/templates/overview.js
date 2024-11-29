@@ -48,6 +48,64 @@ export const getOverviewStyles = (hslColor) => `
         display: flex;
         flex-direction: column;
         border: 1px solid hsl(var(--b3)); /* Base border for all cards */
+        position: relative; /* Add this for video positioning */
+    }
+    .video-container {
+        position: fixed;
+        width: 200px;
+        z-index: 1000;
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        cursor: default;
+        left: 20px;  /* Initial position */
+        top: 20px;   /* Initial position */
+    }
+    .video-drag-handle {
+        padding: 8px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        cursor: grab;
+        border-radius: 0.5rem 0.5rem 0 0;
+        font-size: 12px;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .video-drag-handle.dragging {
+        cursor: grabbing;
+    }
+    .video-content {
+        aspect-ratio: 9/16;
+        position: relative;
+        cursor: default;
+    }
+    .video-content iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 0 0 0.5rem 0.5rem;
+        cursor: pointer; /* Make it clear it's interactive */
+    }
+    .video-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 200px;
+        height: 355px;
+        z-index: 1000;
+        cursor: move;
+        background: rgba(0,0,0,0.1);
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .video-container.dragging {
+        opacity: 0.8;
+        box-shadow: 0 8px 16px -2px rgba(0, 0, 0, 0.2);
     }
     .card-header-content {
         padding: 1.5rem;
@@ -125,6 +183,41 @@ export const getOverviewStyles = (hslColor) => `
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
         border: 2px solid hsl(var(--b1));
     }
+    .video-drag-handle {
+        padding: 8px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        cursor: grab;
+        border-radius: 0.5rem 0.5rem 0 0;
+        font-size: 12px;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .video-drag-handle.dragging {
+        cursor: grabbing;
+    }
+    .video-content {
+        aspect-ratio: 9/16;
+        position: relative;
+    }
+    .video-content iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 0 0 0.5rem 0.5rem;
+    }
+    .minimize-btn {
+        cursor: pointer;
+        padding: 0 4px;
+        background: none;
+        border: none;
+        color: white;
+    }
 `;
 
 export async function generateOverviewHTML(demoData, currentStep = null) {
@@ -138,6 +231,22 @@ export async function generateOverviewHTML(demoData, currentStep = null) {
     return {
         styles: getOverviewStyles(hslColor),
         content: `
+            ${currentStep !== null && demoData.steps[currentStep]?.video ? `
+                <div id="draggableVideo" class="video-container">
+                    <div class="video-drag-handle">
+                        <span>Step ${currentStep + 1} Video</span>
+                        <button class="minimize-btn">_</button>
+                    </div>
+                    <div class="video-content">
+                        <iframe
+                            src="https://customer-6q7djnjft9y9t31b.cloudflarestream.com/${demoData.steps[currentStep].video}/iframe?loop=true&poster=https%3A%2F%2Fcustomer-6q7djnjft9y9t31b.cloudflarestream.com%2F${demoData.steps[currentStep].video}%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+                            loading="lazy"
+                            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                            allowfullscreen="true"
+                        ></iframe>
+                    </div>
+                </div>
+            ` : ''}
             <div class="page-content">
                 <div class="hero bg-base-100 py-8 md:py-12 shadow-lg">
                     <div class="hero-content text-center px-4">
@@ -165,6 +274,9 @@ export async function generateOverviewHTML(demoData, currentStep = null) {
                                             <span class="material-icons icon-large">${step.icon}</span>
                                         </div>
                                         <h2 class="card-title text-xl md:text-2xl flex-1">${step.title}</h2>
+                                        ${step.video ? `
+                                            <span class="material-icons text-primary" title="Has video">videocam</span>
+                                        ` : ''}
                                     </div>
                                 </div>
                                 <div class="card-body">
