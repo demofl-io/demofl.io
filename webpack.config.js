@@ -13,8 +13,7 @@ module.exports = [{
         'auth-content': './js/auth/auth-content.js',
         demofliocloud: './js/demofliocloud.js',
         overview: './js/popup/overview-loader.js',
-        personas: './js/popup/personas-loader.js',
-        'video-player': './css/components/video-player.css'
+        personas: './js/popup/personas-loader.js'
     },
     output: {
         filename: '[name]-bundle.js',
@@ -22,7 +21,7 @@ module.exports = [{
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: '[name].css'
+            filename: 'css/[name].css'
         })
     ],
     resolve: {

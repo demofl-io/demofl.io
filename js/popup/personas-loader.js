@@ -1,6 +1,8 @@
 import { generatePersonasHTML } from './templates/personas.js';
 import { initializeTheme } from '../utils/theme.js';
 
+import '../../css/components/personas.css';
+
 async function loadPersonasContent() {
     try {
         const result = await chrome.storage.local.get('pendingTemplate');

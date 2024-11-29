@@ -1,0 +1,134 @@
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.page-content {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.steps-container {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 1rem 0.5rem;
+    margin: -1rem -0.5rem;
+}
+
+.step-card {
+    scroll-snap-align: start;
+    width: calc(100vw - 3rem);
+    max-width: 400px;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid hsl(var(--b3));
+    position: relative;
+    transition: all 0.3s ease-in-out;
+    background: hsl(var(--b1));
+    margin-top: 1rem;
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header-content {
+    padding: 1.5rem;
+    border-bottom: 1px solid hsl(var(--b3));
+    border-radius: 1rem 1rem 0 0;
+}
+
+.material-icons.icon-large {
+    font-size: 48px;
+    transform: scale(1.2);
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+@keyframes cardBump {
+    0%, 100% {
+        transform: translateY(-5px) scale(1.02);
+    }
+    50% {
+        transform: translateY(-10px) scale(1.02);
+    }
+}
+
+.step-card.current-step {
+    border-width: 2px;
+    border-color: hsl(var(--p));
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    z-index: 10;
+    background: hsl(var(--p) / 0.05);
+    animation: cardBump 3s ease-in-out infinite;
+}
+
+.step-card.current-step:hover {
+    animation-play-state: paused;
+    transform: translateY(-10px) scale(1.02);
+}
+
+.step-card.current-step .card-header-content {
+    background: hsl(var(--p) / 0.1);
+}
+
+.current-step-badge {
+    position: absolute;
+    top: -0.75rem;
+    right: 1rem;
+    z-index: 20;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    background-color: hsl(var(--p));
+    color: hsl(var(--pc));
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    border: 2px solid hsl(var(--b1));
+}
+
+@media (min-width: 640px) {
+    .step-card {
+        width: 300px;
+    }
+}
+
+@media (min-width: 768px) {
+    .step-card {
+        width: 350px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .step-card {
+        width: 400px;
+    }
+}
+
+::-webkit-scrollbar {
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 4px;
+}

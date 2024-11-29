@@ -8,37 +8,7 @@ export const getPersonasStyles = (hslColor) => `
         --pf: ${hslColor};
         --pc: 0 0% 100%;
     }
-    body {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-    }
-            #content {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
-    .page-content {
-        flex: 1 0 auto;
-        display: flex;
-        flex-direction: column;
-    }
-    .persona-card {
-        transition: transform 0.2s ease-in-out;
-    }
-    .persona-card:hover {
-        transform: translateY(-5px);
-    }
-    .avatar.large {
-        width: 96px;
-        height: 96px;
-    }
-    main {
-        flex: 1 0 auto;
-    }
-    footer {
-        flex-shrink: 0;
-    }
+
 `;
 
 export async function generatePersonasHTML(demoData) {

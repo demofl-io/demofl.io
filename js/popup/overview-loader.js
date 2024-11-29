@@ -1,8 +1,14 @@
 import { generateOverviewHTML } from './templates/overview.js';
 import { initializeTheme } from '../utils/theme.js';
+// Import CSS directly in the JS
 
+import '../../css/components/overview.css';
+import '../../css/components/video-player.css';
+
+// Add console log for debugging
 async function loadOverviewContent() {
     try {
+        console.log('Loading overview content...');
         const params = new URLSearchParams(window.location.search);
         const currentStep = params.has('step') ? parseInt(params.get('step')) : null;
 
@@ -175,4 +181,5 @@ async function loadOverviewContent() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', loadOverviewContent);
+// Make sure the script runs after DOM is loaded
+window.addEventListener('DOMContentLoaded', loadOverviewContent);
