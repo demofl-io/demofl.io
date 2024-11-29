@@ -13,7 +13,8 @@ module.exports = [{
         'auth-content': './js/auth/auth-content.js',
         demofliocloud: './js/demofliocloud.js',
         overview: './js/popup/overview-loader.js',
-        personas: './js/popup/personas-loader.js'
+        personas: './js/popup/personas-loader.js',
+        'video-player': './css/components/video-player.css'
     },
     output: {
         filename: '[name]-bundle.js',

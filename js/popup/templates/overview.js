@@ -50,79 +50,6 @@ export const getOverviewStyles = (hslColor) => `
         border: 1px solid hsl(var(--b3)); /* Base border for all cards */
         position: relative; /* Add this for video positioning */
     }
-    .video-container {
-        position: fixed;
-        width: 200px;
-        z-index: 1000;
-        background: white;
-        border-radius: 0.5rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        cursor: default;
-        left: 20px;  /* Initial position */
-        top: 20px;   /* Initial position */
-        resize: both;
-        overflow: hidden;
-        min-width: 150px;
-        min-height: 266px;
-    }
-    .video-drag-handle {
-        padding: 8px;
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        cursor: grab;
-        border-radius: 0.5rem 0.5rem 0 0;
-        font-size: 12px;
-        user-select: none;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .video-drag-handle.dragging {
-        cursor: grabbing;
-    }
-    .video-content {
-        aspect-ratio: 9/16;
-        position: relative;
-        cursor: default;
-        width: 100%;
-        height: calc(100% - 32px); /* Subtract header height */
-    }
-    .video-content iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: none;
-        border-radius: 0 0 0.5rem 0.5rem;
-        cursor: pointer; /* Make it clear it's interactive */
-    }
-    .video-container {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        width: 200px;
-        height: 355px;
-        z-index: 1000;
-        cursor: move;
-        background: rgba(0,0,0,0.1);
-        border-radius: 0.5rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    .video-container.dragging {
-        opacity: 0.8;
-        box-shadow: 0 8px 16px -2px rgba(0, 0, 0, 0.2);
-    }
-    .video-resize-handle {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 15px;
-        height: 15px;
-        cursor: se-resize;
-        background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.4) 50%);
-        border-radius: 0 0 0.5rem 0;
-    }
     .card-header-content {
         padding: 1.5rem;
         border-bottom: 1px solid hsl(var(--b3));
@@ -198,43 +125,6 @@ export const getOverviewStyles = (hslColor) => `
         color: hsl(var(--pc));
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
         border: 2px solid hsl(var(--b1));
-    }
-    .video-drag-handle {
-        padding: 8px;
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        cursor: grab;
-        border-radius: 0.5rem 0.5rem 0 0;
-        font-size: 12px;
-        user-select: none;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .video-drag-handle.dragging {
-        cursor: grabbing;
-    }
-    .video-content {
-        aspect-ratio: 9/16;
-        position: relative;
-        width: 100%;
-        height: calc(100% - 32px); /* Subtract header height */
-    }
-    .video-content iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: none;
-        border-radius: 0 0 0.5rem 0.5rem;
-    }
-    .minimize-btn {
-        cursor: pointer;
-        padding: 0 4px;
-        background: none;
-        border: none;
-        color: white;
     }
 `;
 

@@ -1,0 +1,69 @@
+
+.video-container {
+    position: fixed;
+    width: 200px;
+    z-index: 1000;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    cursor: default;
+    left: 20px;
+    top: 20px;
+    resize: both;
+    overflow: hidden;
+    min-width: 150px;
+    min-height: 266px;
+}
+
+.video-drag-handle {
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    cursor: grab;
+    border-radius: 0.5rem 0.5rem 0 0;
+    font-size: 12px;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.video-drag-handle.dragging {
+    cursor: grabbing;
+}
+
+.video-content {
+    aspect-ratio: 9/16;
+    position: relative;
+    width: 100%;
+    height: calc(100% - 32px);
+}
+
+.video-content iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.video-resize-handle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 15px;
+    height: 15px;
+    cursor: se-resize;
+    background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.4) 50%);
+    border-radius: 0 0 0.5rem 0;
+}
+
+.minimize-btn {
+    cursor: pointer;
+    padding: 0 4px;
+    background: none;
+    border: none;
+    color: white;
+}
