@@ -19,7 +19,7 @@ export function createPersonaField(key = '', persona = {}) {
                 </button>
                 <div class="dropdown-options hidden absolute left-0 top-full w-64 max-h-60 overflow-y-auto bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg shadow-lg z-50">
                     <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2" data-value="">
-                        <div class="w-8 h-8 flex-shrink-0 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                        <div class="w-8 h-8 shrink-0 bg-gray-200 dark:bg-gray-600 rounded-sm"></div>
                         <span class="dark:text-gray-200">Select picture...</span>
                     </div>
                 </div>
@@ -29,7 +29,7 @@ export function createPersonaField(key = '', persona = {}) {
                 📤
                 <input type="file" class="hidden persona-upload" accept="image/*">
             </label>
-            <img class="w-10 h-10 object-cover rounded" src="" alt="Preview">
+            <img class="w-10 h-10 object-cover rounded-sm" src="" alt="Preview">
             <button type="button" class="btn btn-sm removePersona">🗑️</button>
         </div>
         <div class="fake-text-container pl-24">
@@ -91,7 +91,7 @@ export function createPersonaField(key = '', persona = {}) {
         // Clear existing options (except the first one)
         dropdownOptions.innerHTML = `
             <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2" data-value="">
-                <div class="w-8 h-8 flex-shrink-0 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                <div class="w-8 h-8 shrink-0 bg-gray-200 dark:bg-gray-600 rounded-sm"></div>
                 <span class="dark:text-gray-200">Select picture...</span>
             </div>
         `;
@@ -102,7 +102,7 @@ export function createPersonaField(key = '', persona = {}) {
             option.className = 'p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2';
             option.dataset.value = pic;
             option.innerHTML = `
-                <img class="w-8 h-8 object-cover rounded" src="${storage[pic]}" alt="Preview">
+                <img class="w-8 h-8 object-cover rounded-sm" src="${storage[pic]}" alt="Preview">
                 <span class="dark:text-gray-200">${storage[`${pic}_displayName`] || pic.replace(/^(persona_\d+_|default_)/, '')}</span>
             `;
             
@@ -110,7 +110,7 @@ export function createPersonaField(key = '', persona = {}) {
                 pictureInput.value = pic;
                 picturePreview.src = storage[pic];
                 selectButton.innerHTML = `
-                    <img class="w-6 h-6 object-cover rounded" src="${storage[pic]}" alt="Selected">
+                    <img class="w-6 h-6 object-cover rounded-sm" src="${storage[pic]}" alt="Selected">
                     <span class="flex-1 text-left truncate dark:text-gray-200">${storage[`${pic}_displayName`] || pic.replace(/^(persona_\d+_|default_)/, '')}</span>
                     <span class="arrow">▼</span>
                 `;

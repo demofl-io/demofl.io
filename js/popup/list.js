@@ -19,7 +19,7 @@ export async function clearTabs() {
 
 export function createDemoFlowItem(type, name) {
   const item = document.createElement('div');
-  item.className = 'grid grid-cols-[1fr,auto] gap-2 w-full';
+  item.className = 'grid grid-cols-[1fr_auto] gap-2 w-full';
 
   // Main clickable area for running demo
   const mainArea = document.createElement('button');
@@ -226,7 +226,7 @@ export async function loadDemoList() {
 
   // Create New and Clear tabs buttons
   const controlsDiv = document.createElement('div');
-  controlsDiv.className = 'grid grid-cols-[1fr,auto] gap-2 mb-4';
+  controlsDiv.className = 'grid grid-cols-[1fr_auto] gap-2 mb-4';
 
   // New demo flow button
   const newDemoFlowBtn = document.createElement('button');

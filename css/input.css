@@ -10,35 +10,46 @@
     --color-secondary:  #7b92b2;
   }
 
-@layer components {
-    /* Editor layout */
-    
-    .tab-content {
-        @apply block;
-    }
+@utility tab-content {
+  /* Editor layout */
+  @apply block;
+}
 
-    /* Form controls */
-    .custom-select {
-        @apply relative w-full;
-    }
+@utility custom-select {
+  /* Form controls */
+  @apply relative w-full;
 
-    .custom-select button {
-        @apply select border border-base-300 w-full flex items-center space-x-2;
-    }
+  & button {
+    @apply select border border-base-300 w-full flex items-center space-x-2;
+  }
+}
 
-    .dropdown-options {
-        @apply absolute left-0 top-full w-full mt-1 max-h-60 overflow-y-auto 
+@utility dropdown-options {
+  @apply absolute left-0 top-full w-full mt-1 max-h-60 overflow-y-auto 
                bg-base-200 border border-base-300 rounded-lg shadow-lg z-50;
-    }
+}
 
-    /* Icon selector */
-    .icon-dropdown {
-        @apply bg-base-200 border border-base-300 rounded-lg;
-    }
+@utility icon-dropdown {
+  /* Icon selector */
+  @apply bg-base-200 border border-base-300 rounded-lg;
+}
 
-    .icon-item {
-        @apply text-base-content p-2 cursor-pointer hover:bg-base-300 flex items-center gap-2;
-    }
+@utility icon-item {
+  @apply text-base-content p-2 cursor-pointer hover:bg-base-300 flex items-center gap-2;
+}
+
+@layer utilities {
+  @plugin "daisyui" {
+    themes:
+      light --default,
+      dark --prefersdark,
+      business;
+  }
+  @plugin "daisyui/theme" {
+    name: 'lofi';
+    --color-primary: #1c4e80;
+    --color-secondary: #7b92b2;
+  }
 }
 
 /* Your custom styles here */

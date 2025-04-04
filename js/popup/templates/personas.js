@@ -52,7 +52,7 @@ export async function generatePersonasHTML(demoData) {
                             <div class="persona-card card bg-base-100 shadow-xl hover:shadow-2xl">
                                 <div class="card-body items-center text-center p-8">
                                     <div class="avatar large placeholder mb-4">
-                                        <div class="bg-primary text-primary-content rounded-full w-24 h-24 ring ring-primary ring-offset-2">
+                                        <div class="bg-primary text-primary-content rounded-full w-24 h-24 ring-3 ring-primary ring-offset-2">
                                             ${pictureData ?
           `<img src="${pictureData}" alt="${persona.name}" class="mask mask-circle">` :
           `<span class="text-3xl font-bold">${persona.name.charAt(0)}</span>`

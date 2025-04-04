@@ -50,7 +50,7 @@ async function loadAvailableLogos(dropdownOptions, selectButton, hiddenInput) {
     // Clear existing options (except the first one)
     dropdownOptions.innerHTML = `
         <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2" data-value="">
-            <div class="w-8 h-8 flex-shrink-0 bg-gray-200 dark:bg-gray-600 rounded"></div>
+            <div class="w-8 h-8 shrink-0 bg-gray-200 dark:bg-gray-600 rounded-sm"></div>
             <span class="dark:text-gray-200">Select logo...</span>
         </div>
     `;
@@ -61,14 +61,14 @@ async function loadAvailableLogos(dropdownOptions, selectButton, hiddenInput) {
         option.className = 'p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2';
         option.dataset.value = logo;
         option.innerHTML = `
-            <img class="w-8 h-8 object-contain rounded" src="${storage[logo]}" alt="Preview">
+            <img class="w-8 h-8 object-contain rounded-sm" src="${storage[logo]}" alt="Preview">
             <span class="dark:text-gray-200">${storage[`${logo}_displayName`] || logo.replace(/^logo_\d+_/, '')}</span>
         `;
         
         option.addEventListener('click', async () => {
             hiddenInput.value = logo;
             selectButton.innerHTML = `
-                <img class="w-6 h-6 object-contain rounded" src="${storage[logo]}" alt="Selected">
+                <img class="w-6 h-6 object-contain rounded-sm" src="${storage[logo]}" alt="Selected">
                 <span class="flex-1 text-left truncate dark:text-gray-200">${storage[`${logo}_displayName`] || logo.replace(/^logo_\d+_/, '')}</span>
                 <span class="arrow">▼</span>
             `;
@@ -139,7 +139,7 @@ async function initializeLogoSelect(customSelect, logoId) {
     
     if (storage[logoId]) {
         selectButton.innerHTML = `
-            <img class="w-6 h-6 object-contain rounded" src="${storage[logoId]}" alt="Selected">
+            <img class="w-6 h-6 object-contain rounded-sm" src="${storage[logoId]}" alt="Selected">
             <span class="flex-1 text-left truncate dark:text-gray-200">${storage[`${logoId}_displayName`] || logoId.replace(/^logo_\d+_/, '')}</span>
             <span class="arrow">▼</span>
         `;

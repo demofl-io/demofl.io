@@ -77,7 +77,7 @@ function attachIconItemHandler(iconItem) {
 function generatePersonaOptions(personas, selectedPersona) {
     return Object.entries(personas).map(([key, persona]) => `
         <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2 persona-option" data-value="${key}">
-            <img class="w-8 h-8 object-cover rounded" src="" alt="" data-picture-id="${persona.pictureurl || ''}">
+            <img class="w-8 h-8 object-cover rounded-sm" src="" alt="" data-picture-id="${persona.pictureurl || ''}">
             <span class="dark:text-gray-200">${persona.title}</span>
         </div>
     `).join('');
@@ -120,7 +120,7 @@ export function createStepField(title = '', description = '', urls = [], persona
                 </label>
                 <div class="custom-select relative w-full">
                     <button type="button" class="select select-bordered w-full flex items-center space-x-2">
-                        <img class="w-6 h-6 object-cover rounded selected-persona-img" src="" alt="">
+                        <img class="w-6 h-6 object-cover rounded-sm selected-persona-img" src="" alt="">
                         <span class="flex-1 text-left selected-persona-name">${persona ? personas[persona]?.title : 'Select Persona...'}</span>
                         <span class="arrow">▼</span>
                     </button>
