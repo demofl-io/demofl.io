@@ -15,8 +15,8 @@ extpay.getUser().then(user => {
 const trialDays = 30;
 
 
-document.querySelector('#login').addEventListener('click', extpay.openLoginPage);
-document.querySelector('#paynow').addEventListener('click', extpay.openPaymentPage);
+document.querySelector('#login').addEventListener('click', () =>extpay.openLoginPage());
+document.querySelector('#paynow').addEventListener('click',() => extpay.openPaymentPage());
 document.querySelector('#trial').addEventListener('click', func => {
     extpay.openTrialPage("Enter an email to start your *"+trialDays+"-days* free trial");
 });
