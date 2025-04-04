@@ -13,6 +13,11 @@
   @apply block;
 }
 
+@utility hidden {
+  /* Make sure hidden elements are actually hidden */
+  @apply hidden;
+}
+
 @utility custom-select {
   /* Form controls */
   @apply relative w-full;
