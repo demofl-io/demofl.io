@@ -9,7 +9,8 @@ module.exports = {
         },
         normalizeWhitespace: true,
         minifyFontValues: true,
-        colormin: true
+        colormin: true,
+        calc: false // Disable calc optimization to avoid the infinity * 1px errors
       }]
     }),
   ]

@@ -1,14 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark, business;
+  }
+@plugin "daisyui/theme" {
+    name: "lofi";
+    --color-primary: #1C4E80;
+    --color-secondary:  #7b92b2;
+  }
 
 @layer components {
     /* Editor layout */
-
+    
     .tab-content {
         @apply block;
     }
-
 
     /* Form controls */
     .custom-select {
@@ -16,7 +23,7 @@
     }
 
     .custom-select button {
-        @apply select select-bordered w-full flex items-center space-x-2;
+        @apply select border border-base-300 w-full flex items-center space-x-2;
     }
 
     .dropdown-options {
