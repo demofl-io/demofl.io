@@ -38,19 +38,7 @@
   @apply text-base-content p-2 cursor-pointer hover:bg-base-300 flex items-center gap-2;
 }
 
-@layer utilities {
-  @plugin "daisyui" {
-    themes:
-      light --default,
-      dark --prefersdark,
-      business;
-  }
-  @plugin "daisyui/theme" {
-    name: 'lofi';
-    --color-primary: #1c4e80;
-    --color-secondary: #7b92b2;
-  }
-}
+
 
 /* Your custom styles here */
 
