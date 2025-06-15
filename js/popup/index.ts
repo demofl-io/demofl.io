@@ -1,14 +1,15 @@
-// js/popup/index.js
+// js/popup/index.ts
 import { loadDemoList } from './list.js';
 import { initializeImport } from './import.js';
 import ExtPay from 'extpay';
 import { AuthService } from '../auth';
 import { initializeTheme } from '../utils/theme.js';
+import { AuthUser, ExtensionMessage } from '../types.js';
 
 const authService = new AuthService();
-var extpay = ExtPay('abobjbfojjkoonmfffjppmkobmbcebdj'); // Careful! See note below
+const extpay = ExtPay('abobjbfojjkoonmfffjppmkobmbcebdj'); // Careful! See note below
 
-extpay.getUser().then(user => {
+extpay.getUser().then((user: AuthUser) => {
 
 })
 
@@ -53,69 +54,78 @@ document.addEventListener('DOMContentLoaded', async () => {
         showLoginButton();
 
         // here we use ExtPay to check if the user is logged in and paid for the personnal plan
-        extpay.getUser().then(user => {
+        extpay.getUser().then((user: AuthUser) => {
             if (user.email) {
                 // Remove all payment-related buttons when user is logged in
-                document.querySelector('#login').remove();
+                document.querySelector('#login')?.remove();
 
             }
             if (user.paid) {
-                document.querySelector('#paynow').remove();
-                document.querySelector('#trial').remove();
-                document.querySelector('#payheader').innerHTML = '<div class="flex flex-col">' +
-                    '<div>Welcome ' + user.email + ' 🎉</div>' +
-                    '<div class="flex gap-2">' +
-                    '<button id="preferences" class="btn btn-link">Manage your subscription</button>' +
-                    '<button id="extpay-signout" class="btn btn-link">Sign out</button>' +
-                    '</div></div>';
-
-                document.querySelector('#preferences').addEventListener('click', extpay.openPaymentPage);
-                document.querySelector('#extpay-signout').addEventListener('click', () => {
-                    // Clear ExtPay user data from storage
-                    chrome.storage.sync.remove(['extensionpay_api_key', 'extensionpay_user'], () => {
-                        window.location.reload();
-                    });
-                });
-            } else {
-
-                const now = new Date();
-                const sevenDays = 1000 * 60 * 60 * 24 * trialDays // in milliseconds
-                if (user.trialStartedAt && (now - user.trialStartedAt) < sevenDays) {
-                    document.querySelector('#paynow').remove();
-
-                    document.querySelector('#payheader').innerHTML = '<div class="flex flex-col">' +
-                        '<div>Welcome ' + user.email + ' . Your trial ends in ' + Math.floor((sevenDays - (now - user.trialStartedAt)) / (1000 * 60 * 60 * 24)) + ' days</div>' +
+                document.querySelector('#paynow')?.remove();
+                document.querySelector('#trial')?.remove();
+                const payHeaderElement = document.querySelector('#payheader');
+                if (payHeaderElement) {
+                    payHeaderElement.innerHTML = '<div class="flex flex-col">' +
+                        '<div>Welcome ' + user.email + ' 🎉</div>' +
                         '<div class="flex gap-2">' +
                         '<button id="preferences" class="btn btn-link">Manage your subscription</button>' +
                         '<button id="extpay-signout" class="btn btn-link">Sign out</button>' +
                         '</div></div>';
 
-                    document.querySelector('#preferences').addEventListener('click', extpay.openPaymentPage);
-
-                    document.querySelector('#extpay-signout').addEventListener('click', () => {
+                    document.querySelector('#preferences')?.addEventListener('click', extpay.openPaymentPage);
+                    document.querySelector('#extpay-signout')?.addEventListener('click', () => {
                         // Clear ExtPay user data from storage
                         chrome.storage.sync.remove(['extensionpay_api_key', 'extensionpay_user'], () => {
                             window.location.reload();
                         });
                     });
+                }
+            } else {
+
+                const now = new Date();
+                const sevenDays = 1000 * 60 * 60 * 24 * trialDays // in milliseconds
+                if (user.trialStartedAt && (now.getTime() - user.trialStartedAt.getTime()) < sevenDays) {
+                    document.querySelector('#paynow')?.remove();
+
+                    const payHeaderElement = document.querySelector('#payheader');
+                    if (payHeaderElement) {
+                        payHeaderElement.innerHTML = '<div class="flex flex-col">' +
+                            '<div>Welcome ' + user.email + ' . Your trial ends in ' + Math.floor((sevenDays - (now.getTime() - user.trialStartedAt.getTime())) / (1000 * 60 * 60 * 24)) + ' days</div>' +
+                            '<div class="flex gap-2">' +
+                            '<button id="preferences" class="btn btn-link">Manage your subscription</button>' +
+                            '<button id="extpay-signout" class="btn btn-link">Sign out</button>' +
+                            '</div></div>';
+
+                        document.querySelector('#preferences')?.addEventListener('click', extpay.openPaymentPage);
+
+                        document.querySelector('#extpay-signout')?.addEventListener('click', () => {
+                            // Clear ExtPay user data from storage
+                            chrome.storage.sync.remove(['extensionpay_api_key', 'extensionpay_user'], () => {
+                                window.location.reload();
+                            });
+                        });
+                    }
                 } else {
                     // user's trial is not active
-                    document.querySelector('#demoflio').remove();
+                    document.querySelector('#demoflio')?.remove();
                     return;
                 }
     
             }
             loadDemoList();
             initializeImport();
-        }).catch(err => {
-            document.querySelector('p').innerHTML = "Error fetching data :( Check that your ExtensionPay id is correct and you're connected to the internet"
+        }).catch((err: Error) => {
+            const errorElement = document.querySelector('p');
+            if (errorElement) {
+                errorElement.innerHTML = "Error fetching data :( Check that your ExtensionPay id is correct and you're connected to the internet";
+            }
         });
     }
 
 
 });
 
-function showLoginButton() {
+function showLoginButton(): void {
     const loginButton = document.createElement('button');
     loginButton.className = 'btn btn-primary';
     loginButton.textContent = 'Login with Demofl.io Cloud (coming soon)';
@@ -130,11 +140,14 @@ function showLoginButton() {
         });
     });
 
-    document.querySelector('#login-container').appendChild(loginButton);
+    const loginContainer = document.querySelector('#login-container');
+    if (loginContainer) {
+        loginContainer.appendChild(loginButton);
+    }
 }
 
 // Listen for authentication success
-chrome.runtime.onMessage.addListener((message) => {
+chrome.runtime.onMessage.addListener((message: ExtensionMessage) => {
     if (message.type === 'AUTH_SUCCESS') {
         window.location.reload();
     }

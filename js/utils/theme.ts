@@ -1,7 +1,7 @@
-// js/utils/theme.js
-export function initializeTheme(container = null) {
-    let lightTheme = 'lofi';
-    let darkTheme = 'business';
+// js/utils/theme.ts
+export function initializeTheme(container: HTMLElement | null = null): void {
+    const lightTheme = 'lofi';
+    const darkTheme = 'business';
 
     // Try to find existing theme toggle elements
     let themeToggleBtn = document.getElementById('theme-toggle');
@@ -32,7 +32,7 @@ export function initializeTheme(container = null) {
 
     // If we have theme toggle elements, set up the functionality
     if (themeToggleBtn && sunIcon && moonIcon) {
-        function toggleTheme() {
+        function toggleTheme(): void {
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === lightTheme ? darkTheme : lightTheme;
@@ -40,8 +40,8 @@ export function initializeTheme(container = null) {
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             
-            sunIcon.classList.toggle('hidden');
-            moonIcon.classList.toggle('hidden');
+            sunIcon!.classList.toggle('hidden');
+            moonIcon!.classList.toggle('hidden');
         }
 
         themeToggleBtn.addEventListener('click', toggleTheme);

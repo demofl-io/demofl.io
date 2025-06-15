@@ -1,10 +1,12 @@
-// js/popup/templates.js
+// js/popup/templates.ts
+import { DemoFlowTemplate, UserTemplate } from '../types';
+
 export const demoFolder = "demos";
 
-export async function loadBuiltInTemplates() {
+export async function loadBuiltInTemplates(): Promise<UserTemplate[]> {
   try {
     const response = await fetch(chrome.runtime.getURL(`/${demoFolder}/template1.json`));
-    const template = await response.json();
+    const template: DemoFlowTemplate = await response.json();
     return [{ name: 'template1', data: template }];
   } catch (error) {
     console.error('Error loading built-in templates:', error);
@@ -12,8 +14,8 @@ export async function loadBuiltInTemplates() {
   }
 }
 
-// js/popup/templates.js
-export async function saveTemplate(template, name, type) {
+// js/popup/templates.ts
+export async function saveTemplate(template: DemoFlowTemplate, name: string, type: string): Promise<boolean> {
   try {
       if (type === 'user') {
           const result = await chrome.storage.local.get('userTemplates');
