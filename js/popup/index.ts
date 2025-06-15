@@ -16,10 +16,10 @@ extpay.getUser().then((user: AuthUser) => {
 const trialDays = 30;
 
 
-document.querySelector('#login').addEventListener('click', () =>extpay.openLoginPage());
-document.querySelector('#paynow').addEventListener('click',() => extpay.openPaymentPage());
-document.querySelector('#trial').addEventListener('click', func => {
-    extpay.openTrialPage("Enter an email to start your *"+trialDays+"-days* free trial");
+document.querySelector('#login')?.addEventListener('click', () => extpay.openLoginPage());
+document.querySelector('#paynow')?.addEventListener('click', () => extpay.openPaymentPage());
+document.querySelector('#trial')?.addEventListener('click', () => {
+    extpay.openTrialPage("Enter an email to start your *" + trialDays + "-days* free trial");
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -27,25 +27,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     initializeTheme();
     
     // Add popout handler
-    document.getElementById('popout').addEventListener('click', () => {
-        chrome.tabs.create({
-            url: chrome.runtime.getURL('html/popup.html')
+    const popoutBtn = document.getElementById('popout');
+    if (popoutBtn) {
+        popoutBtn.addEventListener('click', () => {
+            chrome.tabs.create({
+                url: chrome.runtime.getURL('html/popup.html')
+            });
+            window.close();
         });
-        window.close();
-    });
+    }
 
     const isAuthenticated = await authService.isAuthenticated();
 
     // demofl.io cloud for the team plan
     if (isAuthenticated) {
-        document.querySelector('#payheader').innerHTML = 'Welcome to the cloud  🎉';
-        // Add sign out button
-        document.querySelector('#payheader').innerHTML += ' <button id="signout" class="btn btn-link">Sign out</button>';
-        // Add sign out handler
-        document.querySelector('#signout').addEventListener('click', async () => {
-            await authService.signOut();
-            window.location.reload();
-        });
+        const payHeaderElement = document.querySelector('#payheader');
+        if (payHeaderElement) {
+            payHeaderElement.innerHTML = 'Welcome to the cloud  🎉';
+            // Add sign out button
+            payHeaderElement.innerHTML += ' <button id="signout" class="btn btn-link">Sign out</button>';
+            // Add sign out handler
+            const signOutBtn = document.querySelector('#signout');
+            if (signOutBtn) {
+                signOutBtn.addEventListener('click', async () => {
+                    await authService.signOut();
+                    window.location.reload();
+                });
+            }
+        }
         loadDemoList();
         initializeImport();
     
@@ -72,13 +81,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                         '<button id="extpay-signout" class="btn btn-link">Sign out</button>' +
                         '</div></div>';
 
-                    document.querySelector('#preferences')?.addEventListener('click', extpay.openPaymentPage);
-                    document.querySelector('#extpay-signout')?.addEventListener('click', () => {
-                        // Clear ExtPay user data from storage
-                        chrome.storage.sync.remove(['extensionpay_api_key', 'extensionpay_user'], () => {
-                            window.location.reload();
+                    const preferencesBtn = document.querySelector('#preferences');
+                    if (preferencesBtn) {
+                        preferencesBtn.addEventListener('click', () => extpay.openPaymentPage());
+                    }
+                    const extpaySignoutBtn = document.querySelector('#extpay-signout');
+                    if (extpaySignoutBtn) {
+                        extpaySignoutBtn.addEventListener('click', () => {
+                            // Clear ExtPay user data from storage
+                            chrome.storage.sync.remove(['extensionpay_api_key', 'extensionpay_user'], () => {
+                                window.location.reload();
+                            });
                         });
-                    });
+                    }
                 }
             } else {
 
@@ -96,14 +111,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                             '<button id="extpay-signout" class="btn btn-link">Sign out</button>' +
                             '</div></div>';
 
-                        document.querySelector('#preferences')?.addEventListener('click', extpay.openPaymentPage);
+                        const preferencesBtn = document.querySelector('#preferences');
+                        if (preferencesBtn) {
+                            preferencesBtn.addEventListener('click', () => extpay.openPaymentPage());
+                        }
 
-                        document.querySelector('#extpay-signout')?.addEventListener('click', () => {
-                            // Clear ExtPay user data from storage
-                            chrome.storage.sync.remove(['extensionpay_api_key', 'extensionpay_user'], () => {
-                                window.location.reload();
+                        const extpaySignoutBtn = document.querySelector('#extpay-signout');
+                        if (extpaySignoutBtn) {
+                            extpaySignoutBtn.addEventListener('click', () => {
+                                // Clear ExtPay user data from storage
+                                chrome.storage.sync.remove(['extensionpay_api_key', 'extensionpay_user'], () => {
+                                    window.location.reload();
+                                });
                             });
-                        });
+                        }
                     }
                 } else {
                     // user's trial is not active

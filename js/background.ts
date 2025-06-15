@@ -50,7 +50,7 @@ chrome.runtime.onMessage.addListener(async (message: ExtensionMessage, sender: c
             await authService.handleCallback(message.code!);
             
             // Then close the auth window
-            if (sender.tab) {
+            if (sender.tab && sender.tab.id) {
                 await chrome.tabs.remove(sender.tab.id);
             }
             

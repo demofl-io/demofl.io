@@ -1,12 +1,13 @@
-// js/content/index.js
+// js/content/index.ts
 import { init, currentTabId } from './init.js';
 import { checkStoredPersona } from './storage.js';
 import { createPersonaOverlay } from './overlay/index.js';
+import { ExtensionMessage, StorageResult } from '../types.js';
 
 console.log("Content script loaded on:", window.location.href);
 
 // Start initialization and check for stored persona
-async function initialize() {
+async function initialize(): Promise<void> {
   await init();
   await checkStoredPersona(currentTabId);
 }
@@ -14,7 +15,7 @@ async function initialize() {
 initialize();
 
 // Visibility change listener
-document.addEventListener('visibilitychange', async () => {
+document.addEventListener('visibilitychange', async (): Promise<void> => {
   if (document.visibilityState === 'hidden') {
     console.log("Tab becoming hidden");
   } else {
@@ -24,14 +25,14 @@ document.addEventListener('visibilitychange', async () => {
 });
 
 // Message listener
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request: ExtensionMessage, sender: chrome.runtime.MessageSender, sendResponse: (response?: any) => void) => {
   if (request.action === "showPersona") {
-    chrome.storage.local.get(["personaTabs"], (result) => {
+    chrome.storage.local.get(["personaTabs"], (result: StorageResult) => {
       const personaTabs = result.personaTabs || {};
-      personaTabs[currentTabId] = request.persona;
+      personaTabs[currentTabId] = request.payload;
       
       chrome.storage.local.set({ personaTabs }, () => {
-        createPersonaOverlay(request.persona);
+        createPersonaOverlay(request.payload);
         sendResponse({ success: true });
       });
     });
@@ -40,7 +41,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 // Handle keyboard shortcuts
-document.addEventListener('keydown', async (e) => {
+document.addEventListener('keydown', async (e: KeyboardEvent): Promise<void> => {
   // Check if Ctrl+Alt + number key (1-9) is pressed
   if (e.key >= '1' && e.key <= '9') {
     if (e.ctrlKey && e.altKey) {
@@ -49,7 +50,7 @@ document.addEventListener('keydown', async (e) => {
       console.log("Shortcut activated:", e.key);
 
       // Get the currently active persona for this tab
-      chrome.storage.local.get(["personaTabs", "demo"], (result) => {
+      chrome.storage.local.get(["personaTabs", "demo"], (result: StorageResult) => {
         const persona = result.personaTabs?.[currentTabId];
         if (persona && persona.fakeText) {
           const index = parseInt(e.key) - 1;
@@ -57,15 +58,16 @@ document.addEventListener('keydown', async (e) => {
           console.log("Inserting text:", text);
           if (text) {
             // Get the currently focused element
-            const activeElement = document.activeElement;
+            const activeElement = document.activeElement as HTMLElement;
             if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA' || activeElement.isContentEditable)) {
               // For regular input/textarea elements
               if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA') {
-                const start = activeElement.selectionStart;
-                const end = activeElement.selectionEnd;
-                const currentValue = activeElement.value;
-                activeElement.value = currentValue.substring(0, start) + text + currentValue.substring(end);
-                activeElement.selectionStart = activeElement.selectionEnd = start + text.length;
+                const inputElement = activeElement as HTMLInputElement | HTMLTextAreaElement;
+                const start = inputElement.selectionStart || 0;
+                const end = inputElement.selectionEnd || 0;
+                const currentValue = inputElement.value;
+                inputElement.value = currentValue.substring(0, start) + text + currentValue.substring(end);
+                inputElement.selectionStart = inputElement.selectionEnd = start + text.length;
               } 
               // For contenteditable elements
               else {
@@ -81,6 +83,6 @@ document.addEventListener('keydown', async (e) => {
 });
 
 // Handle reload/navigation
-window.addEventListener('load', async () => {
+window.addEventListener('load', async (): Promise<void> => {
   await checkStoredPersona(currentTabId);
 });

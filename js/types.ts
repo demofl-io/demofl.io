@@ -67,9 +67,9 @@ export interface StorageResult {
 }
 
 export interface AuthUser {
-  email: string;
+  email: string | null;
   paid: boolean;
-  trialStartedAt?: Date;
+  trialStartedAt?: Date | null;
 }
 
 // Utility types for component props
