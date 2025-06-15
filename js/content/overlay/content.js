@@ -9,6 +9,17 @@ export async function createOverlayContent(persona, theme) {
     pointer-events: none;
   `;
 
+  // Handle case where persona is undefined or null
+  if (!persona) {
+    console.error("Persona is undefined or null");
+    content.innerHTML = `
+      <div style="color: ${theme["overlay-color"] || "#333"};">
+        <div style="font-weight: bold;">Error: No persona data</div>
+      </div>
+    `;
+    return content;
+  }
+
   let pictureUrl = null;
   if (persona.pictureurl) {
     const storedPicture = await getPersonaPicture(persona.pictureurl);
@@ -17,16 +28,20 @@ export async function createOverlayContent(persona, theme) {
     }
   }
 
+  // Use fallback values if properties are missing
+  const personaName = persona.name || 'Unknown';
+  const personaTitle = persona.title || '';
+
   content.innerHTML = `
     ${pictureUrl ? 
-      `<img src="${pictureUrl}" alt="${persona.name}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">` : 
+      `<img src="${pictureUrl}" alt="${personaName}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">` : 
       `<div style="width: 48px; height: 48px; border-radius: 50%; background-color: ${theme["overlay-color"]}20; display: flex; align-items: center; justify-content: center; color: ${theme["overlay-color"]};">
-        ${persona.name.charAt(0)}
+        ${personaName.charAt(0)}
       </div>`
     }
     <div style="color: ${theme["overlay-color"]};">
-      <div style="font-weight: bold; margin-bottom: 4px;">${persona.name}</div>
-      <div style="font-size: 0.9em; opacity: 0.7;">${persona.title}</div>
+      <div style="font-weight: bold; margin-bottom: 4px;">${personaName}</div>
+      <div style="font-size: 0.9em; opacity: 0.7;">${personaTitle}</div>
     </div>
   `;
 

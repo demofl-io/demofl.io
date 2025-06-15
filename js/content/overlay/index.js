@@ -6,6 +6,12 @@ import { initializeDrag } from './drag.js';
 
 export async function createPersonaOverlay(persona) {
   try {
+    // Check if persona is defined before proceeding
+    if (!persona) {
+      console.error("Cannot create overlay: persona is undefined or null");
+      return;
+    }
+
     const theme = await new Promise(resolve => {
       chrome.storage.local.get(["demo"], (result) => {
         resolve(result.demo?.theme || {
