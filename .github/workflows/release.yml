@@ -35,12 +35,12 @@ jobs:
     - name: Update manifest version
       run: |
         VERSION=${GITHUB_REF_NAME#v}
-        jq --arg version "$VERSION" '.version = $version' manifest.json > manifest.json.tmp
+        jq --arg version "$VERSION" '.version = $version' dist/manifest.json > manifest.json.tmp
         mv manifest.json.tmp manifest.json
       
     - name: Create extension zip
       run: |
-        zip -r demoflio-extension.zip manifest.json html/ dist/ demos/ pictures/ assets/ -x "assets/data.json"
+        cd dist && zip -r ../demoflio-extension.zip . -x "dist/assets/data.json" && cd ..
         
     - name: Create Release
       uses: softprops/action-gh-release@v2
