@@ -17,11 +17,17 @@ function initializeTabs() {
             
             const tabId = tab.dataset.tab;
             document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.add('hidden');
+                content.style.display = 'none';
             });
-            document.getElementById(`${tabId}Tab`).classList.remove('hidden');
+            document.getElementById(`${tabId}Tab`).style.display = 'block';
         });
     });
+
+    // Initialize the default tab view
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.style.display = 'none';
+    });
+    document.getElementById('logosTab').style.display = 'block';
 }
 
 async function loadAssets() {

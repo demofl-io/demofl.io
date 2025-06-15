@@ -1,38 +1,43 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "daisyui" {
+    themes: lofi --default, business --prefersdark;
+  }
+@plugin "daisyui/theme" {
+    name: "lofi";
+    --color-primary: #1C4E80;
+    --color-secondary:  #7b92b2;
+  }
 
-@layer components {
-    /* Editor layout */
-
-    .tab-content {
-        @apply block;
-    }
-
-
-    /* Form controls */
-    .custom-select {
-        @apply relative w-full;
-    }
-
-    .custom-select button {
-        @apply select select-bordered w-full flex items-center space-x-2;
-    }
-
-    .dropdown-options {
-        @apply absolute left-0 top-full w-full mt-1 max-h-60 overflow-y-auto 
-               bg-base-200 border border-base-300 rounded-lg shadow-lg z-50;
-    }
-
-    /* Icon selector */
-    .icon-dropdown {
-        @apply bg-base-200 border border-base-300 rounded-lg;
-    }
-
-    .icon-item {
-        @apply text-base-content p-2 cursor-pointer hover:bg-base-300 flex items-center gap-2;
-    }
+@utility tab-content {
+  /* Editor layout */
+  @apply block;
 }
+
+
+@utility custom-select {
+  /* Form controls */
+  @apply relative w-full;
+
+  & button {
+    @apply select border border-base-300 w-full flex items-center space-x-2;
+  }
+}
+
+@utility dropdown-options {
+  @apply absolute left-0 top-full w-full mt-1 max-h-60 overflow-y-auto 
+               bg-base-200 border border-base-300 rounded-lg shadow-lg z-50;
+}
+
+@utility icon-dropdown {
+  /* Icon selector */
+  @apply bg-base-200 border border-base-300 rounded-lg;
+}
+
+@utility icon-item {
+  @apply text-base-content p-2 cursor-pointer hover:bg-base-300 flex items-center gap-2;
+}
+
+
 
 /* Your custom styles here */
 

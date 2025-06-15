@@ -26,7 +26,7 @@
   "incognito": "spanning",
   "commands": {},
   "content_security_policy": {
-    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' https://extensionpay.com/extension/abobjbfojjkoonmfffjppmkobmbcebdj/api/user https://extensionpay.com/extension/abobjbfojjkoonmfffjppmkobmbcebdj/api/new-key https://my.demofl.io/ext/oidc https://demoflio-zrzu8s.us1.zitadel.cloud/oauth/v2/token https://demoflio-zrzu8s.us1.zitadel.cloud/* https://demoflio.us1.zitadel.cloud/* https://my.demofl.io/*"
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' https://extensionpay.com/extension/abobjbfojjkoonmfffjppmkobmbcebdj/ https://extensionpay.com/extension/abobjbfojjkoonmfffjppmkobmbcebdj/api/user https://extensionpay.com/extension/abobjbfojjkoonmfffjppmkobmbcebdj/api/new-key https://my.demofl.io/ext/oidc https://demoflio-zrzu8s.us1.zitadel.cloud/oauth/v2/token https://demoflio-zrzu8s.us1.zitadel.cloud/* https://demoflio.us1.zitadel.cloud/* https://my.demofl.io/*"
   },
   "content_scripts": [
     {
