@@ -60,7 +60,7 @@ function initializeComponents(data: DemoFlowTemplate, formattedIcons: FormattedI
         });
 
         // Add URL handlers
-        const urlsContainer = stepDiv.querySelector('.urls-container');
+        const urlsContainer = stepDiv.querySelector('.urls-container') as any;
         const addUrlBtn = stepDiv.querySelector('.addUrl');
         
         addUrlBtn?.addEventListener('click', () => {
@@ -68,23 +68,23 @@ function initializeComponents(data: DemoFlowTemplate, formattedIcons: FormattedI
         });
 
         // Add icon search handlers
-        const searchInput = stepDiv.querySelector('.step-icon-search');
+        const searchInput = stepDiv.querySelector('.step-icon-search') as any;
         const iconDropdown = stepDiv.querySelector('.icon-dropdown');
 
         searchInput?.addEventListener('input', () => {
             const query = searchInput.value.toLowerCase();
             const icons = iconDropdown.querySelectorAll('.icon-item');
-            icons.forEach(iconItem => {
+            icons.forEach((iconItem: any) => {
                 const iconName = iconItem.getAttribute('data-icon').toLowerCase();
                 iconItem.style.display = iconName.includes(query) ? 'flex' : 'none';
             });
         });
 
         // Handle icon selection
-        iconDropdown?.querySelectorAll('.icon-item').forEach(iconItem => {
+        iconDropdown?.querySelectorAll('.icon-item').forEach((iconItem: any) => {
             iconItem.addEventListener('click', () => {
                 const selectedIcon = iconItem.getAttribute('data-icon');
-                const hiddenInput = stepDiv.querySelector('.selected-icon');
+                const hiddenInput = stepDiv.querySelector('.selected-icon') as any;
                 hiddenInput.value = selectedIcon;
                 searchInput.value = selectedIcon;
                 iconDropdown.classList.add('hidden');
@@ -115,7 +115,7 @@ function initializeComponents(data: DemoFlowTemplate, formattedIcons: FormattedI
         });
 
         // Add URL handlers
-        const urlsContainer = stepDiv.querySelector('.urls-container');
+        const urlsContainer = stepDiv.querySelector('.urls-container') as any;
         const addUrlBtn = stepDiv.querySelector('.addUrl');
         
         addUrlBtn?.addEventListener('click', () => {
@@ -123,23 +123,23 @@ function initializeComponents(data: DemoFlowTemplate, formattedIcons: FormattedI
         });
 
         // Add icon search handlers
-        const searchInput = stepDiv.querySelector('.step-icon-search');
+        const searchInput = stepDiv.querySelector('.step-icon-search') as any;
         const iconDropdown = stepDiv.querySelector('.icon-dropdown');
 
         searchInput?.addEventListener('input', () => {
             const query = searchInput.value.toLowerCase();
             const icons = iconDropdown.querySelectorAll('.icon-item');
-            icons.forEach(iconItem => {
+            icons.forEach((iconItem: any) => {
                 const iconName = iconItem.getAttribute('data-icon').toLowerCase();
                 iconItem.style.display = iconName.includes(query) ? 'flex' : 'none';
             });
         });
 
         // Handle icon selection
-        iconDropdown?.querySelectorAll('.icon-item').forEach(iconItem => {
+        iconDropdown?.querySelectorAll('.icon-item').forEach((iconItem: any) => {
             iconItem.addEventListener('click', () => {
                 const selectedIcon = iconItem.getAttribute('data-icon');
-                const hiddenInput = stepDiv.querySelector('.selected-icon');
+                const hiddenInput = stepDiv.querySelector('.selected-icon') as any;
                 hiddenInput.value = selectedIcon;
                 searchInput.value = selectedIcon;
                 iconDropdown.classList.add('hidden');
@@ -151,7 +151,7 @@ function initializeComponents(data: DemoFlowTemplate, formattedIcons: FormattedI
 }
 
 // Also add this helper function
-function addUrlField(container: HTMLElement, url: string = ''): void {
+function addUrlField(container: any, url: string = ''): void {
     const urlDiv = document.createElement('div');
     urlDiv.className = 'flex space-x-2 items-center';
     

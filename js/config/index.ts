@@ -159,8 +159,7 @@ function initializeUploaders(): void {
                 const file = target.files[0];
                 const name = prompt('Enter a name for this picture:', file.name.replace(/\.[^/.]+$/, ''));
                 if (name) {
-                    const fileName = `persona_${Date.now()}_${name}`;
-                    await uploadImage(file, 'persona', fileName);
+                    await uploadImage(file, 'persona');
                     await loadPersonaPictures();
                 }
             }
