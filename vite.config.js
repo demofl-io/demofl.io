@@ -2,56 +2,63 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
-export default defineConfig({
-  plugins: [
-    viteStaticCopy({
-      targets: [
-        {
-          src: 'manifest.json',
-          dest: '.'
-        },
-        {
-          src: 'html/*',
-          dest: 'html'
-        },
-        {
-          src: 'assets/*',
-          dest: 'assets'
-        },
-        {
-          src: 'css/input.css',
-          dest: 'css'
-        }
-      ]
-    })
-  ],
-  build: {
-    outDir: 'dist',
-    emptyOutDir: true,
-    rollupOptions: {
-      input: {
-        popup: resolve(process.cwd(), 'js/popup/index.js'),
-        content: resolve(process.cwd(), 'js/content/index.js'),
-        background: resolve(process.cwd(), 'js/background.js'),
-        editor: resolve(process.cwd(), 'js/editor/index.js'),
-        processor: resolve(process.cwd(), 'js/processor.js'),
-        config: resolve(process.cwd(), 'js/config/index.js'),
-        'auth-content': resolve(process.cwd(), 'js/auth/auth-content.js'),
-        demofliocloud: resolve(process.cwd(), 'js/demofliocloud.js'),
-        overview: resolve(process.cwd(), 'js/popup/overview-loader.js'),
-        personas: resolve(process.cwd(), 'js/popup/personas-loader.js')
-      },
-      output: {
-        entryFileNames: '[name]-bundle.js',
-        chunkFileNames: '[name]-[hash].js',
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name?.endsWith('.css')) {
-            return 'css/[name][extname]';
+export default defineConfig(({ mode }) => {
+  return {
+    plugins: [
+      viteStaticCopy({
+        targets: [
+          {
+            src: 'manifest.json',
+            dest: '.'
+          },
+          {
+            src: 'html/*',
+            dest: 'html'
+          },
+          {
+            src: 'assets/*',
+            dest: 'assets'
+          },
+          {
+            src: 'css/input.css',
+            dest: 'css'
+          },
+          {
+            src: 'css/components/*',
+            dest: 'css'
+          },
+          {
+            src: 'demos/*',
+            dest: 'demos'
+          },
+          {
+            src: 'pictures/*',
+            dest: 'pictures'
+          },
+          {
+            src: 'logos/*',
+            dest: 'logos'
           }
-          return 'assets/[name]-[hash][extname]';
+        ]
+      })
+    ],
+    build: {
+      outDir: 'dist',
+      emptyOutDir: false, // Don't empty since extension files are built first
+      rollupOptions: {
+        // For static-only mode, create a dummy input so static files can be copied
+        input: mode === 'static-only' ? { dummy: new URL('data:text/javascript,').href } : undefined,
+        output: {
+          entryFileNames: '[name]-bundle.js',
+          chunkFileNames: '[name]-[hash].js',
+          assetFileNames: (assetInfo) => {
+            if (assetInfo.name?.endsWith('.css')) {
+              return 'css/[name][extname]';
+            }
+            return 'assets/[name]-[hash][extname]';
+          }
         }
-      }
-    },
+      },
     minify: 'terser',
     target: ['chrome88', 'firefox78']
   },
@@ -61,4 +68,5 @@ export default defineConfig({
   resolve: {
     extensions: ['.js', '.json']
   }
+  };
 });

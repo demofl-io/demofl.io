@@ -20,7 +20,7 @@
     "128": "assets/icons/icon128.png"
   },
   "background": {
-    "service_worker": "dist/background-bundle.js"
+    "service_worker": "background-bundle.js"
   },
   "options_page": "html/config.html",
   "incognito": "spanning",
@@ -35,18 +35,17 @@
         "http://*/*"
       ],
       "run_at": "document_end",
-      "js": ["dist/content-bundle.js"],
-      "type": "module",
+      "js": ["content-bundle.js"],
       "all_frames": true
     },
     {
       "matches": ["https://my.demofl.io/ext/callback*"],
-      "js": ["dist/auth-content-bundle.js"],
+      "js": ["auth-content-bundle.js"],
       "run_at": "document_start"
     },
     {
       "matches": ["https://my.demofl.io/*","http://127.0.0.1:7331/*"],
-      "js": ["dist/demofliocloud-bundle.js"],
+      "js": ["demofliocloud-bundle.js"],
       "run_at": "document_start"
     }
   ],
