@@ -18,7 +18,7 @@ export function init() {
           // Connect to background first
           if (connectToBackground()) {
             // Always check for stored persona data
-            await checkStoredPersona();
+            await checkStoredPersona(currentTabId);
           }
         } else {
           console.error("No tab ID received");
