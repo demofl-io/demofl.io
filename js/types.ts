@@ -52,6 +52,7 @@ export interface ExtensionMessage {
   type: string;
   payload?: any;
   action?: string;
+  persona?: Persona;
   tabId?: number;
   code?: string;
   error?: string;

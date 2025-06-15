@@ -29,10 +29,10 @@ chrome.runtime.onMessage.addListener((request: ExtensionMessage, sender: chrome.
   if (request.action === "showPersona") {
     chrome.storage.local.get(["personaTabs"], (result: StorageResult) => {
       const personaTabs = result.personaTabs || {};
-      personaTabs[currentTabId] = request.payload;
+      personaTabs[currentTabId] = request.persona;
       
       chrome.storage.local.set({ personaTabs }, () => {
-        createPersonaOverlay(request.payload);
+        createPersonaOverlay(request.persona);
         sendResponse({ success: true });
       });
     });
