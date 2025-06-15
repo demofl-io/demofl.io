@@ -9,7 +9,7 @@ console.log("Content script loaded on:", window.location.href);
 // Start initialization and check for stored persona
 async function initialize(): Promise<void> {
   await init();
-  await checkStoredPersona(currentTabId);
+  // checkStoredPersona is now called inside init() after currentTabId is set
 }
 
 initialize();
