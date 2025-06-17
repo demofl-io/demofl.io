@@ -1,4 +1,5 @@
 // js/content/index.js
+// This is a test comment added by the copilot coding agent
 import { init, currentTabId } from './init.js';
 import { checkStoredPersona } from './storage.js';
 import { createPersonaOverlay } from './overlay/index.js';
