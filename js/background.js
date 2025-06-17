@@ -1,4 +1,5 @@
 // background.js
+// This is the main background script for the demofl.io browser extension
 
 import ExtPay from 'extpay';
 import { AuthService } from './auth';
