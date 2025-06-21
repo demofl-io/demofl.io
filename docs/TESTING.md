@@ -4,7 +4,12 @@ This document describes the testing infrastructure for the Demofl.io Chrome exte
 
 ## Overview
 
-The extension uses [Vitest](https://vitest.dev/) as the testing framework with comprehensive Chrome API mocking to ensure reliable testing of browser extension functionality.
+The extension uses a comprehensive two-tier testing approach:
+
+1. **[Vitest](https://vitest.dev/)** for unit testing with Chrome API mocking
+2. **[Playwright](https://playwright.dev/)** for visual end-to-end testing of the actual extension
+
+This dual approach ensures both functionality correctness and visual regression detection.
 
 ## Test Structure
 
@@ -23,8 +28,9 @@ tests/
 
 ## Running Tests
 
+### Unit Tests (Vitest)
 ```bash
-# Run all tests
+# Run all unit tests
 npm test
 
 # Run tests in watch mode
@@ -39,6 +45,23 @@ npm run test:ui
 # Run tests with coverage
 npm run test:coverage
 ```
+
+### Visual/E2E Tests (Playwright)
+```bash
+# Run visual tests (requires built extension)
+npm run build && npm run test:e2e
+
+# Run with UI interface
+npm run test:e2e:ui
+
+# Run in headed mode (visible browser)
+npm run test:e2e:headed
+
+# Debug tests step by step
+npm run test:e2e:debug
+```
+
+See [PLAYWRIGHT_TESTING.md](./PLAYWRIGHT_TESTING.md) for detailed visual testing documentation.
 
 ## Test Categories
 

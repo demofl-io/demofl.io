@@ -91,8 +91,19 @@ If you prefer to install **Demofl.io** manually, follow these steps:
     ```
 
 3. **Run Tests:**
+    
+    **Unit Tests (Vitest):**
     ```bash
-    npm test
+    npm test                  # Run tests in watch mode
+    npm run test:run          # Run tests once
+    npm run test:coverage     # Run with coverage report
+    ```
+    
+    **Visual/E2E Tests (Playwright):**
+    ```bash
+    npm run test:e2e          # Run visual extension tests
+    npm run test:e2e:ui       # Run with UI interface
+    npm run test:e2e:headed   # Run in headed mode
     ```
 
 ### 🛠️ Demo File
