@@ -90,6 +90,11 @@ If you prefer to install **Demofl.io** manually, follow these steps:
     npm run build
     ```
 
+3. **Run Tests:**
+    ```bash
+    npm test
+    ```
+
 ### 🛠️ Demo File
 
 What a demo file looks like :

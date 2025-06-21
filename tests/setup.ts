@@ -25,7 +25,7 @@ global.btoa = vi.fn((str) => Buffer.from(str, 'binary').toString('base64'))
 const mockChrome = {
   runtime: {
     id: 'test-extension-id',
-    getURL: vi.fn((path: string) => `chrome-extension://test-id${path}`),
+    getURL: vi.fn((path: string) => `chrome-extension://test-id${path.startsWith('/') ? path : '/' + path}`),
     sendMessage: vi.fn(),
     onMessage: {
       addListener: vi.fn(),
@@ -66,7 +66,8 @@ const mockChrome = {
   windows: {
     create: vi.fn(),
     getCurrent: vi.fn(),
-    getAll: vi.fn()
+    getAll: vi.fn(),
+    update: vi.fn()
   },
   commands: {
     onCommand: {
