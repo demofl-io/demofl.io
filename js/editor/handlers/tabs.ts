@@ -1,10 +1,11 @@
-export function initTabHandlers() {
+// js/editor/handlers/tabs.ts
+export function initTabHandlers(): void {
     const tabs = document.querySelectorAll('.tabs .tab');
     const contents = document.querySelectorAll('.tab-content');
 
     // Initial state - hide all content except the first tab
     contents.forEach((content, index) => {
-        content.style.display = index === 0 ? 'block' : 'none';
+        (content as HTMLElement).style.display = index === 0 ? 'block' : 'none';
     });
 
     tabs.forEach(tab => {
@@ -14,7 +15,7 @@ export function initTabHandlers() {
             
             // Hide all tab contents
             contents.forEach(c => {
-                c.style.display = 'none';
+                (c as HTMLElement).style.display = 'none';
             });
             
             // Add active class to clicked tab

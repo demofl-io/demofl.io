@@ -61,6 +61,7 @@ export interface ExtensionMessage {
 export interface UserTemplate {
   name: string;
   data: DemoFlowTemplate;
+  type?: string;
 }
 
 export interface StorageResult {
@@ -94,6 +95,12 @@ export interface StepFieldProps {
 export interface IconData {
   name: string;
   category: string;
+}
+
+export interface IconFormatted {
+  name: string;
+  value: string;
+  class: string;
 }
 
 export interface FormattedIcon {

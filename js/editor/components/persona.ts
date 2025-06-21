@@ -1,10 +1,13 @@
-export async function getPersonaPicture(pictureId) {
+// js/editor/components/persona.ts
+import { Persona } from '../../types.js';
+
+export async function getPersonaPicture(pictureId: string): Promise<string | null> {
     if (!pictureId) return null;
     const result = await chrome.storage.local.get(pictureId);
     return result[pictureId] || null;
 }
 
-export function createPersonaField(key = '', persona = {}) {
+export function createPersonaField(key: string = '', persona: Partial<Persona> = {}): HTMLElement {
     const personaDiv = document.createElement('div');
     personaDiv.className = 'persona flex flex-col space-y-4';
     personaDiv.innerHTML = `
@@ -81,7 +84,7 @@ export function createPersonaField(key = '', persona = {}) {
     });
 
     // Function to populate picture select dropdown
-    async function loadAvailablePictures() {
+    async function loadAvailablePictures(): Promise<void> {
         const storage = await chrome.storage.local.get(null);
         const storedPictures = Object.keys(storage).filter(key => 
             (key.startsWith('persona_') || key.startsWith('default_')) && 
@@ -129,7 +132,7 @@ export function createPersonaField(key = '', persona = {}) {
         }
     }
 
-    async function promptForPictureName(defaultName) {
+    async function promptForPictureName(defaultName: string): Promise<string> {
         const name = window.prompt('Enter a name for this picture:', defaultName);
         return name ? name.trim() : defaultName;
     }
