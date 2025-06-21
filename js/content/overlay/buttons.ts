@@ -1,5 +1,7 @@
-// js/content/overlay/buttons.js
-export function createCloseButton(theme, onClose) {
+// js/content/overlay/buttons.ts
+import { Theme } from '../../types.js';
+
+export function createCloseButton(theme: Theme, onClose: () => void): HTMLButtonElement {
   const closeButton = document.createElement('button');
   closeButton.innerHTML = '×';
   closeButton.style.cssText = `

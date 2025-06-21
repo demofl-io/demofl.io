@@ -1,11 +1,42 @@
 
+// js/components/VideoContainer.ts
+export interface VideoContainerOptions {
+    x?: number;
+    y?: number;
+}
+
+export interface VideoPosition {
+    x: number;
+    y: number;
+}
+
+export interface VideoSize {
+    width: number;
+    height: number;
+}
+
 export class VideoContainer {
-    constructor(container, options = {}) {
+    private container: HTMLElement;
+    private dragHandle: HTMLElement;
+    private resizeHandle: HTMLElement;
+    private minimizeBtn: HTMLElement | null;
+    private videoContent: HTMLElement;
+    
+    private isDragging: boolean;
+    private isResizing: boolean;
+    private startX: number;
+    private startY: number;
+    private lastX: number;
+    private lastY: number;
+    private startWidth: number;
+    private startHeight: number;
+
+    constructor(container: HTMLElement, options: VideoContainerOptions = {}) {
         this.container = container;
-        this.dragHandle = container.querySelector('.video-drag-handle');
-        this.resizeHandle = container.querySelector('.video-resize-handle');
-        this.minimizeBtn = this.dragHandle.querySelector('.minimize-btn');
-        this.videoContent = container.querySelector('.video-content');
+        this.dragHandle = container.querySelector('.video-drag-handle') as HTMLElement;
+        this.resizeHandle = container.querySelector('.video-resize-handle') as HTMLElement;
+        this.minimizeBtn = this.dragHandle.querySelector('.minimize-btn') as HTMLElement | null;
+        this.videoContent = container.querySelector('.video-content') as HTMLElement;
         
         this.isDragging = false;
         this.isResizing = false;
@@ -19,7 +50,7 @@ export class VideoContainer {
         this.init();
     }
 
-    async init() {
+    async init(): Promise<void> {
         // Load saved position and size
         const savedState = await chrome.storage.local.get(['videoPosition', 'videoSize']);
         if (savedState.videoPosition) {
@@ -44,7 +75,7 @@ export class VideoContainer {
         this.minimizeBtn?.addEventListener('click', this.toggleMinimize.bind(this));
     }
 
-    dragStart(e) {
+    private dragStart(e: MouseEvent): void {
         const isHandle = e.target === this.dragHandle || e.target === this.dragHandle.querySelector('span');
         if (isHandle) {
             this.isDragging = true;
@@ -54,7 +85,7 @@ export class VideoContainer {
         }
     }
 
-    drag(e) {
+    private drag(e: MouseEvent): void {
         if (!this.isDragging) return;
         e.preventDefault();
 
@@ -71,14 +102,14 @@ export class VideoContainer {
         this.updatePosition();
     }
 
-    dragEnd() {
+    private dragEnd(): void {
         if (!this.isDragging) return;
         this.isDragging = false;
         this.dragHandle.classList.remove('dragging');
         this.savePosition();
     }
 
-    resizeStart(e) {
+    private resizeStart(e: MouseEvent): void {
         if (e.target === this.resizeHandle) {
             this.isResizing = true;
             this.startX = e.clientX;
@@ -88,7 +119,7 @@ export class VideoContainer {
         }
     }
 
-    resize(e) {
+    private resize(e: MouseEvent): void {
         if (!this.isResizing) return;
         e.preventDefault();
         
@@ -101,27 +132,29 @@ export class VideoContainer {
         this.saveSize();
     }
 
-    resizeEnd() {
+    private resizeEnd(): void {
         this.isResizing = false;
     }
 
-    toggleMinimize() {
+    private toggleMinimize(): void {
         this.videoContent.style.display = this.videoContent.style.display === 'none' ? 'block' : 'none';
-        this.minimizeBtn.textContent = this.videoContent.style.display === 'none' ? '□' : '_';
+        if (this.minimizeBtn) {
+            this.minimizeBtn.textContent = this.videoContent.style.display === 'none' ? '□' : '_';
+        }
     }
 
-    updatePosition() {
+    private updatePosition(): void {
         this.container.style.left = `${this.lastX}px`;
         this.container.style.top = `${this.lastY}px`;
     }
 
-    savePosition() {
+    private savePosition(): void {
         chrome.storage.local.set({
             videoPosition: { x: this.lastX, y: this.lastY }
         });
     }
 
-    saveSize() {
+    private saveSize(): void {
         chrome.storage.local.set({
             videoSize: {
                 width: this.container.offsetWidth,

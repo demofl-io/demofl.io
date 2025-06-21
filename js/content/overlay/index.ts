@@ -1,10 +1,11 @@
-// js/content/overlay/index.js
+// js/content/overlay/index.ts
 import { generateOverlayStyles } from './styles.js';
 import { createOverlayContent } from './content.js';
 import { createCloseButton } from './buttons.js';
 import { initializeDrag } from './drag.js';
+import { Persona, Theme } from '../../types.js';
 
-export async function createPersonaOverlay(persona) {
+export async function createPersonaOverlay(persona: Persona): Promise<void> {
   try {
     // Check if persona is defined before proceeding
     if (!persona) {
@@ -12,7 +13,7 @@ export async function createPersonaOverlay(persona) {
       return;
     }
 
-    const theme = await new Promise(resolve => {
+    const theme = await new Promise<Theme>(resolve => {
       chrome.storage.local.get(["demo"], (result) => {
         resolve(result.demo?.theme || {
           "overlay-color": "#333333",

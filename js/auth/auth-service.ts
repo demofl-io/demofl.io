@@ -1,11 +1,26 @@
-import { ZITADEL_CONFIG } from './zitadel-config.js';
+// js/auth/auth-service.ts
+import { ZITADEL_CONFIG, ZitadelConfig } from './zitadel-config.js';
+
+export interface CodeChallenge {
+    codeVerifier: string;
+    codeChallenge: string;
+}
+
+export interface ClientConfig {
+    client_id: string;
+    redirect_uri: string;
+    scope: string;
+    [key: string]: any;
+}
 
 export class AuthService {
+    private config: ZitadelConfig;
+
     constructor() {
         this.config = ZITADEL_CONFIG;
     }
 
-    async generateCodeChallenge() {
+    async generateCodeChallenge(): Promise<CodeChallenge> {
         const codeVerifier = this.generateCodeVerifier();
         const encoder = new TextEncoder();
         const data = encoder.encode(codeVerifier);
@@ -21,13 +36,13 @@ export class AuthService {
         };
     }
 
-    generateCodeVerifier() {
+    generateCodeVerifier(): string {
         const array = new Uint32Array(56);
         crypto.getRandomValues(array);
         return Array.from(array, dec => ('0' + dec.toString(16)).substr(-2)).join('');
     }
 
-    async getClientConfig() {
+    async getClientConfig(): Promise<ClientConfig> {
         const response = await fetch(this.config.config_endpoint, {
             headers: {
                 'x-extension-id': chrome.runtime.id

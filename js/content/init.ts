@@ -1,10 +1,10 @@
-// js/content/init.js
+// js/content/init.ts
 import { connectToBackground } from './port.js';
 import { checkStoredPersona } from './storage.js';
 
-export let currentTabId;
+export let currentTabId: number;
 
-export function init() {
+export function init(): Promise<void> {
     return new Promise((resolve) => {
         chrome.runtime.sendMessage({ action: "getTabId" }, async (response) => {
             if (chrome.runtime.lastError) {

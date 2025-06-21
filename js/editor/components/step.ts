@@ -1,21 +1,24 @@
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
+// js/editor/components/step.ts
+import { Persona, IconFormatted } from '../../types.js';
+
+function debounce<T extends (...args: any[]) => void>(func: T, wait: number): T {
+    let timeout: NodeJS.Timeout;
+    return function executedFunction(...args: Parameters<T>) {
         const later = () => {
             clearTimeout(timeout);
             func(...args);
         };
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
-    };
+    } as T;
 }
 
-function generateIconItems(formattedIcons) {
+function generateIconItems(formattedIcons: IconFormatted[]): string {
     // Create a container div instead of generating all HTML at once
     return '<div class="icons-virtual-list" style="height: 300px; overflow-y: auto;"></div>';
 }
 
-function renderVisibleIcons(container, formattedIcons, searchQuery = '') {
+function renderVisibleIcons(container: HTMLElement, formattedIcons: IconFormatted[], searchQuery: string = ''): void {
     const itemHeight = 40; // approximate height of each icon item
     const containerHeight = container.clientHeight;
     const scrollTop = container.scrollTop;
@@ -74,7 +77,7 @@ function attachIconItemHandler(iconItem) {
     });
 }
 
-function generatePersonaOptions(personas, selectedPersona) {
+function generatePersonaOptions(personas: Record<string, Persona>, selectedPersona: string): string {
     return Object.entries(personas).map(([key, persona]) => `
         <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center space-x-2 persona-option" data-value="${key}">
             <img class="w-8 h-8 object-cover rounded-sm" src="" alt="" data-picture-id="${persona.pictureurl || ''}">
@@ -83,7 +86,17 @@ function generatePersonaOptions(personas, selectedPersona) {
     `).join('');
 }
 
-export function createStepField(title = '', description = '', urls = [], persona = '', icon = '', formattedIcons, personas, tabColor = 'green', video = '') {
+export function createStepField(
+    title: string = '', 
+    description: string = '', 
+    urls: string[] = [], 
+    persona: string = '', 
+    icon: string = '', 
+    formattedIcons: IconFormatted[], 
+    personas: Record<string, Persona>, 
+    tabColor: string = 'green', 
+    video: string = ''
+): HTMLElement {
     const stepDiv = document.createElement('div');
     stepDiv.className = 'step p-4 border border-gray-300 rounded-lg';
     const iconItems = generateIconItems(formattedIcons);

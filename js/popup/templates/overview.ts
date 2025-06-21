@@ -1,12 +1,7 @@
 // js/popup/templates/overview.ts
 import { hexToHSL } from '../utils/colors.js';
 import { getStoredImage } from '../../editor/utils/images.js';
-import type { DemoFlowTemplate } from '../../types.js';
-
-interface OverviewResult {
-    styles: string;
-    content: string;
-}
+import { DemoFlowTemplate } from '../../types.js';
 
 export const getOverviewStyles = (hslColor: string): string => `
     :root {
@@ -16,7 +11,7 @@ export const getOverviewStyles = (hslColor: string): string => `
     }
 `;
 
-export async function generateOverviewHTML(demoData: DemoFlowTemplate, currentStep: number | null = null): Promise<OverviewResult> {
+export async function generateOverviewHTML(demoData: DemoFlowTemplate, currentStep: number | null = null): Promise<{ styles: string; content: string }> {
     const hslColor = hexToHSL(demoData.theme["brand-color"]);
 
     const [productLogo, customerLogo] = await Promise.all([

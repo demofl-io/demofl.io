@@ -1,7 +1,9 @@
+// js/editor/handlers/form.ts
 import { saveTemplate } from '../../popup/templates.js';
 import { getStoredImage, uploadImage } from '../utils/images.js';
+import { UserTemplate, DemoFlowTemplate } from '../../types.js';
 
-export function initFormHandler(form, data) {
+export function initFormHandler(form: HTMLFormElement, data: UserTemplate): void {
     // First populate the form with existing data
     populateFormData(form, data.data);
 
@@ -13,15 +15,15 @@ export function initFormHandler(form, data) {
     });
 
     // Initialize logo selectors
-    initLogoSelector(form.querySelector('#product .custom-select'), '#productLogo');
-    initLogoSelector(form.querySelector('#customer .custom-select'), '#customerLogo');
+    initLogoSelector(form.querySelector('#product .custom-select') as HTMLElement, '#productLogo');
+    initLogoSelector(form.querySelector('#customer .custom-select') as HTMLElement, '#customerLogo');
 
     // Initialize logo upload handlers
-    initLogoUploader(form.querySelector('.product-logo-upload'), '#product .custom-select');
-    initLogoUploader(form.querySelector('.customer-logo-upload'), '#customer .custom-select');
+    initLogoUploader(form.querySelector('.product-logo-upload') as HTMLInputElement, '#product .custom-select');
+    initLogoUploader(form.querySelector('.customer-logo-upload') as HTMLInputElement, '#customer .custom-select');
 }
 
-function initLogoSelector(customSelect, hiddenInputSelector) {
+function initLogoSelector(customSelect: HTMLElement, hiddenInputSelector: string): void {
     const selectButton = customSelect.querySelector('button');
     const dropdownOptions = customSelect.querySelector('.dropdown-options');
     const hiddenInput = customSelect.closest('form').querySelector(hiddenInputSelector);
@@ -40,7 +42,7 @@ function initLogoSelector(customSelect, hiddenInputSelector) {
     });
 }
 
-async function loadAvailableLogos(dropdownOptions, selectButton, hiddenInput) {
+async function loadAvailableLogos(dropdownOptions: HTMLElement, selectButton: HTMLElement, hiddenInput: HTMLInputElement): Promise<void> {
     const storage = await chrome.storage.local.get(null);
     const storedLogos = Object.keys(storage).filter(key => 
         key.startsWith('logo_') && 
@@ -79,7 +81,7 @@ async function loadAvailableLogos(dropdownOptions, selectButton, hiddenInput) {
     }
 }
 
-function initLogoUploader(fileInput, customSelectSelector) {
+function initLogoUploader(fileInput: HTMLInputElement, customSelectSelector: string): void {
     fileInput.addEventListener('change', async (e) => {
         if (e.target.files && e.target.files[0]) {
             const result = await uploadImage(e.target.files[0], 'logo');
@@ -98,7 +100,7 @@ function initLogoUploader(fileInput, customSelectSelector) {
     });
 }
 
-async function populateFormData(form, data) {
+async function populateFormData(form: HTMLFormElement, data: DemoFlowTemplate): Promise<void> {
     // Theme data
     form.querySelector('#brandColor').value = data.theme['brand-color'] || '#000000';
     form.querySelector('#overlayColor').value = data.theme['overlay-color'] || '#ffffff';
@@ -159,7 +161,7 @@ async function loadLogoPreview(input, previewSelector) {
     }
 }
 
-async function collectFormData(form) {
+async function collectFormData(form: HTMLFormElement): Promise<DemoFlowTemplate> {
     // Gather Theme Data
     const theme = {
         'brand-color': form.querySelector('#brandColor').value,
@@ -239,7 +241,7 @@ async function collectFormData(form) {
     };
 }
 
-async function handleFormSubmit(template, name, type) {
+async function handleFormSubmit(template: DemoFlowTemplate, name: string, type: string): Promise<boolean> {
     // Validate steps have icons
     const missingIcons = template.steps.filter(step => !step.icon);
     if (missingIcons.length > 0) {
