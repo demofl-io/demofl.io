@@ -1,10 +1,12 @@
 
+import { ExtensionMessage } from './types.js';
+
 console.log("Content script loaded on DEMOCLOUD:", window.location.href);
-window.addEventListener('DOMContentLoaded', function () {
+window.addEventListener('DOMContentLoaded', function (): void {
 
     
     // Listen for messages from the website
-    window.addEventListener('message', (event) => {
+    window.addEventListener('message', (event: MessageEvent): void => {
         // Only accept messages from your domain
         //if (event.origin !== 'https://your-website-domain.com') return;
 
@@ -15,7 +17,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 chrome.runtime.sendMessage({
                     type: 'EXTENSION_RUNDEMO',
                     payload: event.data.payload
-                });
+                } as ExtensionMessage);
                 break;
         }
     });

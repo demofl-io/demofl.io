@@ -1,6 +1,7 @@
 import { loadBuiltInTemplates, demoFolder } from './templates.js';
+import { DemoFlowTemplate, StorageResult } from '../types.js';
 
-export async function clearTabs() {
+export async function clearTabs(): Promise<void> {
   // First check and close any existing demo tabs
   console.log("clearing existing tabs");
   const result = await chrome.storage.local.get('demoTabIds');
@@ -17,7 +18,7 @@ export async function clearTabs() {
   } 
 }
 
-export function createDemoFlowItem(type, name) {
+export function createDemoFlowItem(type: string, name: string): HTMLElement {
   const item = document.createElement('div');
   item.className = 'grid grid-cols-[1fr_auto] gap-2 w-full';
 
@@ -33,17 +34,17 @@ export function createDemoFlowItem(type, name) {
   `;
   mainArea.title = `Run ${name}`;
   // Add click handler for running demo
-  mainArea.onclick = async () => {
-
+  mainArea.onclick = async (event: MouseEvent): Promise<void> => {
+    let template: DemoFlowTemplate;
 
     if (type === 'user') {
-      const result = await chrome.storage.local.get('userTemplates');
-      const template = result.userTemplates[name];
+      const result: StorageResult = await chrome.storage.local.get('userTemplates');
+      template = result.userTemplates[name];
       await chrome.storage.local.set({ pendingTemplate: template });
     } else {
       const flowurl = chrome.runtime.getURL(`/${demoFolder}/${name}.json`);
       const response = await fetch(flowurl);
-      const template = await response.json();
+      template = await response.json() as DemoFlowTemplate;
       await chrome.storage.local.set({ pendingTemplate: template });
     }
 
@@ -65,15 +66,15 @@ export function createDemoFlowItem(type, name) {
   exportBtn.className = actionBtnClasses;
   exportBtn.innerHTML = '⬇';
   exportBtn.title = 'Export Demo Flow';
-  exportBtn.onclick = async () => {
-    let template;
+  exportBtn.onclick = async (event: MouseEvent): Promise<void> => {
+    let template: DemoFlowTemplate;
     if (type === 'user') {
-      const result = await chrome.storage.local.get('userTemplates');
+      const result: StorageResult = await chrome.storage.local.get('userTemplates');
       template = result.userTemplates[name];
     } else {
       const flowurl = chrome.runtime.getURL(`/${demoFolder}/${name}.json`);
       const response = await fetch(flowurl);
-      template = await response.json();
+      template = await response.json() as DemoFlowTemplate;
     }
 
     const blob = new Blob([JSON.stringify(template, null, 2)], { type: 'application/json' });
@@ -93,7 +94,7 @@ export function createDemoFlowItem(type, name) {
   copyBtn.className = actionBtnClasses;
   copyBtn.innerHTML = '📋';
   copyBtn.title = 'Copy Demo Flow';
-  copyBtn.onclick = async () => {
+  copyBtn.onclick = async (event: MouseEvent): Promise<void> => {
     let newName = window.prompt("Enter a name for the copied demo flow:", `${name}-copy`);
     
     if (!newName) {
@@ -103,7 +104,7 @@ export function createDemoFlowItem(type, name) {
     
     newName = newName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
     
-    const result = await chrome.storage.local.get('userTemplates');
+    const result: StorageResult = await chrome.storage.local.get('userTemplates');
     const userTemplates = result.userTemplates || {};
     
     if (userTemplates[newName]) {
@@ -112,13 +113,13 @@ export function createDemoFlowItem(type, name) {
     }
 
     // Get source template data
-    let templateData;
+    let templateData: DemoFlowTemplate;
     if (type === 'user') {
       templateData = userTemplates[name];
     } else {
       const flowurl = chrome.runtime.getURL(`/${demoFolder}/${name}.json`);
       const response = await fetch(flowurl);
-      templateData = await response.json();
+      templateData = await response.json() as DemoFlowTemplate;
     }
 
     // Store copied template for editing
@@ -143,15 +144,15 @@ export function createDemoFlowItem(type, name) {
     editBtn.className = actionBtnClasses;
     editBtn.innerHTML = '✏️';
     editBtn.title = 'Edit Demo Flow';
-    editBtn.onclick = async () => {
-      let template;
+    editBtn.onclick = async (event: MouseEvent): Promise<void> => {
+      let template: DemoFlowTemplate;
       if (type === 'user') {
-        const result = await chrome.storage.local.get('userTemplates');
+        const result: StorageResult = await chrome.storage.local.get('userTemplates');
         template = result.userTemplates[name];
       } else {
         const flowurl = chrome.runtime.getURL(`/${demoFolder}/${name}.json`);
         const response = await fetch(flowurl);
-        template = await response.json();
+        template = await response.json() as DemoFlowTemplate;
       }
 
       // Store the template info in local storage for editing
@@ -169,9 +170,9 @@ export function createDemoFlowItem(type, name) {
     deleteBtn.className = `${actionBtnClasses} btn-error`;
     deleteBtn.innerHTML = '🗑';
     deleteBtn.title = 'Delete Demo Flow';
-    deleteBtn.onclick = async () => {
+    deleteBtn.onclick = async (event: MouseEvent): Promise<void> => {
       if (confirm(`Delete demo flow "${name}"?`)) {
-        const result = await chrome.storage.local.get('userTemplates');
+        const result: StorageResult = await chrome.storage.local.get('userTemplates');
         const userTemplates = result.userTemplates || {};
         delete userTemplates[name];
         await chrome.storage.local.set({ userTemplates });
@@ -186,8 +187,12 @@ export function createDemoFlowItem(type, name) {
   return item;
 }
 
-export async function loadDemoList() {
+export async function loadDemoList(): Promise<void> {
   const container = document.getElementById("templateList");
+  if (!container) {
+    console.error("templateList container not found");
+    return;
+  }
   container.innerHTML = '';
 
   // Top header with action buttons
@@ -236,7 +241,7 @@ export async function loadDemoList() {
     <span class="text-lg">✨</span>
     <span class="font-medium">Create New Demo Flow</span>
   `;
-  newDemoFlowBtn.onclick = async () => {
+  newDemoFlowBtn.onclick = async (event: MouseEvent): Promise<void> => {
     // Prompt for template name
     let templateName = window.prompt("Enter a name for your new demo flow:", "");
     
@@ -250,7 +255,7 @@ export async function loadDemoList() {
     templateName = templateName.toLowerCase().replace(/[^a-z0-9-]/g, '-');
     
     // Check if name already exists
-    const result = await chrome.storage.local.get('userTemplates');
+    const result: StorageResult = await chrome.storage.local.get('userTemplates');
     const userTemplates = result.userTemplates || {};
     
     if (userTemplates[templateName]) {
@@ -258,7 +263,7 @@ export async function loadDemoList() {
         return;
     }
 
-    const emptyTemplate = {
+    const emptyTemplate: DemoFlowTemplate = {
         theme: {
             'brand-color': '#000000',
             'brand-font': 'Arial',

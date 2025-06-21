@@ -1,9 +1,24 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import { existsSync } from 'fs';
 
 export default defineConfig(({ mode }) => {
-  // Extension entry points
+  // Helper function to find the correct entry file (.ts or .js)
+  const findEntryFile = (basePath) => {
+    const tsPath = basePath.replace('.js', '.ts');
+    const jsPath = basePath;
+    
+    if (existsSync(resolve(process.cwd(), tsPath))) {
+      return tsPath;
+    } else if (existsSync(resolve(process.cwd(), jsPath))) {
+      return jsPath;
+    } else {
+      throw new Error(`Entry file not found: ${basePath} (tried .ts and .js)`);
+    }
+  };
+
+  // Extension entry points - will automatically use .ts if available, fallback to .js
   const extensionEntries = {
     'content': 'js/content/index.js',
     'background': 'js/background.js', 
@@ -24,7 +39,7 @@ export default defineConfig(({ mode }) => {
         outDir: 'dist',
         emptyOutDir: false,
         lib: {
-          entry: resolve(process.cwd(), extensionEntries[mode]),
+          entry: resolve(process.cwd(), findEntryFile(extensionEntries[mode])),
           name: `${mode.replace('-', '')}Bundle`,
           fileName: () => `${mode}-bundle.js`,
           formats: ['iife']
@@ -85,7 +100,7 @@ export default defineConfig(({ mode }) => {
       emptyOutDir: false,
       rollupOptions: {
         input: mode === 'static-only' ? { dummy: new URL('data:text/javascript,').href } : Object.fromEntries(
-          Object.entries(extensionEntries).map(([key, path]) => [key, resolve(process.cwd(), path)])
+          Object.entries(extensionEntries).map(([key, path]) => [key, resolve(process.cwd(), findEntryFile(path))])
         ),
         output: {
           entryFileNames: '[name]-bundle.js',
@@ -105,7 +120,7 @@ export default defineConfig(({ mode }) => {
       postcss: './postcss.config.js'
     },
     resolve: {
-      extensions: ['.js', '.json']
+      extensions: ['.ts', '.js', '.json']
     }
   };
 });

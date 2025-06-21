@@ -1,5 +1,7 @@
+import { ExtensionMessage } from '../types.js';
+
 // Listen for messages from the callback page
-window.addEventListener('message', (event) => {
+window.addEventListener('message', (event: MessageEvent): void => {
     // Only accept messages from our callback page
     if (event.origin !== 'https://my.demofl.io') return;
     
@@ -8,13 +10,13 @@ window.addEventListener('message', (event) => {
         chrome.runtime.sendMessage({
             type: 'ZITADEL_AUTH_CODE',
             code: event.data.code
-        });
+        } as ExtensionMessage);
         // Don't try to close window here
     }
 });
 
 // Handle the auth code directly instead of injecting a script
-function handleAuthCode() {
+function handleAuthCode(): void {
     const code = new URLSearchParams(window.location.search).get('code');
     if (code) {
         window.postMessage({ 

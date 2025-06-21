@@ -1,5 +1,5 @@
-// js/popup/utils/colors.js
-export function hexToHSL(hex) {
+// js/popup/utils/colors.ts
+export function hexToHSL(hex: string): string {
   hex = hex.replace('#', '');
   const r = parseInt(hex.substring(0, 2), 16) / 255;
   const g = parseInt(hex.substring(2, 4), 16) / 255;
@@ -7,7 +7,7 @@ export function hexToHSL(hex) {
   
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
-  let h, s, l = (max + min) / 2;
+  let h: number, s: number, l = (max + min) / 2;
 
   if (max === min) {
     h = s = 0;

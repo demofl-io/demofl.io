@@ -1,9 +1,10 @@
-// background.js
+// background.ts
 
 import ExtPay from 'extpay';
 import { AuthService } from './auth';
+import { ExtensionMessage, DemoFlowTemplate } from './types.js';
 
-var extpay = ExtPay('abobjbfojjkoonmfffjppmkobmbcebdj'); // Careful! See note below
+const extpay = ExtPay('abobjbfojjkoonmfffjppmkobmbcebdj'); // Careful! See note below
 extpay.startBackground(); 
 
 const authService = new AuthService();
@@ -20,7 +21,7 @@ chrome.runtime.onConnect.addListener(port => {
 });
 
 // Listening for messages
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request: ExtensionMessage, sender: chrome.runtime.MessageSender, sendResponse: (response?: any) => void) => {
   if (request.action === "getTabId") {
     if (sender.tab && sender.tab.id) {
       sendResponse({ tabId: sender.tab.id });
@@ -36,20 +37,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.type === 'ZITADEL_AUTH_CODE') {
-    authService.handleCallback(request.code);
+    authService.handleCallback(request.code!);
   }
 
   return true;
 });
 
-chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message: ExtensionMessage, sender: chrome.runtime.MessageSender, sendResponse: (response?: any) => void) => {
     if (message.type === 'ZITADEL_AUTH_CODE') {
         try {
             // First handle the auth callback
-            await authService.handleCallback(message.code);
+            await authService.handleCallback(message.code!);
             
             // Then close the auth window
-            if (sender.tab) {
+            if (sender.tab && sender.tab.id) {
                 await chrome.tabs.remove(sender.tab.id);
             }
             
@@ -71,7 +72,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
         const flowurl = chrome.runtime.getURL(`/demos/template1.json`);
             const response = await fetch(flowurl);
-            const template = await response.json();
+            const template: DemoFlowTemplate = await response.json();
             await chrome.storage.local.set({ pendingTemplate: template });
       
           // Create a new tab that will handle the template processing
@@ -139,7 +140,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
    // }
 });
 
-function tabUpdatedAction(tabId, changeInfo, tab) {
+function tabUpdatedAction(tabId: number, changeInfo: chrome.tabs.TabChangeInfo, tab: chrome.tabs.Tab): void {
     if (changeInfo.status === 'complete') {
         // chrome.tabs.sendMessage(tabId, { message: 'hello!' }, function (response) {
         //     console.log(response);
@@ -147,8 +148,8 @@ function tabUpdatedAction(tabId, changeInfo, tab) {
     }
 }
 
-function keyboardAction(command, tab) {
-    chrome.tabs.sendMessage(tab.id, { message: 'command triggered!' }, function (response) {
+function keyboardAction(command: string, tab: chrome.tabs.Tab): void {
+    chrome.tabs.sendMessage(tab.id!, { message: 'command triggered!' }, function (response) {
 
     });
 };

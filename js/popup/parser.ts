@@ -1,22 +1,23 @@
 import { demoFolder } from './templates.js';
 import { generateOverviewHTML, generatePersonasHTML } from './templates/index.js';
+import { DemoFlowTemplate, StorageResult } from '../types.js';
 
-export async function openJSONFile(value) {
+export async function openJSONFile(value: string): Promise<void> {
     const [type, name] = value.split(':');
 
     if (type === 'builtin') {
         const flowurl = chrome.runtime.getURL(`/${demoFolder}/${name}.json`);
         const response = await fetch(flowurl);
-        const data = await response.json();
+        const data: DemoFlowTemplate = await response.json();
         await parseDemoFile(data);
     } else {
-        const result = await chrome.storage.local.get('userTemplates');
-        const template = result.userTemplates[name];
+        const result: StorageResult = await chrome.storage.local.get('userTemplates');
+        const template: DemoFlowTemplate = result.userTemplates[name];
         await parseDemoFile(template);
     }
 }
 
-export async function parseDemoFile(demoData) {
+export async function parseDemoFile(demoData: DemoFlowTemplate): Promise<void> {
     try {
         const currentWindow = await chrome.windows.getCurrent();
         let currentWindowId = currentWindow.id;
@@ -92,7 +93,7 @@ export async function parseDemoFile(demoData) {
                                             action: "showPersona",
                                             persona: personaData
                                         });
-                                        resolve();
+                                        resolve(undefined);
                                     });
                                 });
                             }
@@ -121,12 +122,12 @@ export async function parseDemoFile(demoData) {
                     createProperties: { windowId: stepWindowId }
                 });
                 
-                const validColors = ['grey', 'blue', 'red', 'yellow', 'green', 'pink', 'purple', 'cyan', 'orange'];
+                const validColors = ['grey', 'blue', 'red', 'yellow', 'green', 'pink', 'purple', 'cyan', 'orange'] as const;
                 const tabColor = demoData.steps[i].tabColor;
                 
                 await chrome.tabGroups.update(group, { 
                     title: demoData.steps[i].title,
-                    color: validColors.includes(tabColor) ? tabColor : 'green'
+                    color: validColors.includes(tabColor as any) ? tabColor as any : 'green'
                 });
             }
         }

@@ -1,4 +1,4 @@
-// js/editor/index.js
+// js/editor/index.ts
 import { formatIcons } from './utils/icons.js';
 import { initTabHandlers } from './handlers/tabs.js';
 import { initFormHandler } from './handlers/form.js';
@@ -6,13 +6,19 @@ import { createPersonaField } from './components/persona.js';
 import { createStepField } from './components/step.js';
 import availableIcons from '../../assets/material-icons.json';
 import { initializeTheme } from '../utils/theme.js';
+import { DemoFlowTemplate, FormattedIcon, StorageResult } from '../types.js';
 
 // Add this function before the DOMContentLoaded event listener
-function initializeComponents(data, formattedIcons) {
+function initializeComponents(data: DemoFlowTemplate, formattedIcons: FormattedIcon): void {
     const personasContainer = document.getElementById('personasContainer');
     const stepsContainer = document.getElementById('stepsContainer');
     const addPersonaBtn = document.getElementById('addPersonaBtn');
     const addStepBtn = document.getElementById('addStepBtn');
+
+    if (!personasContainer || !stepsContainer || !addPersonaBtn || !addStepBtn) {
+        console.error('Required DOM elements not found');
+        return;
+    }
 
     // Clear existing content
     personasContainer.innerHTML = '';
@@ -24,9 +30,12 @@ function initializeComponents(data, formattedIcons) {
         const personaDiv = createPersonaField(key, persona);
         
         // Add remove handler
-        personaDiv.querySelector('.removePersona').addEventListener('click', () => {
-            personasContainer.removeChild(personaDiv);
-        });
+        const removeBtn = personaDiv.querySelector('.removePersona');
+        if (removeBtn) {
+            removeBtn.addEventListener('click', () => {
+                personasContainer.removeChild(personaDiv);
+            });
+        }
         
         personasContainer.appendChild(personaDiv);
     });
@@ -51,7 +60,7 @@ function initializeComponents(data, formattedIcons) {
         });
 
         // Add URL handlers
-        const urlsContainer = stepDiv.querySelector('.urls-container');
+        const urlsContainer = stepDiv.querySelector('.urls-container') as any;
         const addUrlBtn = stepDiv.querySelector('.addUrl');
         
         addUrlBtn?.addEventListener('click', () => {
@@ -59,23 +68,23 @@ function initializeComponents(data, formattedIcons) {
         });
 
         // Add icon search handlers
-        const searchInput = stepDiv.querySelector('.step-icon-search');
+        const searchInput = stepDiv.querySelector('.step-icon-search') as any;
         const iconDropdown = stepDiv.querySelector('.icon-dropdown');
 
         searchInput?.addEventListener('input', () => {
             const query = searchInput.value.toLowerCase();
             const icons = iconDropdown.querySelectorAll('.icon-item');
-            icons.forEach(iconItem => {
+            icons.forEach((iconItem: any) => {
                 const iconName = iconItem.getAttribute('data-icon').toLowerCase();
                 iconItem.style.display = iconName.includes(query) ? 'flex' : 'none';
             });
         });
 
         // Handle icon selection
-        iconDropdown?.querySelectorAll('.icon-item').forEach(iconItem => {
+        iconDropdown?.querySelectorAll('.icon-item').forEach((iconItem: any) => {
             iconItem.addEventListener('click', () => {
                 const selectedIcon = iconItem.getAttribute('data-icon');
-                const hiddenInput = stepDiv.querySelector('.selected-icon');
+                const hiddenInput = stepDiv.querySelector('.selected-icon') as any;
                 hiddenInput.value = selectedIcon;
                 searchInput.value = selectedIcon;
                 iconDropdown.classList.add('hidden');
@@ -106,7 +115,7 @@ function initializeComponents(data, formattedIcons) {
         });
 
         // Add URL handlers
-        const urlsContainer = stepDiv.querySelector('.urls-container');
+        const urlsContainer = stepDiv.querySelector('.urls-container') as any;
         const addUrlBtn = stepDiv.querySelector('.addUrl');
         
         addUrlBtn?.addEventListener('click', () => {
@@ -114,23 +123,23 @@ function initializeComponents(data, formattedIcons) {
         });
 
         // Add icon search handlers
-        const searchInput = stepDiv.querySelector('.step-icon-search');
+        const searchInput = stepDiv.querySelector('.step-icon-search') as any;
         const iconDropdown = stepDiv.querySelector('.icon-dropdown');
 
         searchInput?.addEventListener('input', () => {
             const query = searchInput.value.toLowerCase();
             const icons = iconDropdown.querySelectorAll('.icon-item');
-            icons.forEach(iconItem => {
+            icons.forEach((iconItem: any) => {
                 const iconName = iconItem.getAttribute('data-icon').toLowerCase();
                 iconItem.style.display = iconName.includes(query) ? 'flex' : 'none';
             });
         });
 
         // Handle icon selection
-        iconDropdown?.querySelectorAll('.icon-item').forEach(iconItem => {
+        iconDropdown?.querySelectorAll('.icon-item').forEach((iconItem: any) => {
             iconItem.addEventListener('click', () => {
                 const selectedIcon = iconItem.getAttribute('data-icon');
-                const hiddenInput = stepDiv.querySelector('.selected-icon');
+                const hiddenInput = stepDiv.querySelector('.selected-icon') as any;
                 hiddenInput.value = selectedIcon;
                 searchInput.value = selectedIcon;
                 iconDropdown.classList.add('hidden');
@@ -142,7 +151,7 @@ function initializeComponents(data, formattedIcons) {
 }
 
 // Also add this helper function
-function addUrlField(container, url = '') {
+function addUrlField(container: any, url: string = ''): void {
     const urlDiv = document.createElement('div');
     urlDiv.className = 'flex space-x-2 items-center';
     
@@ -168,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initTabHandlers();
 
     // Load template data
-    const result = await chrome.storage.local.get('editingTemplate');
+    const result: StorageResult = await chrome.storage.local.get('editingTemplate');
     if (!result.editingTemplate) {
         alert('No template selected for editing.');
         window.close();
@@ -176,10 +185,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Set demo name in header
-    document.getElementById('demoName').textContent = result.editingTemplate.name;
+    const demoNameElement = document.getElementById('demoName');
+    if (demoNameElement) {
+        demoNameElement.textContent = result.editingTemplate.name;
+    }
 
     // Initialize form with template data
-    initFormHandler(document.getElementById('editForm'), result.editingTemplate);
+    const editForm = document.getElementById('editForm') as HTMLFormElement;
+    if (editForm) {
+        initFormHandler(editForm, result.editingTemplate);
+    }
 
     // Initialize components
     initializeComponents(result.editingTemplate.data, formattedIcons);
