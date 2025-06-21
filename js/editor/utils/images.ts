@@ -1,11 +1,18 @@
 
-export async function getStoredImage(imageId) {
+// js/editor/utils/images.ts
+export interface UploadedImage {
+    id: string;
+    url: string;
+    displayName: string;
+}
+
+export async function getStoredImage(imageId: string | null): Promise<string | null> {
     if (!imageId) return null;
     const result = await chrome.storage.local.get(imageId);
     return result[imageId] || null;
 }
 
-export async function uploadImage(file, prefix = 'image') {
+export async function uploadImage(file: File, prefix: string = 'image'): Promise<UploadedImage> {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = async (event) => {
@@ -14,7 +21,7 @@ export async function uploadImage(file, prefix = 'image') {
             );
             
             const fileName = `${prefix}_${Date.now()}_${customName}`;
-            const imageData = event.target.result;
+            const imageData = event.target?.result as string;
             
             await chrome.storage.local.set({
                 [fileName]: imageData,
@@ -32,7 +39,7 @@ export async function uploadImage(file, prefix = 'image') {
     });
 }
 
-export async function promptForImageName(defaultName) {
+export async function promptForImageName(defaultName: string): Promise<string> {
     const name = window.prompt('Enter a name for this image:', defaultName);
     return name ? name.trim() : defaultName;
 }
