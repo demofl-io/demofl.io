@@ -1,8 +1,9 @@
-// js/popup/templates/personas.js
+// js/popup/templates/personas.ts
 import { hexToHSL } from '../utils/colors.js';
 import { getStoredImage } from '../../editor/utils/images.js';
+import { DemoFlowTemplate } from '../../types.js';
 
-export const getPersonasStyles = (hslColor) => `
+export const getPersonasStyles = (hslColor: string): string => `
     :root {
         --p: ${hslColor};
         --pf: ${hslColor};
@@ -11,7 +12,7 @@ export const getPersonasStyles = (hslColor) => `
 
 `;
 
-export async function generatePersonasHTML(demoData) {
+export async function generatePersonasHTML(demoData: DemoFlowTemplate): Promise<{ styles: string; content: string }> {
   const hslColor = hexToHSL(demoData.theme["brand-color"]);
 
   const [productLogo, customerLogo] = await Promise.all([

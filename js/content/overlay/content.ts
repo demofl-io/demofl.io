@@ -1,6 +1,8 @@
+// js/content/overlay/content.ts
 import { getPersonaPicture } from '../../editor/components/persona.js';
+import { Persona, Theme } from '../../types.js';
 
-export async function createOverlayContent(persona, theme) {
+export async function createOverlayContent(persona: Persona, theme: Theme): Promise<HTMLElement> {
   const content = document.createElement('div');
   content.style.cssText = `
     display: flex;

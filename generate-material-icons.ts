@@ -1,7 +1,16 @@
-// convert-data-to-material-icons.js
+// generate-material-icons.ts
+import * as fs from 'fs';
+import * as path from 'path';
 
-const fs = require('fs');
-const path = require('path');
+interface IconData {
+    name: string;
+    [key: string]: any;
+}
+
+interface InputData {
+    icons: IconData[];
+    [key: string]: any;
+}
 
 // Paths to your input and output files
 const inputFilePath = path.join(__dirname, './assets/data.json');
@@ -16,7 +25,7 @@ fs.readFile(inputFilePath, 'utf8', (err, data) => {
 
     try {
         // Parse the JSON data
-        const jsonData = JSON.parse(data);
+        const jsonData: InputData = JSON.parse(data);
 
         // Ensure 'icons' array exists
         if (!jsonData.icons || !Array.isArray(jsonData.icons)) {

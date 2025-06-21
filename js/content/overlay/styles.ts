@@ -1,5 +1,7 @@
-// js/content/overlay/styles.js
-export function generateOverlayStyles(theme, overlayh, overlayv) {
+// js/content/overlay/styles.ts
+import { Theme } from '../../types.js';
+
+export function generateOverlayStyles(theme: Theme, overlayh: string, overlayv: string): string {
   const positions = {
     horizontal: {
       left: { position: 'left: 20px;', transform: 'translateX(0)' },

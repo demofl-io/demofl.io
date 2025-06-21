@@ -1,17 +1,19 @@
-// js/content/overlay/drag.js
-export function initializeDrag(overlay, theme) {
+// js/content/overlay/drag.ts
+import { Theme } from '../../types.js';
+
+export function initializeDrag(overlay: HTMLElement, theme: Theme): void {
   let isDragging = false;
-  let currentX;
-  let currentY;
-  let initialX;
-  let initialY;
+  let currentX: number;
+  let currentY: number;
+  let initialX: number;
+  let initialY: number;
 
   // Calculate scale from theme
   const scale = theme["overlay-scale"].includes('%') ?
     Math.min(parseInt(theme["overlay-scale"]) / 100, 2) : // Convert percentage to scale, max 200%
     parseInt(theme["overlay-scale"]) / 100; // Convert direct number to scale
 
-  const dragStart = (e) => {
+  const dragStart = (e: MouseEvent) => {
     const rect = overlay.getBoundingClientRect();
     if (e.target === overlay) {
       isDragging = true;
@@ -20,7 +22,7 @@ export function initializeDrag(overlay, theme) {
     }
   };
 
-  const drag = (e) => {
+  const drag = (e: MouseEvent) => {
     if (isDragging) {
       e.preventDefault();
       currentX = e.clientX - initialX;
@@ -44,7 +46,7 @@ export function initializeDrag(overlay, theme) {
     }
   };
 
-  const dragEnd = () => {
+  const dragEnd = (): void => {
     isDragging = false;
   };
 

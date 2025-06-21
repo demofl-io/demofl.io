@@ -1,7 +1,7 @@
-// js/content/port.js
-export let port;
+// js/content/port.ts
+export let port: chrome.runtime.Port | null;
 
-export function connectToBackground() {
+export function connectToBackground(): boolean {
     try {
         if (port) {
           port.disconnect();
@@ -18,6 +18,8 @@ export function connectToBackground() {
           // Only clean up if we're actually closing the tab
           if (document.visibilityState === 'hidden') {
             window.addEventListener('unload', () => {
+              // Note: currentTabId should be imported from init.ts
+              const currentTabId = (window as any).currentTabId;
               if (currentTabId) {
                 chrome.storage.local.get(["personaTabs"], (result) => {
                   const personaTabs = result.personaTabs || {};
