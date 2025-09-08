@@ -2,7 +2,7 @@
   "type": "module",
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.10",
-    "@types/chrome": "^0.0.326",
+    "@types/chrome": "^0.1.9",
     "@types/node": "^24.0.1",
     "@vitejs/plugin-legacy": "^6.1.1",
     "cssnano": "^7.0.7",
