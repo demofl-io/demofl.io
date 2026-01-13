@@ -3,7 +3,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.10",
     "@types/chrome": "^0.0.326",
-    "@types/node": "^24.0.1",
+    "@types/node": "^25.0.7",
     "@vitejs/plugin-legacy": "^6.1.1",
     "cssnano": "^7.0.7",
     "daisyui": "^5.0.43",
